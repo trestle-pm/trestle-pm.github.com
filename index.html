@@ -1,6 +1,49 @@
-<html>
-<head/>
-<body>
-Hello World
-</body>
+<!DOCTYPE html>
+<html lang="en" ng-app="Trestle" ng-controller="AppCtrl as appCtrl" >
+
+  <head>
+    <title>Trestle</title>
+
+    <!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/docs/assets/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/docs/assets/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+
+    <!--[if IE 7>
+    <link rel="stylesheet" href="assets/font-awesome-ie7.min.css />
+    <![endif]-->
+
+    <!-- compiled CSS -->
+    <script type="text/javascript" src="vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="vendor/jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="vendor/lodash/lodash.js"></script>
+    <script type="text/javascript" src="vendor/dump/angular/angular.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-sortable/src/sortable.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-utils/modules/route/route.js"></script>
+    <script type="text/javascript" src="vendor/restangular/dist/restangular.js"></script>
+    <script type="text/javascript" src="vendor/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="src/app/app.js"></script>
+    <script type="text/javascript" src="src/app/board/board.js"></script>
+    <script type="text/javascript" src="src/app/board/columns/columns.js"></script>
+    <script type="text/javascript" src="src/app/board/columns/issue_column_ctrl.js"></script>
+    <script type="text/javascript" src="src/app/board/users/user_list.js"></script>
+    <script type="text/javascript" src="src/app/issue/issue_ctrl.js"></script>
+    <script type="text/javascript" src="src/app/login/login.js"></script>
+    <script type="text/javascript" src="src/app/repos_ctrl.js"></script>
+    <script type="text/javascript" src="src/app/services/auth_service.js"></script>
+    <script type="text/javascript" src="src/app/services/issue_helpers.js"></script>
+    <script type="text/javascript" src="src/app/services/repos_service.js"></script>
+    <script type="text/javascript" src="src/app/toolbar/toolbar.js"></script>
+    <script type="text/javascript" src="src/common/draggable/draggable.js"></script>
+    <script type="text/javascript" src="src/common/github_api/github_api.js"></script>
+    <script type="text/javascript" src="templates-common.js"></script>
+    <script type="text/javascript" src="templates-app.js"></script>
+
+  </head>
+
+  <body ui-view="body" >
+  </body>
+
 </html>

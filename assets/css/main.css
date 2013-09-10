@@ -1,0 +1,277 @@
+/* line 8, ../../../src/scss/main.scss */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Required to make elements draggable in old WebKit */
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
+
+/* line 2, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .brand img {
+  height: 1em;
+}
+/* line 6, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list {
+  width: 400px;
+}
+/* line 9, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list .filter {
+  margin: 5px;
+}
+/* line 12, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list .filter .search-query {
+  width: 100%;
+  padding: 13px;
+  box-sizing: border-box;
+}
+/* line 19, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list .repo-list {
+  height: 300px;
+  overflow: auto;
+}
+/* line 25, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #issue-search {
+  width: 20em;
+  margin: 5px;
+}
+/* line 30, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #settings {
+  padding: 5px;
+}
+
+/* line 2, ../../../src/app/board/board.scss */
+.repos_base.container {
+  width: 100%;
+}
+
+/* line 8, ../../../src/app/board/board.scss */
+ul.user-list, ul.issue-columns, ul.column-body {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 13, ../../../src/app/board/board.scss */
+ul.issue-columns {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+  margin-left: 25px;
+}
+/* line 17, ../../../src/app/board/board.scss */
+ul.issue-columns > li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+/* line 24, ../../../src/app/board/board.scss */
+.avatar {
+  max-width: 30px;
+  max-height: 30px;
+  border-radius: 5px;
+}
+
+/* line 30, ../../../src/app/board/board.scss */
+.btn.backlog {
+  -webkit-transform: rotate(90deg);
+  -webkit-transform-origin: 0 100%;
+}
+
+/* line 2, ../../../src/app/board/columns/issue_columns.scss */
+.column-header {
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 0;
+  color: #555;
+  line-height: 20px;
+  margin-bottom: 10px;
+  padding: 3px;
+  padding-left: 10px;
+  border: 1px solid #e5e5e5;
+  background: #f3f3f3;
+  font-size: 100%;
+}
+
+/* line 19, ../../../src/app/board/columns/issue_columns.scss */
+.column {
+  width: 16%;
+  margin: 0;
+  padding: 0 10px;
+  margin-before: 0;
+  vertical-align: top;
+  box-sizing: border-box;
+  min-height: 1000px;
+}
+
+/* line 33, ../../../src/app/board/columns/issue_columns.scss */
+.column-body {
+  min-height: 1000px;
+}
+
+/* line 2, ../../../src/app/issue/issues.scss */
+.card {
+  border: 1px solid #e5e5e5;
+  box-shadow: 2px 2px 7px #888888;
+  width: 100%;
+  position: relative;
+  margin: 5px 0;
+  padding-bottom: 3px;
+  background: white;
+  list-style-type: none;
+  /** styling for the build headers */
+  /** Voting styling */
+}
+/* line 17, ../../../src/app/issue/issues.scss */
+.card .build_header {
+  height: 3px;
+  width: 100%;
+  background: gray;
+}
+/* line 22, ../../../src/app/issue/issues.scss */
+.card.success .build_header {
+  background: green;
+}
+/* line 25, ../../../src/app/issue/issues.scss */
+.card.failure .build_header {
+  background: red;
+}
+/* line 28, ../../../src/app/issue/issues.scss */
+.card.pending .build_header {
+  background: gray;
+}
+/* line 31, ../../../src/app/issue/issues.scss */
+.card.unknown .build_header {
+  background: gray;
+}
+/* line 35, ../../../src/app/issue/issues.scss */
+.card.dragging {
+  background: blue;
+}
+/* line 39, ../../../src/app/issue/issues.scss */
+.card .header {
+  margin: 5px;
+}
+/* line 43, ../../../src/app/issue/issues.scss */
+.card .labels {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 49, ../../../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_inline-block-list.scss */
+.card .labels li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  white-space: nowrap;
+}
+/* line 46, ../../../src/app/issue/issues.scss */
+.card .labels li {
+  padding: 0 4px;
+  margin: 0 4px;
+  border-radius: 2px;
+}
+/* line 52, ../../../src/app/issue/issues.scss */
+.card .labels li.pull {
+  background-color: lightskyblue;
+}
+/* line 57, ../../../src/app/issue/issues.scss */
+.card .title {
+  white-space: normal;
+}
+/* line 63, ../../../src/app/issue/issues.scss */
+.card .voting_bar {
+  position: relative;
+  min-height: 1em;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 68, ../../../src/app/issue/issues.scss */
+.card .voting_bar .votes {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  *zoom: 1;
+  padding: 5px;
+}
+/* line 49, ../../../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_inline-block-list.scss */
+.card .voting_bar .votes li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  white-space: nowrap;
+}
+/* line 72, ../../../src/app/issue/issues.scss */
+.card .voting_bar .votes .vote_avatar {
+  max-width: 20px;
+  max-height: 20px;
+  border-style: solid;
+  border-width: 2px;
+  margin: 2px;
+  border-color: grey;
+}
+/* line 80, ../../../src/app/issue/issues.scss */
+.card .voting_bar .votes .vote_avatar.yes {
+  border-color: green;
+}
+/* line 83, ../../../src/app/issue/issues.scss */
+.card .voting_bar .votes .vote_avatar.no {
+  border-color: red;
+}
+/* line 89, ../../../src/app/issue/issues.scss */
+.card .voting_bar .vote_count {
+  float: right;
+  margin: 4px;
+  padding: 3px;
+  border-radius: 9px;
+  background: grey;
+}
+/* line 97, ../../../src/app/issue/issues.scss */
+.card .voting_bar .vote_count.positive {
+  background: green;
+}
+/* line 100, ../../../src/app/issue/issues.scss */
+.card .voting_bar .vote_count.negative {
+  background: red;
+}
+
+/* line 112, ../../../src/app/issue/issues.scss */
+.issue_detail .user-selector .dropdown-menu li {
+  margin: 4px;
+}
+/* line 113, ../../../src/app/issue/issues.scss */
+.issue_detail .user-selector .dropdown-menu li:hover {
+  background: blue;
+}
+/* line 118, ../../../src/app/issue/issues.scss */
+.issue_detail .user-selector .dropdown-menu li .avatar {
+  padding: 4px;
+}
