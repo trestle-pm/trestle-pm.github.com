@@ -8,11 +8,11 @@ angular.module('Trestle')
    scope.repo   = null;
    scope.config = null;
 
-   // XXX upcoming
-   scope.issues = [];
-   scope.milestones = [];
+   // repository state
+   scope.issues      = [];
+   scope.milestones  = [];
    scope.repoDetails = null;
-   scope.assignees = [];
+   scope.assignees   = [];
 
    // TODO: Move this to a filter helper of some type
    scope.cardSearchText = null;
@@ -33,7 +33,7 @@ angular.module('Trestle')
  * Service to hold information about the repository that we are
  * connected to and using.
 */
-.service('trReposSrv', function($modal, $q, gh, trRepoModel, trIssueHelpers) {
+.service('trReposSrv', function($modal, $q, gh, trRepoModel, trIssueHelpers, auth) {
    var TRESTLE_CONFIG_TITLE = 'TRESTLE_CONFIG',
        DEFAULT_CONFIG = {
           "columns": ["In Progress", "Review", "CI", "Ship"]
@@ -46,9 +46,13 @@ angular.module('Trestle')
       // XXX: Hack, remove this
       trRepoModel.config = angular.copy(DEFAULT_CONFIG);
 
+      if(!auth.getAuthToken()) {
+         console.warn('trReposSrv:refreshSettings: no auth token, skipping');
+      }
+
       // Spawn off the configuration loading
       var has_repo = trRepoModel.owner && trRepoModel.repo;
-      if( has_repo ) {
+      if( has_repo && auth.getAuthToken()) {
          return $q.all([
             this._loadConfig(),
             this._loadIssues(),
@@ -60,26 +64,28 @@ angular.module('Trestle')
       else {
          // Return an empty deferred so that callers can connect to the methods
          // result no matter what.
-         return $q().resolve();
+         var done = $q.defer();
+         done.resolve(true);
+         return done.promise;
       }
    };
 
    this._loadIssues = function() {
-      gh.listRepoIssues(trRepoModel.owner, trRepoModel.repo)
+      return gh.listRepoIssues(trRepoModel.owner, trRepoModel.repo)
          .then(function(issues) {
             trRepoModel.issues = issues;
          });
    };
 
    this._loadMilestones = function() {
-      gh.listMilestones(trRepoModel.owner, trRepoModel.repo)
+      return gh.listMilestones(trRepoModel.owner, trRepoModel.repo)
          .then(function(milestones) {
             trRepoModel.milestones = milestones;
          });
    };
 
    this._loadRepoDetails = function() {
-      gh.getRepos(trRepoModel.owner, trRepoModel.repo)
+      return gh.getRepos(trRepoModel.owner, trRepoModel.repo)
          .then(function(repos) {
             trRepoModel.repoDetails = repos;
          });
@@ -89,7 +95,7 @@ angular.module('Trestle')
    * Load all assignees on this repository.
    */
    this._loadAssignees = function() {
-      gh.listRepoAssignees(trRepoModel.owner, trRepoModel.repo)
+      return gh.listRepoAssignees(trRepoModel.owner, trRepoModel.repo)
          .then(function(assignees) {
             trRepoModel.assignees = assignees;
          });
@@ -102,34 +108,6 @@ angular.module('Trestle')
    */
    this._loadConfig = function() {
       var me = this;
-
-      // Attempt to lookup the configuration issue for this repository
-      // - If found, then set it and continue
-      // - If not, then prompt to create and try loading it again
-      me.readConfig().then(
-         function(configResult) {
-            if(null !== configResult) {
-               console.log('config loaded');
-               trRepoModel.config = configResult;
-            }
-            // No config, so prompt to create one
-            else {
-               promptToCreateConfig().then(
-                  function(created_config) {
-                     if(created_config) {
-                        me._loadConfig();
-                     } else {
-                        console.log('proceeding with no config');
-                     }
-                  }
-               );
-            }
-         },
-         function() {
-            // todo: handle this case by fixing up configuration.
-            console.error('Error reading config');
-         }
-      );
 
       // Called when there is no configuration found and we need to handle that.
       //
@@ -175,6 +153,34 @@ angular.module('Trestle')
 
          return deferred.promise;
       }
+
+      // Attempt to lookup the configuration issue for this repository
+      // - If found, then set it and continue
+      // - If not, then prompt to create and try loading it again
+      return me.readConfig().then(
+         function(configResult) {
+            if(null !== configResult) {
+               console.log('config loaded');
+               trRepoModel.config = configResult;
+            }
+            // No config, so prompt to create one
+            else {
+               promptToCreateConfig().then(
+                  function(created_config) {
+                     if(created_config) {
+                        me._loadConfig();
+                     } else {
+                        console.log('proceeding with no config');
+                     }
+                  }
+               );
+            }
+         },
+         function() {
+            // todo: handle this case by fixing up configuration.
+            console.error('Error reading config');
+         }
+      );
    };
 
    /**

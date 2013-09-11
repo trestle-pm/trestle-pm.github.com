@@ -14,16 +14,37 @@ angular.module( 'Trestle', [
    'ngSanitize'
 ])
 
-.config( function ( $stateProvider, $urlRouterProvider ) {
+.run( function( $rootScope, $location ) {
+   $rootScope.$on('$stateChangeError', function($event, current, previous, rejection) {
+      // TODO: detect what caused failure.  (right now we assume an authentication failure)
+      console.log('state change error: ' + arguments, arguments);
 
+      // Redirect to login page because of auth failure
+      $location.path('/login');
+   });
+})
+
+.config( function ( $stateProvider, $urlRouterProvider ) {
    // Repository base
    $stateProvider
       .state( 'repos', {
          url: '/repo',
-         //abstract: true,
          views: {
             body: {
                templateUrl: 'repos.tpl.html'
+            }
+         },
+         resolve: {
+            // Setup credentials or redirect to login page
+            // - if no token, then throw a reject to stop the transition
+            // - else setup gh api with correct token
+            auth_check: function(auth, gh, $q) {
+               var token = auth.getAuthToken();
+               if(!token) {
+                  return $q.reject('no auth');
+               } else {
+                  gh.setAccessToken(token);
+               }
             }
          },
          onEnter: function() {
@@ -42,7 +63,7 @@ angular.module( 'Trestle', [
          },
          resolve: {
             repos_srv: function(trReposSrv, $stateParams) {
-               trReposSrv.refreshSettings($stateParams);
+               return trReposSrv.refreshSettings($stateParams);
             }
          },
          onEnter: function() {
