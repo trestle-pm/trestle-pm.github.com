@@ -86,6 +86,24 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
       },
 
       /**
+      * Popup dialog to allow converting issue to pull.
+      */
+      convertToPull: function() {
+         var modal_scope = $rootScope.$new();
+
+         modal_scope.issue = this.issue;
+
+         var opts = {
+            scope        : modal_scope,
+            windowClass  : 'convert_to_pull_modal',
+            backdrop     : true,
+            keyboard     : true,
+            templateUrl  : "issue/convert_to_pull.tpl.html"
+         };
+         $modal.open(opts);
+      },
+
+      /*
       * Called to assign the given user to the issue.
       */
       assignUser: function(user) {

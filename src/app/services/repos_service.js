@@ -9,7 +9,9 @@ angular.module('Trestle')
    scope.config = null;
 
    // XXX upcoming
-   scope.issues    = [];
+   scope.issues = [];
+   scope.milestones = [];
+   scope.repoDetails = null;
    scope.assignees = [];
 
    // TODO: Move this to a filter helper of some type
@@ -50,6 +52,8 @@ angular.module('Trestle')
          return $q.all([
             this._loadConfig(),
             this._loadIssues(),
+            this._loadMilestones(),
+            this._loadRepoDetails(),
             this._loadAssignees()
          ]);
       }
@@ -63,11 +67,21 @@ angular.module('Trestle')
    this._loadIssues = function() {
       gh.listRepoIssues(trRepoModel.owner, trRepoModel.repo)
          .then(function(issues) {
-            // Pre sort the list of issues so that the jquery sortable plugin
-            // works correctly.
-            trRepoModel.issues = _.sortBy(issues, function(issue) {
-               return issue.config.weight;
-            }).reverse();
+            trRepoModel.issues = issues;
+         });
+   };
+
+   this._loadMilestones = function() {
+      gh.listMilestones(trRepoModel.owner, trRepoModel.repo)
+         .then(function(milestones) {
+            trRepoModel.milestones = milestones;
+         });
+   };
+
+   this._loadRepoDetails = function() {
+      gh.getRepos(trRepoModel.owner, trRepoModel.repo)
+         .then(function(repos) {
+            trRepoModel.repoDetails = repos;
          });
    };
 

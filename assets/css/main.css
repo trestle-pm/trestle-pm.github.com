@@ -9,6 +9,11 @@
   -webkit-user-drag: element;
 }
 
+/* line 18, ../../../src/scss/main.scss */
+body {
+  background: #2c3e50;
+}
+
 /* line 2, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .brand img {
   height: 1em;
@@ -124,154 +129,285 @@ ul.issue-columns > li {
 
 /* line 2, ../../../src/app/issue/issues.scss */
 .card {
-  border: 1px solid #e5e5e5;
-  box-shadow: 2px 2px 7px #888888;
+  border: 1px solid #080b0e;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
   width: 100%;
   position: relative;
-  margin: 5px 0;
-  padding-bottom: 3px;
-  background: white;
+  margin: 8px 0;
+  padding: 0;
+  background: #e8ecec;
   list-style-type: none;
+  min-height: 42px;
   /** styling for the build headers */
   /** Voting styling */
 }
-/* line 17, ../../../src/app/issue/issues.scss */
+/* line 15, ../../../src/app/issue/issues.scss */
 .card .build_header {
-  height: 3px;
+  height: 5px;
+  margin-top: -1px;
   width: 100%;
-  background: gray;
+  border-radius: 3px 3px 0 0;
+  background: #95a5a6;
+  border-top: 1px solid #bfc8c9;
+  border-bottom: 1px solid #798d8f;
 }
-/* line 22, ../../../src/app/issue/issues.scss */
+/* line 26, ../../../src/app/issue/issues.scss */
 .card.success .build_header {
-  background: green;
+  background: #27ae60;
+  border-top: 1px solid #4bd786;
+  border-bottom: 1px solid #1e8449;
 }
-/* line 25, ../../../src/app/issue/issues.scss */
+/* line 32, ../../../src/app/issue/issues.scss */
 .card.failure .build_header {
-  background: red;
+  background: #e74c3c;
+  border-top: 1px solid #ef8b80;
+  border-bottom: 1px solid #d62c1a;
 }
-/* line 28, ../../../src/app/issue/issues.scss */
+/* line 38, ../../../src/app/issue/issues.scss */
 .card.pending .build_header {
-  background: gray;
+  background: #3498db;
+  border-top: 1px solid #75b9e7;
+  border-bottom: 1px solid #217dbb;
 }
-/* line 31, ../../../src/app/issue/issues.scss */
+/* line 44, ../../../src/app/issue/issues.scss */
 .card.unknown .build_header {
-  background: gray;
+  background: #95a5a6;
+  border-top: 1px solid #bfc8c9;
+  border-bottom: 1px solid #798d8f;
 }
-/* line 35, ../../../src/app/issue/issues.scss */
+/* line 51, ../../../src/app/issue/issues.scss */
 .card.dragging {
   background: blue;
 }
-/* line 39, ../../../src/app/issue/issues.scss */
+/* line 55, ../../../src/app/issue/issues.scss */
 .card .header {
-  margin: 5px;
-}
-/* line 43, ../../../src/app/issue/issues.scss */
-.card .labels {
   margin: 0;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  *zoom: 1;
+  padding: 3px 50px 3px 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background: #fff;
+  border-bottom: 1px solid #ccd4d5;
 }
-/* line 49, ../../../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_inline-block-list.scss */
-.card .labels li {
-  list-style-image: none;
-  list-style-type: none;
-  margin-left: 0;
-  display: -moz-inline-stack;
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  zoom: 1;
-  *display: inline;
-  white-space: nowrap;
+/* line 62, ../../../src/app/issue/issues.scss */
+.card .header:first-child {
+  border-radius: 3px 3px 0 0;
 }
-/* line 46, ../../../src/app/issue/issues.scss */
-.card .labels li {
-  padding: 0 4px;
-  margin: 0 4px;
-  border-radius: 2px;
-}
-/* line 52, ../../../src/app/issue/issues.scss */
-.card .labels li.pull {
-  background-color: lightskyblue;
-}
-/* line 57, ../../../src/app/issue/issues.scss */
-.card .title {
-  white-space: normal;
-}
-/* line 63, ../../../src/app/issue/issues.scss */
-.card .voting_bar {
-  position: relative;
-  min-height: 1em;
-  overflow: hidden;
-  *zoom: 1;
-}
-/* line 68, ../../../src/app/issue/issues.scss */
-.card .voting_bar .votes {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  *zoom: 1;
-  padding: 5px;
-}
-/* line 49, ../../../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_inline-block-list.scss */
-.card .voting_bar .votes li {
-  list-style-image: none;
-  list-style-type: none;
-  margin-left: 0;
-  display: -moz-inline-stack;
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  zoom: 1;
-  *display: inline;
-  white-space: nowrap;
+/* line 66, ../../../src/app/issue/issues.scss */
+.card .icon-code-fork {
+  color: #6d8082;
+  font-size: 1em;
+  font-weight: bold;
+  margin-right: 3px;
 }
 /* line 72, ../../../src/app/issue/issues.scss */
-.card .voting_bar .votes .vote_avatar {
+.card .number {
+  display: inline-block;
+  border: 1px solid #3498db;
+  color: #3498db;
+  font-size: .85em;
+  font-weight: normal;
+  padding: 0 4px;
+  border-radius: 3px;
+  background-color: #f7fbfe;
+}
+/* line 81, ../../../src/app/issue/issues.scss */
+.card .number:hover {
+  text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
+}
+/* line 85, ../../../src/app/issue/issues.scss */
+.card .number:hover .icon-code-fork {
+  color: #fff;
+}
+/* line 90, ../../../src/app/issue/issues.scss */
+.card .title {
+  white-space: normal;
+  line-height: 1.3em;
+}
+/* line 95, ../../../src/app/issue/issues.scss */
+.card .avatar {
+  height: 50px;
+  max-height: 50px;
+  max-width: 50px;
+  position: absolute;
+  right: -5px;
+  top: -6px;
+  border-radius: 25px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
+}
+/* line 106, ../../../src/app/issue/issues.scss */
+.card .content {
+  margin: 0;
+  padding: 0 5px;
+  white-space: normal;
+}
+/* line 112, ../../../src/app/issue/issues.scss */
+.card .milestone {
+  display: inline-block;
+  padding: 2px 10px 2px 7px;
+  margin: 1px 2px 0 -8px;
+  line-height: 14px;
+  color: #ffffff;
+  vertical-align: baseline;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+  background-color: #95a5a6;
+  border: 1px solid #617374;
+  border-top-color: #a3b1b2;
+  border-left-color: #272e2e;
+  font-style: italic;
+  font-weight: normal;
+  font-size: .9em;
+  border-radius: 0 3px 3px 0;
+}
+/* line 130, ../../../src/app/issue/issues.scss */
+.card .label {
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
+  display: inline-block;
+  margin: 2px;
+}
+/* line 144, ../../../src/app/issue/issues.scss */
+.card .reviews {
+  position: relative;
+  white-space: normal;
+  padding: 3px 6px 1px;
+}
+/* line 148, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_count {
+  display: inline-block;
+  margin: 0 0 2px 0;
+  padding: 2px 8px 3px;
+  border-radius: 13px 0 0 13px;
+  background: #95a5a6;
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+  box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.45), 1px 1px 0 white;
+  font-weight: bold;
+  font-size: 1em;
+}
+/* line 162, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_count.even {
+  border-radius: 13px;
+}
+/* line 165, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_count.positive {
+  background: #27ae60;
+}
+/* line 168, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_count.negative {
+  background: #e74c3c;
+}
+/* line 173, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_avatar {
   max-width: 20px;
   max-height: 20px;
   border-style: solid;
-  border-width: 2px;
-  margin: 2px;
+  border-width: 3px;
+  margin: 0 4px 2px -1px;
   border-color: grey;
+  vertical-align: middle;
 }
-/* line 80, ../../../src/app/issue/issues.scss */
-.card .voting_bar .votes .vote_avatar.yes {
-  border-color: green;
+/* line 181, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_avatar.yes {
+  border-color: #229955;
 }
-/* line 83, ../../../src/app/issue/issues.scss */
-.card .voting_bar .votes .vote_avatar.no {
-  border-color: red;
+/* line 184, ../../../src/app/issue/issues.scss */
+.card .reviews .vote_avatar.no {
+  border-color: #e43725;
 }
-/* line 89, ../../../src/app/issue/issues.scss */
-.card .voting_bar .vote_count {
-  float: right;
-  margin: 4px;
-  padding: 3px;
-  border-radius: 9px;
-  background: grey;
+/* line 192, ../../../src/app/issue/issues.scss */
+.card .stats {
+  position: absolute;
+  right: 3px;
+  bottom: 5px;
+  padding: 0 4px;
+  color: #95a5a6;
+  font-size: 1.2em;
 }
-/* line 97, ../../../src/app/issue/issues.scss */
-.card .voting_bar .vote_count.positive {
-  background: green;
+/* line 199, ../../../src/app/issue/issues.scss */
+.card .stats:hover {
+  color: #3e4a4a;
 }
-/* line 100, ../../../src/app/issue/issues.scss */
-.card .voting_bar .vote_count.negative {
-  background: red;
+/* line 202, ../../../src/app/issue/issues.scss */
+.card .stats span {
+  margin-right: 10px;
+}
+/* line 204, ../../../src/app/issue/issues.scss */
+.card .stats span.todos i {
+  margin-right: 5px;
+}
+/* line 207, ../../../src/app/issue/issues.scss */
+.card .stats span:last-child {
+  margin-right: 0;
 }
 
-/* line 112, ../../../src/app/issue/issues.scss */
+/* line 218, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li {
   margin: 4px;
 }
-/* line 113, ../../../src/app/issue/issues.scss */
+/* line 219, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li:hover {
   background: blue;
 }
-/* line 118, ../../../src/app/issue/issues.scss */
+/* line 224, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li .avatar {
   padding: 4px;
+}
+
+/* line 232, ../../../src/app/issue/issues.scss */
+.convert_to_pull {
+  margin: 8px;
+}
+/* line 235, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-selector {
+  display: inline-block;
+}
+/* line 239, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-pulldown {
+  width: 300px;
+  margin-top: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  font-size: 12px;
+  color: #666;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+/* line 253, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-pulldown .menu-header {
+  padding: 8px 10px;
+  background-color: #eeeeee;
+  background-image: -moz-linear-gradient(#fafafa, #eeeeee);
+  background-image: -webkit-linear-gradient(#fafafa, #eeeeee);
+  background-image: linear-gradient(#fafafa, #eeeeee);
+  background-repeat: repeat-x;
+  border-bottom: 1px solid #dddddd;
+}
+/* line 263, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-pulldown .menu-list {
+  max-height: 400px;
+  overflow: auto;
+}
+/* line 268, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-pulldown .menu-item {
+  cursor: pointer;
+  border-bottom: 1px solid #eeeeee;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+/* line 277, ../../../src/app/issue/issues.scss */
+.convert_to_pull .branch-pulldown .menu-item:hover {
+  background: blue;
 }

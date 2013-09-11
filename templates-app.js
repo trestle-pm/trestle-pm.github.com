@@ -1,4 +1,4 @@
-angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/users/users_list.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
+angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/users/users_list.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
 
 angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("board/columns/issue_columns.tpl.html",
@@ -10,7 +10,7 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "\n" +
     "  <ul class=\"issue-columns\" >\n" +
     "    <!-- Backlog Column -->\n" +
-    "    <li ng-show=\"showBacklog\"\n" +
+    "    <li ng-show=\"showBacklog\" class=\"column\"\n" +
     "\n" +
     "        ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
     "\n" +
@@ -23,13 +23,24 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "         ng-href=\"https://github.com/{{repoModel.owner}}/{{repoModel.repo}}/issues/new\"\n" +
     "         target=\"_blank\">Create Issue</a>\n" +
     "\n" +
+    "      <div class=\"milestone_selection\">\n" +
+    "        <select ng-init=\"msFilterVal='*'\"\n" +
+    "                ng-model=\"msFilterVal\"\n" +
+    "                ng-options=\"m.value as m.title for m in columnsCtrl.getMilestoneSelectOptions()\">\n" +
+    "        </select>\n" +
+    "      </div>\n" +
+    "\n" +
     "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\" ui-sortable=\"colCtrl.geSortableOptions()\" >\n" +
-    "        <div class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in repoModel.issues | issuesInBacklog | filter:repoModel.cardSearchText\"\n" +
+    "      <ul class=\"column-body\" ng-model=\"colCtrl.issues\"\n" +
+    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "\n" +
+    "        <li class=\"card_wrapper\"\n" +
+    "             ng-repeat=\"issue in colCtrl.issues | issuesInBacklog | filterMilestones:msFilterVal | filter:repoModel.cardSearchText\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
+    "\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
-    "        </div>\n" +
+    "\n" +
+    "        </li>\n" +
     "      </ul> <!-- end of card list -->\n" +
     "    </li>\n" +
     "\n" +
@@ -43,11 +54,15 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      <h1 class=\"column-header\">{{colCtrl.columnName}}</h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\" ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "      <ul class=\"column-body\" ng-model=\"colCtrl.issues\"\n" +
+    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "\n" +
     "        <li class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in repoModel.issues | issuesWithLabel:colCtrl.labelName | filter:repoModel.cardSearchText | orderBy:'config.weight'\"\n" +
-    "             data-issue-id=\"{{issue.id}}\" >\n" +
+    "            ng-repeat=\"issue in colCtrl.issues | filter:repoModel.cardSearchText\"\n" +
+    "            data-issue-id=\"{{issue.id}}\" >\n" +
+    "\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
+    "\n" +
     "        </li>\n" +
     "      </ul>\n" +
     "      <!-- end of card list -->\n" +
@@ -69,6 +84,115 @@ angular.module("board/users/users_list.tpl.html", []).run(["$templateCache", fun
     "");
 }]);
 
+angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("issue/convert_to_pull.tpl.html",
+    "<div class=\"convert_to_pull\"\n" +
+    "     ng-controller=\"ConvertToPullCtrl as convertCtrl\"\n" +
+    "     ng-init=\"convertCtrl.init(issue)\" >\n" +
+    "\n" +
+    "  <div class=\"modal-header\">\n" +
+    "    <h3>Convert Issue to pull</h3>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <p>We are converting pull for issue: {{convertCtrl.issue.title}}</p>\n" +
+    "\n" +
+    "  <div class=\"branches\">\n" +
+    "    <!-- Base Branch -->\n" +
+    "    <span class=\"branch_type\">Base Branch:</span>\n" +
+    "    <div class=\"branch-selector dropdown\" >\n" +
+    "      <a class=\"btn dropdown-toggle-no-close\" >\n" +
+    "        {{convertCtrl.baseBranch}}<span class=\"caret\"></span>\n" +
+    "      </a>\n" +
+    "\n" +
+    "      <div class=\"branch-pulldown dropdown-menu\">\n" +
+    "        <div class=\"menu-header no-close\">\n" +
+    "          <span class=\"menu-title\">Choose base branch</span>\n" +
+    "        </div>\n" +
+    "        <div class=\"menu-filter no-close\" >\n" +
+    "          <input type=\"text\" placeholder=\"Search\" ng-model=\"baseBranchSearch\"\n" +
+    "                 class=\"search-query\" ></input>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"menu-list\">\n" +
+    "          <div class=\"menu-item\"\n" +
+    "              ng-repeat=\"branch in convertCtrl.branches | filter:baseBranchSearch\"\n" +
+    "              ng-click=\"convertCtrl.selectBaseBranch(branch.name)\">\n" +
+    "            {{branch.name}}\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <!-- Topic Branch -->\n" +
+    "    <span class=\"branch_type\">Topic Branch:</span>\n" +
+    "    <div class=\"branch-selector dropdown\" >\n" +
+    "      <a class=\"btn dropdown-toggle-no-close\" >\n" +
+    "        {{convertCtrl.topicBranch}}<span class=\"caret\"></span>\n" +
+    "      </a>\n" +
+    "\n" +
+    "      <div class=\"branch-pulldown dropdown-menu\">\n" +
+    "        <div class=\"menu-header no-close\">\n" +
+    "          <span class=\"menu-title\">Choose topic branch</span>\n" +
+    "        </div>\n" +
+    "        <div class=\"menu-filter no-close\" >\n" +
+    "          <input type=\"text\" placeholder=\"Search\" ng-model=\"topicBranchSearch\"\n" +
+    "                 class=\"search-query\" ></input>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"menu-list\">\n" +
+    "          <div class=\"menu-item\"\n" +
+    "              ng-repeat=\"branch in convertCtrl.branches | filter:topicBranchSearch\"\n" +
+    "              ng-click=\"convertCtrl.selectTopicBranch(branch.name)\">\n" +
+    "            {{branch.name}}\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <button ng-click=\"convertCtrl.convertToPull()\"\n" +
+    "          class=\"btn btn-primary\"\n" +
+    "          ng-disabled=\"convertCtrl.baseBranch === convertCtrl.topicBranch\">\n" +
+    "    Convert\n" +
+    "  </button>\n" +
+    "\n" +
+    "  <div class=\"compare_summary\"\n" +
+    "       ng-show=\"convertCtrl.compareResults\">\n" +
+    "    <p>Status: {{convertCtrl.compareResults.status}}</p>\n" +
+    "    <p>Total commits: {{convertCtrl.compareResults.total_commits}}</p>\n" +
+    "    <p>Files changed: {{convertCtrl.compareResults.files.length}}</p>\n" +
+    "    <a class=\"btn\" target=\"_blank\"\n" +
+    "     ng-href=\"{{convertCtrl.compareResults.html_url}}\">Compare</a>\n" +
+    "\n" +
+    "    <div class=\"commit_list\">\n" +
+    "      <div class=\"commit\"\n" +
+    "           ng-repeat=\"commit in convertCtrl.compareResults.commits\">\n" +
+    "        <img class=\"avatar\"\n" +
+    "             ng-src=\"{{commit.committer.avatar_url}}?s=30\"></img>\n" +
+    "        <span class=\"committer\"> {{commit.committer.name}} </span>\n" +
+    "        <a ng-href=\"{{commit.url}}\" class=\"message\">{{commit.commit.message}}</span>\n" +
+    "        <a ng-href=\"{{commit.url}}\" class=\"sha\">{{commit.sha | limitTo:7}}</span>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"file_list\">\n" +
+    "      <div>Files:</div>\n" +
+    "      <div class=\"file_details\"\n" +
+    "           ng-repeat=\"file in convertCtrl.compareResults.files\">\n" +
+    "        <div class=\"file_header\">{{file.filename}} - {{file.additions}} - {{file.deletions}}</div>\n" +
+    "        <div class=\"patch\">\n" +
+    "          <pre>{{file.patch}}</pre>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "  </div>\n" +
+    "\n" +
+    "</div>\n" +
+    "");
+}]);
+
 angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/issue.tpl.html",
     "<div ng-controller=\"IssueCtrl as issueCtrl\"\n" +
@@ -80,6 +204,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "  <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
     "       class=\"build_header\"></div>\n" +
     "  <div class=\"header\">\n" +
+    "    <a href=\"{{issueCtrl.issue.html_url}}\" title=\"Open on GitHub\" class=\"number ng-scope\"><i ng-if=\"issueCtrl.isPullRequest()\" class=\"icon-code-fork\"></i>{{issueCtrl.issue.number}}</a>  <span class=\"title ng-binding\">\n" +
     "    <span class=\"title\">\n" +
     "      {{issueCtrl.issue.title}}\n" +
     "    </span>\n" +
@@ -87,39 +212,42 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "         title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
     "         ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
     "  </div>\n" +
-    "\n" +
-    "  <div class=\"milestone\" ng-show=\"issue.milestone\">\n" +
-    "    {{issueCtrl.issue.milestone.title}}\n" +
+    "  <div class=\"content\">\n" +
+    "      <span class=\"milestone\" ng-show=\"issue.milestone\">\n" +
+    "        {{issueCtrl.issue.milestone.title}}\n" +
+    "      </span>\n" +
+    "      <span class=\"label\"\n" +
+    "            ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
+    "            style=\"background-color: #{{label.color}}\">\n" +
+    "          {{label.name}}\n" +
+    "      </span>\n" +
     "  </div>\n" +
-    "\n" +
-    "  <ul class=\"labels\">\n" +
-    "    <li ng-if=\"issueCtrl.isPullRequest()\" class=\"pull\">pull</li>\n" +
-    "    <li ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
-    "        style=\"background-color: #{{label.color}}\">\n" +
-    "      {{label.name}}\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "\n" +
-    "  <div class=\"voting_bar\">\n" +
-    "    <ul class=\"votes\">\n" +
-    "      <li ng-repeat=\"(login, details) in issueCtrl.issue.tr_comment_voting.users\">\n" +
-    "        <img class=\"vote_avatar\"\n" +
+    "  <div class=\"reviews\"\n" +
+    "       ng-if=\"issueCtrl.issue.tr_comments.length > 0\">\n" +
+    "    <div class=\"votes\">\n" +
+    "        <div class=\"vote_count\"\n" +
+    "             ng-class=\"{\n" +
+    "              positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
+    "              negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
+    "             }\">\n" +
+    "          {{issueCtrl.issue.tr_comment_voting.total}}\n" +
+    "        </div>\n" +
+    "        <img ng-repeat=\"(login, details) in issueCtrl.issue.tr_comment_voting.users\"\n" +
+    "             class=\"vote_avatar\"\n" +
     "             title=\"{{login}} {{details.count}}\"\n" +
     "             ng-src=\"{{details.avatar_url}}?s=30\"\n" +
     "             ng-class=\"{\n" +
     "              yes: details.count > 0,\n" +
     "              no: details.count < 0\n" +
     "             }\"\n" +
-    "             ></img>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "\n" +
-    "    <div class=\"vote_count\"\n" +
-    "         ng-class=\"{\n" +
-    "          positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
-    "          negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
-    "         }\">\n" +
-    "      {{issueCtrl.issue.tr_comment_voting.total}}\n" +
+    "             />\n" +
+    "    </div>\n" +
+    "    <div class=\"stats\">\n" +
+    "        <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
+    "        <span class=\"comments\">\n" +
+    "            <i class=\"icon-comments\"></i>\n" +
+    "            {{issueCtrl.issue.tr_comments.length}}\n" +
+    "        </span>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
@@ -203,7 +331,8 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "    </div>\n" +
     "\n" +
     "    <button ng-if=\"!issueCtrl.isPullRequest()\"\n" +
-    "            class=\"convert_pull btn btn-primary\">\n" +
+    "            class=\"convert_pull btn btn-primary\"\n" +
+    "            ng-click=\"issueCtrl.convertToPull()\">\n" +
     "    Convert to Pull\n" +
     "    </button>\n" +
     "    <button ng-if=\"issueCtrl.isPullRequest()\"\n" +
@@ -294,13 +423,13 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "    <ul class=\"nav\">\n" +
     "      <li id=\"repo-selector\" class=\"dropdown\" >\n" +
-    "        <a class=\"dropdown-toggle\" >\n" +
+    "        <a class=\"dropdown-toggle-no-close\" >\n" +
     "          <span ng-if=\"!repoModel.repo\" >yourname/repo</span>\n" +
     "          <span ng-if=\"repoModel.repo\" >{{repoModel.getFullRepoName()}}</span>\n" +
     "        </a>\n" +
     "\n" +
     "        <div id=\"repo-list\" class=\"dropdown-menu\">\n" +
-    "          <div class=\"filter\" >\n" +
+    "          <div class=\"filter no-close\" >\n" +
     "            <input type=\"text\" placeholder=\"Search\" ng-model=\"repoSearchText\"\n" +
     "                   class=\"search-query\" ></input>\n" +
     "          </div>\n" +
@@ -314,9 +443,9 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "                  {{repo.full_name}}\n" +
     "                </li>\n" +
     "              </ol>\n" +
-    "\n" +
     "            </li>\n" +
     "          </ol>\n" +
+    "\n" +
     "        </div>\n" +
     "      </li>\n" +
     "\n" +
@@ -331,7 +460,7 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "        ng-init=\"userCtrl.init()\">\n" +
     "\n" +
     "      <li class=\"dropdown\" >\n" +
-    "        <a id=\"settings\" class=\"dropdown-toggle\" >\n" +
+    "        <a id=\"settings\" class=\"dropdown-toggle-no-close\" >\n" +
     "          <img class=\"avatar\" ng-src=\"{{userCtrl.user.avatar_url}}\"></img>\n" +
     "          {{userCtrl.user.login}}\n" +
     "        </a>\n" +

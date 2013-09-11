@@ -1,6 +1,6 @@
 angular.module('Trestle.board')
 
-.controller('IssueColumnCtrl', function($scope, gh, trRepoModel, trIssueHelpers) {
+.controller('IssueColumnCtrl', function($scope, $filter, gh, trRepoModel, trIssueHelpers) {
    /**
     * options:
     *    labelName: The string for the label for this column or undefined.
@@ -13,17 +13,36 @@ angular.module('Trestle.board')
       this.columnName = (this.isBacklog ? 'Backlog' : this.labelName);
 
       $scope.$id = "ColumnCtrl_" + this.columnName + $scope.$id;
+
+      this.issues = [];
+      this._updateIssueList();
+      trRepoModel.$watch('issues', angular.bind(this, this._updateIssueList), true);
    };
 
    this.excludeColLabel = function(ghLabel) {
       return ghLabel.name !== this.labelName;
    };
 
-   this._findIssueIdx = function(selectableObj) {
+   this._updateIssueList = function() {
+      var issues;
+
+      if (this.isBacklog) {
+         issues = $filter('issuesInBacklog')(trRepoModel.issues);
+      }
+      else {
+         issues = $filter('issuesWithLabel')(trRepoModel.issues, this.labelName);
+      }
+
+      this.issues = _.sortBy(issues, function(issue) {
+         return [issue.config.weight, issue.title.toLowerCase()];
+      });
+   };
+
+   this._findIssueIdx = function(issues, selectableObj) {
       var issue_id = $(selectableObj.item).data('issue-id');
 
       // Loop over the issues and find the one with the dragged issues id.
-      var issue_idx = _.findIndex(trRepoModel.issues, function(issue) {
+      var issue_idx = _.findIndex(issues, function(issue) {
          return issue.id === issue_id;
       });
 
@@ -38,8 +57,8 @@ angular.module('Trestle.board')
     * @postcondition The issue ordering in GitHub has been updated
     */
    this._onIssueMoved = function(evt, obj) {
-      var issue_idx = this._findIssueIdx(obj),
-          all_issues = trRepoModel.issues;
+      var issues = this.issues,
+          issue_idx = this._findIssueIdx(issues, obj);
 
       console.log('moved', issue_idx);
 
@@ -54,20 +73,29 @@ angular.module('Trestle.board')
           below = Number.MAX_VALUE;
 
       if (issue_idx === 0) {
-         weight = 0;
-         if (all_issues.length > 1) {
-            weight = all_issues[1].config.weight - 1;
+         if (issues.length > 1) {
+            // Place the issue just below the old top of column
+            below  = issues[1].config.weight;
+            weight = below - 1;
+         }
+         else {
+            // There is nothing else in the issues list so just give the issue
+            weight = 0;
          }
       }
-      else if (issue_idx === all_issues.length - 1) {
-         weight = 0;
-         if (all_issues.length > 1) {
-            weight = all_issues[all_issues.length - 2].config.weight + 1;
+      else if (issue_idx === issues.length - 1) {
+         if (issues.length > 1) {
+            above  = issues[issues.length - 2].config.weight;
+            weight = above + 1;
+         }
+         else {
+            // There is nothing else in the column so put the issue in the middle
+            weight = 0;
          }
       }
       else {
-         above = all_issues[issue_idx - 1].config.weight;
-         below = all_issues[issue_idx + 1].config.weight;
+         above = issues[issue_idx - 1].config.weight;
+         below = issues[issue_idx + 1].config.weight;
 
          if (above === 0) {
             weight = below / 2.0;
@@ -81,10 +109,10 @@ angular.module('Trestle.board')
       }
 
       // Determine if any data needs to be updated.
-      var moved_issue = all_issues[issue_idx],
+      var moved_issue = issues[issue_idx],
           cur_weight = moved_issue.config.weight;
 
-      console.log(cur_weight, moved_issue, below, above);
+      console.log(cur_weight, weight, below, above, moved_issue);
       if ( (below <= cur_weight) || (above >= cur_weight) ) {
          console.log('do it');
          gh.getIssue(trRepoModel.owner, trRepoModel.repo, moved_issue.number)
@@ -102,8 +130,8 @@ angular.module('Trestle.board')
    };
 
    this._onIssueReceived = function(evt, obj) {
-      var all_issues = trRepoModel.issues,
-          issue = all_issues[this._findIssueIdx(obj)],
+      var issues = this.issues,
+          issue = issues[this._findIssueIdx(issues, obj)],
           me = this;
 
       // Update the issues labels to only have our columns label

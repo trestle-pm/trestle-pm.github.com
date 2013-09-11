@@ -20,7 +20,8 @@ angular.module('github.api', ['restangular'])
  @description
  Angular service `gh` which provides tools for accessing GitHub API's
  */
-.service('gh', function gh(GitHubRestangular, $http, $interpolate, $rootScope, $q) {
+
+.service('gh', function gh($q, GitHubRestangular) {
    var
    response_extractors  = [],
    token;
@@ -226,6 +227,12 @@ angular.module('github.api', ['restangular'])
       return d.promise;
    };
 
+   this.getRepos = function(owner, repo) {
+      return GitHubRestangular
+         .one(['repos', owner, repo].join('/'))
+         .get();
+   };
+
    this.listAllRepos = function() {
       var me = this;
 
@@ -321,9 +328,33 @@ angular.module('github.api', ['restangular'])
          .get();
    };
 
+   this.createPullFromIssue = function(owner, repo, issueNumber, base, head) {
+      return GitHubRestangular
+         .all(['repos', owner, repo, 'pulls'].join('/'))
+         .post({issue: issueNumber, base: base, head: head });
+   };
+
    this.getStatus = function(owner, repo, ref) {
       return GitHubRestangular
          .one(['repos', owner, repo, 'statuses', ref].join('/'))
+         .get();
+   };
+
+   this.listMilestones = function(owner, repo, args) {
+      return GitHubRestangular
+         .one(['repos', owner, repo, 'milestones'].join('/'))
+         .get(_.defaults({}, args, {state: 'open'}));
+   };
+
+   this.getBranches = function(owner, repo) {
+      return GitHubRestangular
+         .one(['repos', owner, repo, 'branches'].join('/'))
+         .get();
+   };
+
+   this.compareCommits = function(owner, repo, base, head) {
+      return GitHubRestangular
+         .one(['repos', owner, repo, 'compare', base + '...' + head].join('/'))
          .get();
    };
 

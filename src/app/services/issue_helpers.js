@@ -258,6 +258,34 @@ angular.module('Trestle')
    };
 })
 
+/**
+ @ngdoc filter
+ @name  Trestle.filterMilestones
+
+ @description
+ Takes an array of GitHub issues and filters it down based upon milestone param.
+
+ @param {String} milestone The name of the milestone to filter or
+       '*' or 'none'
+
+ @returns {Array} Set of issues that are not part of a column
+ */
+.filter('filterMilestones', function() {
+   return function(issues, msFilter) {
+      if('*' === msFilter) {
+         return issues;
+      } else if('none' === msFilter) {
+         return _.filter(issues, function(issue) {
+            return !issue.milestone;
+         });
+      } else {
+         return _.filter(issues, function(issue) {
+            return (issue.milestone && (issue.milestone.title === msFilter));
+         });
+      }
+   };
+})
+
 
 /**
  @ngdoc filter

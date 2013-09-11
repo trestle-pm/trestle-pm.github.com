@@ -8,6 +8,7 @@ angular.module( 'Trestle', [
    'github.api',
    'ui.sortable',
    'ui.bootstrap',
+   'ui.bootstrap.dropdownToggleNoClose',
    'ui.state',
    'ui.route',
    'ngSanitize'
