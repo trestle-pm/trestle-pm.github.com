@@ -75,9 +75,6 @@ angular.module('Trestle.board')
     Initializes the controller.
     */
    this.init = function() {
-      // Get the users details (avatar, name, ...)
-      // - This a `Promise` that when resolved will update the toolbar
-      this.user = gh.getUserDetails();
    };
 
    /**

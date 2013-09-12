@@ -6,11 +6,20 @@ angular.module('Trestle.board')
     *    labelName: The string for the label for this column or undefined.
     *    isBacklog: If true, this this should get all items that are not labeled
     *                with a column.
+    *    isNoMilestone: If true, this should get all items that have no milestone.
+    *    milestone: If true, we are a milestone column.
     */
    this.init = function(options) {
       this.labelName  = options.labelName;
       this.isBacklog  = !!options.isBacklog;
-      this.columnName = (this.isBacklog ? 'Backlog' : this.labelName);
+      this.milestone  = options.milestone || null;
+      this.isNoMilestone = !!options.isNoMilestone;
+
+      if(this.milestone || this.isNoMilestone) {
+         this.columnName = (this.isNoMilestone ? 'No Milestone' : this.milestone.title);
+      } else {
+         this.columnName = (this.isBacklog ? 'Backlog' : this.labelName);
+      }
 
       $scope.$id = "ColumnCtrl_" + this.columnName + $scope.$id;
 
@@ -19,17 +28,20 @@ angular.module('Trestle.board')
       trRepoModel.$watch('issues', angular.bind(this, this._updateIssueList), true);
    };
 
-   this.excludeColLabel = function(ghLabel) {
-      return ghLabel.name !== this.labelName;
-   };
-
+   /**
+   * Helper to refresh/update the list of issues that we should track
+   * and display based upon our current settings and local filters.
+   */
    this._updateIssueList = function() {
       var issues;
 
       if (this.isBacklog) {
          issues = $filter('issuesInBacklog')(trRepoModel.issues);
-      }
-      else {
+      } else if (this.isNoMilestone) {
+         issues = $filter('filterMilestones')(trRepoModel.issues, 'none');
+      } else if (this.milestone) {
+         issues = $filter('filterMilestones')(trRepoModel.issues, this.milestone.title);
+      } else {
          issues = $filter('issuesWithLabel')(trRepoModel.issues, this.labelName);
       }
 
@@ -135,24 +147,40 @@ angular.module('Trestle.board')
    this._onIssueReceived = function(evt, obj) {
       var issues = this.issues,
           issue = issues[this._findIssueIdx(issues, obj)],
+          ms_number = null,
           me = this;
 
-      // Update the issues labels to only have our columns label
-      gh.getIssue(trRepoModel.owner, trRepoModel.repo, issue.number)
-         .then(function(issue) {
-            // - Remove any of the old columns
-            var labels = _.filter(_.pluck(issue.labels, 'name'), function(label) {
-               return !_.contains(trRepoModel.config.columns, label);
+      if(this.isBacklog || this.labelName) {
+         // KANBAN COLUMN
+         // Update the issues labels to only have our columns label
+         // XXX: Do we still need this get?
+         gh.getIssue(trRepoModel.owner, trRepoModel.repo, issue.number)
+            .then(function(issue) {
+               // - Remove any of the old columns
+               var labels = _.filter(_.pluck(issue.labels, 'name'), function(label) {
+                  return !_.contains(trRepoModel.config.columns, label);
 
+               });
+               // - Add our column
+               labels.push(me.labelName);
+               gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
+                              issue.number, {labels: labels})
+               .then(function(updatedIssue) {
+                  console.log('move between columns done');
+               });
             });
-            // - Add our column
-            labels.push(me.labelName);
-            gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
-                           issue.number, {labels: labels})
-            .then(function(updatedIssue) {
-               console.log('move between columns done');
+      } else {
+         // MILESTONE COLUMN
+         if(me.milestone) {
+            ms_number = me.milestone.number;
+         }
+         issue.milestone = this.milestone;
+         gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
+                        issue.number, {milestone: ms_number})
+            .then(function(result) {
+               console.log('assigned new milestone to issue');
             });
-         });
+      }
    };
 
    this.getSortableOptions = function() {

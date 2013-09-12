@@ -7,6 +7,14 @@
  */
 angular.module('Trestle.authentication', [])
 
+.service('trSessionModel', function($rootScope) {
+   var scope = $rootScope.$new();
+
+   scope.user = null;
+
+   return scope;
+})
+
 /**
  @ngdoc service
  @name  Trestle.authentication.auth

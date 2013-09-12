@@ -14,6 +14,18 @@ body {
   background: #2c3e50;
 }
 
+/* line 22, ../../../src/scss/main.scss */
+.repos_base.container {
+  width: 100%;
+}
+
+/* line 28, ../../../src/scss/main.scss */
+.avatar {
+  max-width: 30px;
+  max-height: 30px;
+  border-radius: 5px;
+}
+
 /* line 2, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .brand img {
   height: 1em;
@@ -47,19 +59,14 @@ body {
   padding: 5px;
 }
 
-/* line 2, ../../../src/app/board/board.scss */
-.repos_base.container {
-  width: 100%;
-}
-
-/* line 8, ../../../src/app/board/board.scss */
-ul.user-list, ul.issue-columns, ul.column-body {
+/* line 2, ../../../src/app/board/columns/issue_columns.scss */
+ul.user-list, ul.issue-columns, ul.milestone-columns, ul.column-body {
   margin: 0;
   padding: 0;
 }
 
-/* line 13, ../../../src/app/board/board.scss */
-ul.issue-columns {
+/* line 7, ../../../src/app/board/columns/issue_columns.scss */
+ul.issue-columns, ul.milestone-columns {
   margin: 0;
   padding: 0;
   border: 0;
@@ -67,8 +74,8 @@ ul.issue-columns {
   *zoom: 1;
   margin-left: 25px;
 }
-/* line 17, ../../../src/app/board/board.scss */
-ul.issue-columns > li {
+/* line 11, ../../../src/app/board/columns/issue_columns.scss */
+ul.issue-columns > li, ul.milestone-columns > li {
   list-style-image: none;
   list-style-type: none;
   margin-left: 0;
@@ -82,14 +89,7 @@ ul.issue-columns > li {
   vertical-align: top;
 }
 
-/* line 24, ../../../src/app/board/board.scss */
-.avatar {
-  max-width: 30px;
-  max-height: 30px;
-  border-radius: 5px;
-}
-
-/* line 30, ../../../src/app/board/board.scss */
+/* line 19, ../../../src/app/board/columns/issue_columns.scss */
 .btn.backlog {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
@@ -105,7 +105,7 @@ ul.issue-columns > li {
   top: 175px;
 }
 
-/* line 2, ../../../src/app/board/columns/issue_columns.scss */
+/* line 27, ../../../src/app/board/columns/issue_columns.scss */
 .column-header {
   text-align: center;
   position: relative;
@@ -120,7 +120,7 @@ ul.issue-columns > li {
   background: #f3f3f3;
   font-size: 100%;
 }
-/* line 18, ../../../src/app/board/columns/issue_columns.scss */
+/* line 43, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip_count {
   border: solid;
   border-width: 1px;
@@ -128,12 +128,12 @@ ul.issue-columns > li {
   border-color: light-grey;
   float: right;
 }
-/* line 25, ../../../src/app/board/columns/issue_columns.scss */
+/* line 50, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip_count.over_limit {
   background: red;
 }
 
-/* line 32, ../../../src/app/board/columns/issue_columns.scss */
+/* line 57, ../../../src/app/board/columns/issue_columns.scss */
 .column {
   width: 16%;
   margin: 0;
@@ -144,7 +144,7 @@ ul.issue-columns > li {
   min-height: 1000px;
 }
 
-/* line 46, ../../../src/app/board/columns/issue_columns.scss */
+/* line 71, ../../../src/app/board/columns/issue_columns.scss */
 .column-body {
   min-height: 1000px;
 }
@@ -484,4 +484,24 @@ ul.issue-columns > li {
 /* line 327, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown .menu-item:hover {
   background: blue;
+}
+
+/* line 1, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer {
+  position: absolute;
+  top: 40px;
+  right: 0;
+}
+
+/* line 7, ../../../src/app/issue_filters/issue_filter.scss */
+.drawer {
+  background: white;
+}
+/* line 9, ../../../src/app/issue_filters/issue_filter.scss */
+.drawer.hide {
+  display: none;
+}
+/* line 13, ../../../src/app/issue_filters/issue_filter.scss */
+.drawer.show {
+  display: block;
 }

@@ -15,9 +15,6 @@ angular.module('Trestle')
    scope.assignees   = [];
    scope.labels      = [];
 
-   // TODO: Move this to a filter helper of some type
-   scope.cardSearchText = null;
-
    // Helper to use when you want a pretty name for the repository
    scope.getFullRepoName = angular.bind(this, function() {
       if (scope.repo && scope.owner) {

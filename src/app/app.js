@@ -59,6 +59,9 @@ angular.module( 'Trestle', [
          views: {
             columns: {
                templateUrl: 'board/columns/issue_columns.tpl.html'
+            },
+            filter: {
+               templateUrl: 'issue_filters/issue_filter.tpl.html'
             }
          },
          resolve: {
@@ -72,7 +75,24 @@ angular.module( 'Trestle', [
       });
 
    // Milestone page
-   // repos.milestones
+   $stateProvider
+      .state('repos.milestones', {
+         url: '/:owner/:repo/milestones',
+         views: {
+            columns: {
+               templateUrl: 'board/columns/milestone_columns.tpl.html'
+            }
+         },
+         resolve: {
+            repos_srv: function(trReposSrv, $stateParams) {
+               return trReposSrv.refreshSettings($stateParams);
+            }
+         },
+         onEnter: function() {
+            console.log('entering repos.milestone');
+         }
+      });
+
 
    // Login Page
    $stateProvider.state( 'login', {

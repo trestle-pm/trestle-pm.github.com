@@ -1,4 +1,4 @@
-angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/users/users_list.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
+angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
 
 angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("board/columns/issue_columns.tpl.html",
@@ -31,11 +31,11 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      </div>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\" ng-model=\"colCtrl.issues\"\n" +
+    "      <ul class=\"column-body\"\n" +
     "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
     "\n" +
     "        <li class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in colCtrl.issues | filterMilestones:msFilterVal | filter:repoModel.cardSearchText\"\n" +
+    "             ng-repeat=\"issue in colCtrl.issues | filterMilestones:msFilterVal | globalIssueFilter\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -58,11 +58,11 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      </h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\" ng-model=\"colCtrl.issues\"\n" +
+    "      <ul class=\"column-body\"\n" +
     "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
     "\n" +
     "        <li class=\"card_wrapper\"\n" +
-    "            ng-repeat=\"issue in colCtrl.issues | filter:repoModel.cardSearchText\"\n" +
+    "            ng-repeat=\"issue in colCtrl.issues | globalIssueFilter\"\n" +
     "            data-issue-id=\"{{issue.id}}\" >\n" +
     "\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
@@ -77,14 +77,56 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "");
 }]);
 
-angular.module("board/users/users_list.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("board/users/users_list.tpl.html",
-    "<ul ng-controller=\"UsersListCtrl as usersCtrl\" class=\"user-list\" >\n" +
-    "  <li ng-repeat=\"user in usersCtrl.users\" class=\"user\" ng-draggable=\"getDragData()\" >\n" +
-    "    <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\" ></img>\n" +
-    "    {{user.login}}\n" +
-    "  </li>\n" +
-    "</ul>\n" +
+angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("board/columns/milestone_columns.tpl.html",
+    "<div ng-controller=\"MilestoneColumnsCtrl as columnsCtrl\" >\n" +
+    "\n" +
+    "  <ul class=\"milestone-columns\" >\n" +
+    "    <!-- Empty Milestone Column -->\n" +
+    "    <li ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
+    "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
+    "        ng-init=\"colCtrl.init({isNoMilestone:true})\" >\n" +
+    "\n" +
+    "      <h1 class=\"column-header\">{{colCtrl.columnName}}</h1>\n" +
+    "\n" +
+    "      <!-- CARDS List -->\n" +
+    "      <ul class=\"column-body\"\n" +
+    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "\n" +
+    "        <li class=\"card_wrapper\"\n" +
+    "             ng-repeat=\"issue in colCtrl.issues | filter:issueFilters.searchText\"\n" +
+    "             data-issue-id=\"{{issue.id}}\" >\n" +
+    "          <tr-issue-card issue=\"issue\" />\n" +
+    "        </li>\n" +
+    "      </ul> <!-- end of card list -->\n" +
+    "    </li>\n" +
+    "\n" +
+    "    <!-- Kanban Columns -->\n" +
+    "    <li ng-repeat=\"ms in repoModel.milestones\" class=\"column\"\n" +
+    "        ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
+    "\n" +
+    "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
+    "        ng-init=\"colCtrl.init({milestone:ms})\" >\n" +
+    "\n" +
+    "      <h1 class=\"column-header\">\n" +
+    "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
+    "      </h1>\n" +
+    "\n" +
+    "      <!-- CARDS List -->\n" +
+    "      <ul class=\"column-body\"\n" +
+    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "\n" +
+    "        <li class=\"card_wrapper\"\n" +
+    "            ng-repeat=\"issue in colCtrl.issues | filter:issueFilters.searchText\"\n" +
+    "            data-issue-id=\"{{issue.id}}\" >\n" +
+    "          <tr-issue-card issue=\"issue\" />\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "      <!-- end of card list -->\n" +
+    "    </li>\n" +
+    "\n" +
+    "  </ul>\n" +
+    "</div>\n" +
     "");
 }]);
 
@@ -404,6 +446,57 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "");
 }]);
 
+angular.module("issue_filters/issue_filter.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("issue_filters/issue_filter.tpl.html",
+    "<div id=\"issue-filters-drawer\"\n" +
+    "     ng-controller=\"IssueFilterCtrl as filterCtrl\"\n" +
+    "     ng-init=\"filterCtrl.init()\" >\n" +
+    "\n" +
+    "  <button id=\"filterToggleBtn\"\n" +
+    "          class=\"btn-primary\"\n" +
+    "          ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
+    "    <span ng-if=\"fitlerCtrl.showDrawer\">Hide</span>\n" +
+    "    <span ng-if=\"!fitlerCtrl.showDrawer\">Show</span>\n" +
+    "  </button>\n" +
+    "\n" +
+    "\n" +
+    "  <div class=\"drawer\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
+    "                                 hide: !fitlerCtrl.showDrawer}\" >\n" +
+    "    <h1>Filters</h1>\n" +
+    "    <ul >\n" +
+    "      <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
+    "          ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
+    "        Assigned to Me\n" +
+    "      </li>\n" +
+    "      <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
+    "          ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
+    "        Reviewed by Me\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "    <ul class=\"clearfix\" >\n" +
+    "      <li ng-repeat=\"user in repoModel.assignees\"\n" +
+    "          ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
+    "          ng-class=\"{active: issueFilters.owner == user.login}\"\n" +
+    "          style=\"float: left;\" >\n" +
+    "        <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "    <ul class=\"clearfix\" >\n" +
+    "      <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
+    "          ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
+    "          ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
+    "        {{milestone.title}}\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "  </div>\n" +
+    "\n" +
+    "</div>\n" +
+    "");
+}]);
+
 angular.module("login/login.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("login/login.tpl.html",
     "<form id=\"login-form\" ng-controller=\"LoginCtrl as loginCtrl\">\n" +
@@ -495,7 +588,7 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "      <li>\n" +
     "        <input id=\"issue-search\" type=\"text\" placeholder=\"Search\" class=\"navbar-search\"\n" +
-    "               ng-model=\"repoModel.cardSearchText\" ></input>\n" +
+    "               ng-model=\"issueFilters.searchText\" ></input>\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "\n" +
@@ -511,8 +604,8 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "      <li class=\"dropdown\" >\n" +
     "        <a id=\"settings\" class=\"dropdown-toggle-no-close\" >\n" +
-    "          <img class=\"avatar\" ng-src=\"{{userCtrl.user.avatar_url}}\"></img>\n" +
-    "          {{userCtrl.user.login}}\n" +
+    "          <img class=\"avatar\" ng-src=\"{{sessionModel.user.avatar_url}}\" ></img>\n" +
+    "          {{sessionModel.user.login}}\n" +
     "        </a>\n" +
     "\n" +
     "        <div class=\"dropdown-menu\">\n" +
@@ -523,7 +616,7 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "    <ul class=\"nav pull-right\" >\n" +
     "      <li>\n" +
-    "        <a ng-href=\"#repo/{{repoModel.owner}}/{{repoModel.repo}}/milestones\">Planning</a>\n" +
+    "        <a ng-href=\"#repo/{{repoModel.owner}}/{{repoModel.repo}}/milestones\">Milestones</a>\n" +
     "      </li>\n" +
     "\n" +
     "       <li>\n" +
