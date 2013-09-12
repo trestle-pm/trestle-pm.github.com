@@ -7,7 +7,7 @@ angular.module('Trestle.board')
  @description
  Provides the tools for handling the toolbar
  */
-.controller('ToolbarCtrl', function($location, $stateParams, gh) {
+.controller('ToolbarCtrl', function($location, $stateParams, gh, trReposSrv, $timeout) {
    /**
     @ngdoc    method
     @name     init
@@ -20,6 +20,8 @@ angular.module('Trestle.board')
     */
    this.init = function() {
       var me = this;
+
+      this.isRefreshing = false;
 
       gh.listAllRepos($stateParams.owner, $stateParams.repo).then(function(allRepos) {
          // Build up a tree of the issues to make things easier to search through
@@ -40,6 +42,17 @@ angular.module('Trestle.board')
    this.onSwitchToRepo = function (repo) {
       console.log('switch to repo: ' + repo.full_name);
       $location.path('/repo/' + repo.full_name + '/board');
+   };
+
+   this.refreshRepo = function() {
+      var me = this;
+      me.isRefreshing = true;
+      trReposSrv.refreshSettings().then(function() {
+         // Delay so they can at least see that it did something
+         $timeout(function() {
+            me.isRefreshing = false;
+         }, 1000);
+      });
    };
 })
 

@@ -112,9 +112,12 @@ angular.module('Trestle.board')
       var moved_issue = issues[issue_idx],
           cur_weight = moved_issue.config.weight;
 
-      console.log(cur_weight, weight, below, above, moved_issue);
       if ( (below <= cur_weight) || (above >= cur_weight) ) {
-         console.log('do it');
+         // short circuit the loop to GitHub so that future drags have access to
+         // the correct weight
+         moved_issue.config.weight = weight;
+
+         // Update the copy in GitHub
          gh.getIssue(trRepoModel.owner, trRepoModel.repo, moved_issue.number)
             .then(function(serverIssue) {
                var new_body = trIssueHelpers.mergeBodyConfig(
@@ -144,7 +147,6 @@ angular.module('Trestle.board')
             });
             // - Add our column
             labels.push(me.labelName);
-            console.log(labels);
             gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
                            issue.number, {labels: labels})
             .then(function(updatedIssue) {

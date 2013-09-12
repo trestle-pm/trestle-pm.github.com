@@ -13,6 +13,7 @@ angular.module('Trestle')
    scope.milestones  = [];
    scope.repoDetails = null;
    scope.assignees   = [];
+   scope.labels      = [];
 
    // TODO: Move this to a filter helper of some type
    scope.cardSearchText = null;
@@ -33,18 +34,23 @@ angular.module('Trestle')
  * Service to hold information about the repository that we are
  * connected to and using.
 */
-.service('trReposSrv', function($modal, $q, gh, trRepoModel, trIssueHelpers, auth) {
+.service('trReposSrv', function($modal, $q, gh, $stateParams,
+                                trRepoModel, trIssueHelpers, auth) {
    var TRESTLE_CONFIG_TITLE = 'TRESTLE_CONFIG',
        DEFAULT_CONFIG = {
-          "columns": ["In Progress", "Review", "CI", "Ship"]
+          "columns": ["In Progress", "Review", "CI", "Ship"],
+          "wip_limit": 10
        };
 
    this.refreshSettings = function(stateParams) {
+      stateParams = stateParams || $stateParams;
+
       trRepoModel.owner = stateParams.owner;
       trRepoModel.repo  = stateParams.repo;
 
-      // XXX: Hack, remove this
-      trRepoModel.config = angular.copy(DEFAULT_CONFIG);
+      if(!trRepoModel.config) {
+         trRepoModel.config = angular.copy(DEFAULT_CONFIG);
+      }
 
       if(!auth.getAuthToken()) {
          console.warn('trReposSrv:refreshSettings: no auth token, skipping');
@@ -58,7 +64,8 @@ angular.module('Trestle')
             this._loadIssues(),
             this._loadMilestones(),
             this._loadRepoDetails(),
-            this._loadAssignees()
+            this._loadAssignees(),
+            this._loadLabels()
          ]);
       }
       else {
@@ -81,6 +88,13 @@ angular.module('Trestle')
       return gh.listMilestones(trRepoModel.owner, trRepoModel.repo)
          .then(function(milestones) {
             trRepoModel.milestones = milestones;
+         });
+   };
+
+   this._loadLabels = function() {
+      return gh.listLabels(trRepoModel.owner, trRepoModel.repo)
+         .then(function(labels) {
+            trRepoModel.labels = labels;
          });
    };
 

@@ -35,11 +35,9 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
     "\n" +
     "        <li class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in colCtrl.issues | issuesInBacklog | filterMilestones:msFilterVal | filter:repoModel.cardSearchText\"\n" +
+    "             ng-repeat=\"issue in colCtrl.issues | filterMilestones:msFilterVal | filter:repoModel.cardSearchText\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
-    "\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
-    "\n" +
     "        </li>\n" +
     "      </ul> <!-- end of card list -->\n" +
     "    </li>\n" +
@@ -51,7 +49,13 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
     "        ng-init=\"colCtrl.init({labelName:col_label})\" >\n" +
     "\n" +
-    "      <h1 class=\"column-header\">{{colCtrl.columnName}}</h1>\n" +
+    "      <h1 class=\"column-header\">\n" +
+    "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
+    "        <span ng-class=\"{\n" +
+    "                over_limit: colCtrl.issues.length > repoModel.config.wip_limit\n" +
+    "              }\"\n" +
+    "              class=\"wip_count\">{{colCtrl.issues.length}}</span>\n" +
+    "      </h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
     "      <ul class=\"column-body\" ng-model=\"colCtrl.issues\"\n" +
@@ -204,11 +208,21 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "  <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
     "       class=\"build_header\"></div>\n" +
     "  <div class=\"header\">\n" +
-    "    <a href=\"{{issueCtrl.issue.html_url}}\" title=\"Open on GitHub\" class=\"number ng-scope\"><i ng-if=\"issueCtrl.isPullRequest()\" class=\"icon-code-fork\"></i>{{issueCtrl.issue.number}}</a>  <span class=\"title ng-binding\">\n" +
+    "    <a ng-href=\"{{issueCtrl.issue.html_url}}\"\n" +
+    "       ng-click=\"$event.stopPropagation()\"\n" +
+    "       target=\"_blank\"\n" +
+    "       title=\"Open on GitHub\"\n" +
+    "       class=\"number ng-scope\">\n" +
+    "       <i ng-if=\"issueCtrl.isPullRequest()\" class=\"icon-code-fork\"></i>\n" +
+    "       {{issueCtrl.issue.number}}\n" +
+    "    </a>\n" +
     "    <span class=\"title\">\n" +
     "      {{issueCtrl.issue.title}}\n" +
     "    </span>\n" +
     "    <img class=\"avatar\"\n" +
+    "         ng-class=\"{\n" +
+    "            empty: !issueCtrl.issue.assignee\n" +
+    "         }\"\n" +
     "         title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
     "         ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
     "  </div>\n" +
@@ -265,6 +279,9 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "    <li class=\"user-selector dropdown\">\n" +
     "      <a class=\"dropdown-toggle\">\n" +
     "        <img class=\"avatar\"\n" +
+    "            ng-class=\"{\n" +
+    "                empty: !issueCtrl.issue.assignee\n" +
+    "             }\"\n" +
     "             title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
     "             ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
     "      </a>\n" +
@@ -313,9 +330,16 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "  </div>\n" +
     "\n" +
     "  <div class=\"details\">\n" +
-    "    <div class=\"milestone\" ng-show=\"issue.milestone\">\n" +
-    "      {{issueCtrl.issue.milestone.title}}\n" +
+    "\n" +
+    "    <div class=\"milestone\">\n" +
+    "      <select ng-init=\"msValue=issueCtrl.issue.milestone.number\"\n" +
+    "              ng-model=\"msValue\"\n" +
+    "              ng-options=\"m.number as m.title for m in repoModel.milestones\"\n" +
+    "              ng-change=\"issueCtrl.assignMilestone(msValue)\">\n" +
+    "        <option value=\"\">No Milestone</option>\n" +
+    "      </select>\n" +
     "    </div>\n" +
+    "\n" +
     "    <div class=\"branch_info\" ng-show=\"issueCtrl.isPullRequest()\">\n" +
     "      to {{issueCtrl.issue.tr_pull_details.base.label}}\n" +
     "      from {{issueCtrl.issue.tr_pull_details.tr_head.label}}\n" +
@@ -323,13 +347,33 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "  </div>\n" +
     "\n" +
     "  <div class=\"label_bar\">\n" +
-    "    <div class=\"label_block\">\n" +
-    "      <li ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
-    "          style=\"background-color: #{{label.color}}\">\n" +
-    "        {{label.name}}\n" +
-    "      </li>\n" +
-    "    </div>\n" +
+    "    <span class=\"label\"\n" +
+    "      ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
+    "      style=\"background-color: #{{label.color}}\">\n" +
+    "      {{label.name}}\n" +
+    "    </span>\n" +
+    "  </div>\n" +
     "\n" +
+    "  <div class=\"label_editor dropdown\">\n" +
+    "    <button class=\"btn dropdown-toggle-no-close\">Edit<span class=\"caret\"/></button>\n" +
+    "\n" +
+    "    <div class=\"dropdown-menu\">\n" +
+    "      <div class=\"label-list no-close\">\n" +
+    "         <div class=\"label-item\"\n" +
+    "              ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "              ng-click=\"issueCtrl.toggleLabel(label)\"\n" +
+    "              ng-class=\"{\n" +
+    "                enabled: issueCtrl.isLabelEnabled(label.name)\n" +
+    "              }\">\n" +
+    "              <span class=\"pill\" style=\"background-color: #{{label.color}}\">\n" +
+    "                 {{label.name}}\n" +
+    "              </span>\n" +
+    "          </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div>\n" +
     "    <button ng-if=\"!issueCtrl.isPullRequest()\"\n" +
     "            class=\"convert_pull btn btn-primary\"\n" +
     "            ng-click=\"issueCtrl.convertToPull()\">\n" +
@@ -454,6 +498,12 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "               ng-model=\"repoModel.cardSearchText\" ></input>\n" +
     "      </li>\n" +
     "    </ul>\n" +
+    "\n" +
+    "    <button class=\"pull-right btn\"\n" +
+    "            ng-click=\"toolbarCtrl.refreshRepo()\">\n" +
+    "      <i class=\"icon-refresh\"\n" +
+    "         ng-class=\"{ 'icon-spin': toolbarCtrl.isRefreshing }\"></i>\n" +
+    "    </button>\n" +
     "\n" +
     "    <ul class=\"nav pull-right\"\n" +
     "        ng-controller=\"UserDetailsCtrl as userCtrl\"\n" +

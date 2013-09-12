@@ -92,7 +92,17 @@ ul.issue-columns > li {
 /* line 30, ../../../src/app/board/board.scss */
 .btn.backlog {
   -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
   -webkit-transform-origin: 0 100%;
+  -moz-transform-origin: 0 100%;
+  -ms-transform-origin: 0 100%;
+  -o-transform-origin: 0 100%;
+  transform-origin: 0 100%;
+  position: absolute;
+  top: 175px;
 }
 
 /* line 2, ../../../src/app/board/columns/issue_columns.scss */
@@ -110,8 +120,20 @@ ul.issue-columns > li {
   background: #f3f3f3;
   font-size: 100%;
 }
+/* line 18, ../../../src/app/board/columns/issue_columns.scss */
+.column-header .wip_count {
+  border: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: light-grey;
+  float: right;
+}
+/* line 25, ../../../src/app/board/columns/issue_columns.scss */
+.column-header .wip_count.over_limit {
+  background: red;
+}
 
-/* line 19, ../../../src/app/board/columns/issue_columns.scss */
+/* line 32, ../../../src/app/board/columns/issue_columns.scss */
 .column {
   width: 16%;
   margin: 0;
@@ -122,12 +144,17 @@ ul.issue-columns > li {
   min-height: 1000px;
 }
 
-/* line 33, ../../../src/app/board/columns/issue_columns.scss */
+/* line 46, ../../../src/app/board/columns/issue_columns.scss */
 .column-body {
   min-height: 1000px;
 }
 
 /* line 2, ../../../src/app/issue/issues.scss */
+.card_wrapper {
+  list-style: none;
+}
+
+/* line 5, ../../../src/app/issue/issues.scss */
 .card {
   border: 1px solid #080b0e;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -142,7 +169,7 @@ ul.issue-columns > li {
   /** styling for the build headers */
   /** Voting styling */
 }
-/* line 15, ../../../src/app/issue/issues.scss */
+/* line 18, ../../../src/app/issue/issues.scss */
 .card .build_header {
   height: 5px;
   margin-top: -1px;
@@ -152,35 +179,35 @@ ul.issue-columns > li {
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 26, ../../../src/app/issue/issues.scss */
+/* line 29, ../../../src/app/issue/issues.scss */
 .card.success .build_header {
   background: #27ae60;
   border-top: 1px solid #4bd786;
   border-bottom: 1px solid #1e8449;
 }
-/* line 32, ../../../src/app/issue/issues.scss */
+/* line 35, ../../../src/app/issue/issues.scss */
 .card.failure .build_header {
   background: #e74c3c;
   border-top: 1px solid #ef8b80;
   border-bottom: 1px solid #d62c1a;
 }
-/* line 38, ../../../src/app/issue/issues.scss */
+/* line 41, ../../../src/app/issue/issues.scss */
 .card.pending .build_header {
   background: #3498db;
   border-top: 1px solid #75b9e7;
   border-bottom: 1px solid #217dbb;
 }
-/* line 44, ../../../src/app/issue/issues.scss */
+/* line 47, ../../../src/app/issue/issues.scss */
 .card.unknown .build_header {
   background: #95a5a6;
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 51, ../../../src/app/issue/issues.scss */
+/* line 54, ../../../src/app/issue/issues.scss */
 .card.dragging {
   background: blue;
 }
-/* line 55, ../../../src/app/issue/issues.scss */
+/* line 58, ../../../src/app/issue/issues.scss */
 .card .header {
   margin: 0;
   padding: 3px 50px 3px 5px;
@@ -188,19 +215,20 @@ ul.issue-columns > li {
   font-weight: bold;
   background: #fff;
   border-bottom: 1px solid #ccd4d5;
+  position: relative;
 }
-/* line 62, ../../../src/app/issue/issues.scss */
+/* line 66, ../../../src/app/issue/issues.scss */
 .card .header:first-child {
   border-radius: 3px 3px 0 0;
 }
-/* line 66, ../../../src/app/issue/issues.scss */
+/* line 70, ../../../src/app/issue/issues.scss */
 .card .icon-code-fork {
   color: #6d8082;
   font-size: 1em;
   font-weight: bold;
   margin-right: 3px;
 }
-/* line 72, ../../../src/app/issue/issues.scss */
+/* line 76, ../../../src/app/issue/issues.scss */
 .card .number {
   display: inline-block;
   border: 1px solid #3498db;
@@ -211,22 +239,22 @@ ul.issue-columns > li {
   border-radius: 3px;
   background-color: #f7fbfe;
 }
-/* line 81, ../../../src/app/issue/issues.scss */
+/* line 85, ../../../src/app/issue/issues.scss */
 .card .number:hover {
   text-decoration: none;
   background-color: #3498db;
   color: #fff;
 }
-/* line 85, ../../../src/app/issue/issues.scss */
+/* line 89, ../../../src/app/issue/issues.scss */
 .card .number:hover .icon-code-fork {
   color: #fff;
 }
-/* line 90, ../../../src/app/issue/issues.scss */
+/* line 94, ../../../src/app/issue/issues.scss */
 .card .title {
   white-space: normal;
   line-height: 1.3em;
 }
-/* line 95, ../../../src/app/issue/issues.scss */
+/* line 99, ../../../src/app/issue/issues.scss */
 .card .avatar {
   height: 50px;
   max-height: 50px;
@@ -238,13 +266,22 @@ ul.issue-columns > li {
   border: 1px solid rgba(0, 0, 0, 0.5);
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 106, ../../../src/app/issue/issues.scss */
+/* line 109, ../../../src/app/issue/issues.scss */
+.card .avatar.empty {
+  height: 25px;
+  right: 0;
+  top: -1px;
+  border-radius: 0;
+  box-shadow: none;
+  opacity: .7;
+}
+/* line 118, ../../../src/app/issue/issues.scss */
 .card .content {
   margin: 0;
   padding: 0 5px;
   white-space: normal;
 }
-/* line 112, ../../../src/app/issue/issues.scss */
+/* line 124, ../../../src/app/issue/issues.scss */
 .card .milestone {
   display: inline-block;
   padding: 2px 10px 2px 7px;
@@ -262,7 +299,7 @@ ul.issue-columns > li {
   font-size: .9em;
   border-radius: 0 3px 3px 0;
 }
-/* line 130, ../../../src/app/issue/issues.scss */
+/* line 142, ../../../src/app/issue/issues.scss */
 .card .label {
   overflow: hidden;
   border-bottom: 1px solid rgba(0, 0, 0, 0.35);
@@ -271,13 +308,13 @@ ul.issue-columns > li {
   display: inline-block;
   margin: 2px;
 }
-/* line 144, ../../../src/app/issue/issues.scss */
+/* line 156, ../../../src/app/issue/issues.scss */
 .card .reviews {
   position: relative;
   white-space: normal;
   padding: 3px 6px 1px;
 }
-/* line 148, ../../../src/app/issue/issues.scss */
+/* line 160, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_count {
   display: inline-block;
   margin: 0 0 2px 0;
@@ -290,19 +327,19 @@ ul.issue-columns > li {
   font-weight: bold;
   font-size: 1em;
 }
-/* line 162, ../../../src/app/issue/issues.scss */
+/* line 174, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_count.even {
   border-radius: 13px;
 }
-/* line 165, ../../../src/app/issue/issues.scss */
+/* line 177, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_count.positive {
   background: #27ae60;
 }
-/* line 168, ../../../src/app/issue/issues.scss */
+/* line 180, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_count.negative {
   background: #e74c3c;
 }
-/* line 173, ../../../src/app/issue/issues.scss */
+/* line 185, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_avatar {
   max-width: 20px;
   max-height: 20px;
@@ -312,15 +349,15 @@ ul.issue-columns > li {
   border-color: grey;
   vertical-align: middle;
 }
-/* line 181, ../../../src/app/issue/issues.scss */
+/* line 193, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_avatar.yes {
   border-color: #229955;
 }
-/* line 184, ../../../src/app/issue/issues.scss */
+/* line 196, ../../../src/app/issue/issues.scss */
 .card .reviews .vote_avatar.no {
   border-color: #e43725;
 }
-/* line 192, ../../../src/app/issue/issues.scss */
+/* line 204, ../../../src/app/issue/issues.scss */
 .card .stats {
   position: absolute;
   right: 3px;
@@ -329,45 +366,82 @@ ul.issue-columns > li {
   color: #95a5a6;
   font-size: 1.2em;
 }
-/* line 199, ../../../src/app/issue/issues.scss */
+/* line 211, ../../../src/app/issue/issues.scss */
 .card .stats:hover {
   color: #3e4a4a;
 }
-/* line 202, ../../../src/app/issue/issues.scss */
+/* line 214, ../../../src/app/issue/issues.scss */
 .card .stats span {
   margin-right: 10px;
 }
-/* line 204, ../../../src/app/issue/issues.scss */
+/* line 216, ../../../src/app/issue/issues.scss */
 .card .stats span.todos i {
   margin-right: 5px;
 }
-/* line 207, ../../../src/app/issue/issues.scss */
+/* line 219, ../../../src/app/issue/issues.scss */
 .card .stats span:last-child {
   margin-right: 0;
 }
 
-/* line 218, ../../../src/app/issue/issues.scss */
+/* line 230, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li {
   margin: 4px;
 }
-/* line 219, ../../../src/app/issue/issues.scss */
+/* line 231, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li:hover {
   background: blue;
 }
-/* line 224, ../../../src/app/issue/issues.scss */
+/* line 236, ../../../src/app/issue/issues.scss */
 .issue_detail .user-selector .dropdown-menu li .avatar {
   padding: 4px;
 }
+/* line 243, ../../../src/app/issue/issues.scss */
+.issue_detail .label_bar {
+  border-style: solid;
+  border-width: 1px;
+  border-right: none;
+  min-width: 300px;
+  display: inline-block;
+  border-radius: 2px;
+  padding: 2px;
+  margin: 2px;
+  margin-right: 0px;
+}
+/* line 255, ../../../src/app/issue/issues.scss */
+.issue_detail .label_bar .label {
+  margin: 2px;
+}
+/* line 260, ../../../src/app/issue/issues.scss */
+.issue_detail .label_editor {
+  display: inline-block;
+}
+/* line 263, ../../../src/app/issue/issues.scss */
+.issue_detail .label_editor .label-item {
+  margin: 3px;
+  padding: 2px;
+  border-style: line;
+  border-width: 1px;
+  border-radius: 2px;
+}
+/* line 270, ../../../src/app/issue/issues.scss */
+.issue_detail .label_editor .label-item.enabled {
+  background-color: blue;
+}
+/* line 274, ../../../src/app/issue/issues.scss */
+.issue_detail .label_editor .label-item .pill {
+  border-radius: 2px;
+  padding: 2px;
+}
 
-/* line 232, ../../../src/app/issue/issues.scss */
+/* line 282, ../../../src/app/issue/issues.scss */
 .convert_to_pull {
   margin: 8px;
 }
-/* line 235, ../../../src/app/issue/issues.scss */
+/* line 285, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-selector {
   display: inline-block;
 }
-/* line 239, ../../../src/app/issue/issues.scss */
+/* line 289, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown {
   width: 300px;
   margin-top: 4px;
@@ -382,7 +456,7 @@ ul.issue-columns > li {
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 253, ../../../src/app/issue/issues.scss */
+/* line 303, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
@@ -392,12 +466,12 @@ ul.issue-columns > li {
   background-repeat: repeat-x;
   border-bottom: 1px solid #dddddd;
 }
-/* line 263, ../../../src/app/issue/issues.scss */
+/* line 313, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 268, ../../../src/app/issue/issues.scss */
+/* line 318, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown .menu-item {
   cursor: pointer;
   border-bottom: 1px solid #eeeeee;
@@ -407,7 +481,7 @@ ul.issue-columns > li {
   overflow: hidden;
   color: inherit;
 }
-/* line 277, ../../../src/app/issue/issues.scss */
+/* line 327, ../../../src/app/issue/issues.scss */
 .convert_to_pull .branch-pulldown .menu-item:hover {
   background: blue;
 }

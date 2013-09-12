@@ -346,6 +346,12 @@ angular.module('github.api', ['restangular'])
          .get(_.defaults({}, args, {state: 'open'}));
    };
 
+   this.listLabels = function(owner, repo) {
+      return GitHubRestangular
+         .one(['repos', owner, repo, 'labels'].join('/'))
+         .get();
+   };
+
    this.getBranches = function(owner, repo) {
       return GitHubRestangular
          .one(['repos', owner, repo, 'branches'].join('/'))
