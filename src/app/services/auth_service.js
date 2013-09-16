@@ -23,7 +23,7 @@ angular.module('Trestle.authentication', [])
  Provides tools for logging in and out of the system and presisting the
  authentication across browser refreshes.
  */
-.service('auth', function($http) {
+.service('auth', function($q, $http) {
    var
    // The key to store session tokens under when using storage
    storage_key = 'trestle-gh-token',
@@ -119,27 +119,32 @@ angular.module('Trestle.authentication', [])
     then store it in GitHub so that the user can revoke the authentication
     later on.
 
+    @param {string} opts.username The username to authenticate with
+    @param {string} opts.password the passowrd to authenticate with
+    @param {boolean} remember flag determining if the users token should be
+           stored after the user leaves the page.
+    @param {function} noTokenHandler Called when the user does not currenly have
+           an auth token for trestle.  The function takes no arguments and
+           returns a promise which is resolved only if the user is ok with
+           creating a token.
+
     @returns {Promise} The success chain will be fired with the users token if
              they provided credentials were correct.
     */
-   this.login = function(username, password, rememberMe) {
+   this.login = function(opts) {
       // Query GitHub to see if the creds were valid
       var p = $http({
          method: 'GET',
          url:    'https://api.github.com/authorizations',
          headers: {
-            Authorization: 'Basic ' + window.btoa(username + ':' + password)
+            Authorization: 'Basic ' + window.btoa(opts.username + ':' + opts.password)
          }
       });
 
       // On success store the token for later use
       // Otherwise, return an error
-      p.then(angular.bind(this, this._onLoginSuccess, !!rememberMe),
-             angular.bind(this, this._onLoginError));
-
-      // The users of the this promise will not be called until after our
-      // callbacks are finished.
-      return p;
+      return p.then(angular.bind(this, this._onLoginSuccess, opts),
+                    angular.bind(this, this._onLoginError));
    };
 
    /**
@@ -159,14 +164,14 @@ angular.module('Trestle.authentication', [])
     The new token is also cached in memory and storage so that the user does not
     need to log in again later (if they do not want to).
 
-    @param {boolean} rememberMe Flag indicating if the token aquired from GitHub
+    @param {boolean} opts.remember Flag indicating if the token aquired from GitHub
            should be cached locally.
     @param {object} res The HTTP response from GitHub.  see HttpPromise in
            angular docs.
 
     @returns {String|Promise} The token to use
     */
-   this._onLoginSuccess = function(rememberMe, res) {
+   this._onLoginSuccess = function(opts, res) {
       var auths = res.data;
       // See if any of the authorizations are for our app
       var auth = _.find(auths, function(auth) {
@@ -175,27 +180,40 @@ angular.module('Trestle.authentication', [])
 
       // Yeah, the user already had a token for us
       if (auth) {
-         // Some stuff
-         setAuthToken(auth.token, rememberMe);
+         // Store the token for later
+         setAuthToken(auth.token, opts.remember);
          // Return the new token in case people need to use it.
          return token;
       }
 
       // The user did not have a token for us so we must make one and store it
       // for later use.
-      if (1) {
-         throw new Error('adsf');
-      }
+      return opts.noTokenHandler().then(function(arg) {
+         // Create the token when our special note
+         var p = $http({
+            method: 'POST',
+            url:    'https://api.github.com/authorizations',
+            data: {
+               note: auth_key
+            },
+            headers: {
+               Authorization: 'Basic ' + window.btoa(opts.username + ':' + opts.password)
+            }
+         });
 
-      // XXX Add the authorization ourselves
-
-      return token;
+         return p.then(function(res) {
+            var token = res.data.token;
+            // Store the token so that we can find it later
+            setAuthToken(token, opts.remember);
+            // Resolve the promise with the token
+            return token;
+         });
+      });
    };
 
    this._onLoginError = function(res) {
       console.warn('login error');
    };
-
 })
 
 ;

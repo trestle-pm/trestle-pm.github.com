@@ -7,12 +7,9 @@
  */
 
 // Add our module to the namespace
-angular.module( 'Trestle.login', [
-  'ui.state'
-])
+angular.module( 'Trestle.login', [])
 
-
-.controller( 'LoginCtrl', function HomeController($http, $location, auth, gh) {
+.controller( 'LoginCtrl', function($http, $location, $modal, auth, gh) {
    // Always start with a blonk username/password and remember turned off
    this.username = this.password = '';
    this.rememberMe = false;
@@ -26,9 +23,14 @@ angular.module( 'Trestle.login', [
          // XXX look at basic field validation
          console.log('Dude you must enter something');
          return;
-     }
+      }
+      var options = {username:       this.username,
+                     password:       this.password,
+                     remember:       this.rememberMe,
+                     noTokenHandler: this.onCreateToken
+                    };
 
-      auth.login(user, pass, this.rememberMe).then(
+      auth.login(options).then(
          function(token) {
             // Pass the token off to the `gh` service
             // - Tell the github service how long to hold the authentication
@@ -39,10 +41,18 @@ angular.module( 'Trestle.login', [
             //   bounce the user to the repo list by default
             $location.path('/repo');
          },
-         function() {
+         function(err) {
             // XXX handle bad cred case (some kind of error screen
-            console.log('more error');
+            console.log(err);
          });
+   };
+
+   this.onCreateToken = function(username, password) {
+      var modal = $modal.open({
+         templateUrl: 'login/create_token.tpl.html',
+         backdrop:    'static'});
+
+      return modal.result;
    };
 })
 

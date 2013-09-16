@@ -1,50 +1,50 @@
-angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
+angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/create_token.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
 
 angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("board/columns/issue_columns.tpl.html",
-    "<div ng-controller=\"ColumnsCtrl as columnsCtrl\" >\n" +
-    "  <button class=\"btn btn-primary backlog\"\n" +
-    "          ng-click=\"showBacklog = !showBacklog\">\n" +
-    "    {{showBacklog ? 'Hide Backlog' : 'Show Backlog'}}\n" +
-    "  </button>\n" +
+    "<div class=\"hide-bl\" ng-controller=\"ColumnsCtrl as columnsCtrl\"\n" +
+    "      ng-class=\"{\n" +
+    "         'show-bl': columnsCtrl.showBacklog,\n" +
+    "         'hide-bl': !columnsCtrl.showBacklog\n" +
+    "      }\">\n" +
     "\n" +
+    "   <!-- Backlog Column -->\n" +
+    "   <div id=\"backlog-drawer\"\n" +
+    "       ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
+    "       ng-init=\"colCtrl.init({isBacklog:true})\" >\n" +
+    "      <button id=\"backlog-toggle-btn\"\n" +
+    "              ng-click=\"columnsCtrl.showBacklog = !columnsCtrl.showBacklog\" >\n" +
+    "        <span ng-if=\"!columnsCtrl.showBacklog\"><i class=\"icon-caret-right\"></i></span>\n" +
+    "        <span ng-if=\"columnsCtrl.showBacklog\"><i class=\"icon-caret-left\"></i></span>\n" +
+    "      </button>\n" +
+    "      <div class=\"drawer\">\n" +
+    "          <h1 class=\"column-header\">\n" +
+    "             <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
+    "             <span class=\"wip-count\">{{colCtrl.issues.length}}</span>\n" +
+    "         </h1>\n" +
+    "      <select class=\"milestone-selection\"\n" +
+    "              ng-init=\"msFilterVal='*'\"\n" +
+    "              ng-model=\"msFilterVal\"\n" +
+    "              ng-options=\"m.value as m.title for m in columnsCtrl.getMilestoneSelectOptions()\">\n" +
+    "      </select>\n" +
+    "     <a id=\"new-issue\" class=\"\"\n" +
+    "        ng-href=\"https://github.com/{{repoModel.owner}}/{{repoModel.repo}}/issues/new\"\n" +
+    "        target=\"_blank\">New Issue</a>\n" +
+    "\n" +
+    "\n" +
+    "     <!-- CARDS List -->\n" +
+    "     <ul class=\"column-body\"\n" +
+    "         tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\">\n" +
+    "\n" +
+    "       <li class=\"card-wrapper\"\n" +
+    "            ng-repeat=\"issue in repoModel.issues | issuesInBacklog | filterMilestones:msFilterVal | globalIssueFilter | orderBy:'config.columnWeight'\"\n" +
+    "            data-issue-id=\"{{issue.id}}\" >\n" +
+    "         <tr-issue-card issue=\"issue\" />\n" +
+    "       </li>\n" +
+    "     </ul> <!-- end of card list -->\n" +
+    "   </div>\n" +
+    "</div>\n" +
     "  <ul class=\"issue-columns\" >\n" +
-    "    <!-- Backlog Column -->\n" +
-    "    <li ng-show=\"showBacklog\" class=\"column\"\n" +
-    "\n" +
-    "        ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
-    "\n" +
-    "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
-    "        ng-init=\"colCtrl.init({isBacklog:true})\" >\n" +
-    "\n" +
-    "      <h1 class=\"column-header\">\n" +
-    "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
-    "        <span class=\"wip_count\">{{colCtrl.issues.length}}</span>\n" +
-    "      </h1>\n" +
-    "\n" +
-    "      <a class=\"btn btn-success\"\n" +
-    "         ng-href=\"https://github.com/{{repoModel.owner}}/{{repoModel.repo}}/issues/new\"\n" +
-    "         target=\"_blank\">Create Issue</a>\n" +
-    "\n" +
-    "      <div class=\"milestone_selection\">\n" +
-    "        <select ng-init=\"msFilterVal='*'\"\n" +
-    "                ng-model=\"msFilterVal\"\n" +
-    "                ng-options=\"m.value as m.title for m in columnsCtrl.getMilestoneSelectOptions()\">\n" +
-    "        </select>\n" +
-    "      </div>\n" +
-    "\n" +
-    "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\"\n" +
-    "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\">\n" +
-    "\n" +
-    "        <li class=\"card-wrapper\"\n" +
-    "             ng-repeat=\"issue in repoModel.issues | issuesInBacklog | filterMilestones:msFilterVal | globalIssueFilter | orderBy:'config.columnWeight'\"\n" +
-    "             data-issue-id=\"{{issue.id}}\" >\n" +
-    "          <tr-issue-card issue=\"issue\" />\n" +
-    "        </li>\n" +
-    "      </ul> <!-- end of card list -->\n" +
-    "    </li>\n" +
-    "\n" +
     "    <!-- Kanban Columns -->\n" +
     "    <li ng-repeat=\"col_label in repoModel.config.columns\" class=\"column\"\n" +
     "        ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
@@ -55,9 +55,9 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      <h1 class=\"column-header\">\n" +
     "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
     "        <span ng-class=\"{\n" +
-    "                over_limit: colCtrl.issues.length > repoModel.config.wip_limit\n" +
+    "                'over-limit': colCtrl.issues.length > repoModel.config.wip_limit\n" +
     "              }\"\n" +
-    "              class=\"wip_count\">{{colCtrl.issues.length}}</span>\n" +
+    "              class=\"wip-count\">{{colCtrl.issues.length}}</span>\n" +
     "      </h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
@@ -97,7 +97,7 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
     "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\" >\n" +
     "\n" +
     "        <li class=\"card-wrapper\"\n" +
-    "             ng-repeat=\"issue in repoModel.issues | filterMilestones:'none' | filter:issueFilters.searchText | orderBy:'config.milestoneWeight'\"\n" +
+    "             ng-repeat=\"issue in repoModel.issues | filterMilestones:'none' | globalIssueFilter | orderBy:'config.milestoneWeight'\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -120,7 +120,7 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
     "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\" >\n" +
     "\n" +
     "        <li class=\"card-wrapper\"\n" +
-    "            ng-repeat=\"issue in repoModel.issues | filterMilestones:colCtrl.milestone.title | filter:issueFilters.searchText | orderBy:'config.milestoneWeight'\"\n" +
+    "            ng-repeat=\"issue in repoModel.issues | filterMilestones:colCtrl.milestone.title | globalIssueFilter | orderBy:'config.milestoneWeight'\"\n" +
     "            data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -244,8 +244,11 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
 
 angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/issue.tpl.html",
-    "<div class=\"card\"\n" +
+    "<div class=\"card {{issueCtrl.getBuildStatus()}}\"\n" +
     "      ng-controller=\"IssueCtrl as issueCtrl\"\n" +
+    "      ng-class=\"{\n" +
+    "        updated: issueCtrl.hasBeenUpdatedSinceLastView()\n" +
+    "      }\"\n" +
     "      ng-class=\"issueCtrl.getBuildStatus()\"\n" +
     "      ng-click=\"issueCtrl.showIssueDetails()\">\n" +
     "   <div class=\"build-header\"\n" +
@@ -304,7 +307,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
     "         <span class=\"comments\">\n" +
     "            <i class=\"icon-comments\"></i>\n" +
-    "            {{issueCtrl.issue.tr_comments.length}}\n" +
+    "            {{issueCtrl.issue.comments}}\n" +
     "         </span>\n" +
     "      </div>\n" +
     "   </div>\n" +
@@ -453,68 +456,89 @@ angular.module("issue_filters/issue_filter.tpl.html", []).run(["$templateCache",
     "     ng-controller=\"IssueFilterCtrl as filterCtrl\"\n" +
     "     ng-init=\"filterCtrl.init()\" >\n" +
     "\n" +
-    "  <div class=\"drawer\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
+    "   <div class=\"drawer\" class=\"hide\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
     "                                 hide: !fitlerCtrl.showDrawer}\" >\n" +
-    "    <button id=\"filter-toggle-btn\"\n" +
-    "            class=\"btn-primary\"\n" +
-    "            ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
-    "      <span ng-if=\"fitlerCtrl.showDrawer\"><i class=\"icon-caret-right\"></i></span>\n" +
-    "      <span ng-if=\"!fitlerCtrl.showDrawer\"><i class=\"icon-caret-left\"></i></span>\n" +
-    "    </button>\n" +
-    "    <h1>Filters</h1>\n" +
-    "   <div class=\"content\">\n" +
-    "    <ul >\n" +
-    "      <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
-    "          ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
-    "        Assigned to Me\n" +
-    "         <i class=\"icon-remove\"></i>\n" +
-    "      </li>\n" +
-    "      <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
-    "          ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
-    "        Reviewed by Me\n" +
-    "        <i class=\"icon-remove\"></i>\n" +
-    "      </li>\n" +
-    "      <!-- TODO: Make it work-->\n" +
-    "      <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
-    "          ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
-    "        Updated Recently\n" +
-    "        <i class=\"icon-remove\"></i>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "    <h3>Collaborator</h3>\n" +
-    "    <ul class=\"collaborator\">\n" +
-    "      <li class=\"avatar\"\n" +
-    "          ng-repeat=\"user in repoModel.assignees\"\n" +
-    "          ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
-    "          ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
-    "        <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "    <h3>Milestone</h3>\n" +
-    "    <ul>\n" +
-    "      <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
-    "          ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
-    "          ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
-    "        {{milestone.title}}\n" +
-    "        <i class=\"icon-remove\"></i>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "   <h3>Label</h3>\n" +
-    "    <ul>\n" +
-    "      <!--TODO: Get filter to work?-->\n" +
-    "      <li ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
-    "          ng-click=\"filterCtrl.setFilter('label', label.name)\"\n" +
-    "          ng-class=\"{active: issueFilters.label == label.name}\" >\n" +
-    "            <span class=\"color-preview\"\n" +
-    "                style=\"background-color: #{{label.color}}\"></span>\n" +
-    "        {{label.name}}\n" +
-    "        <i class=\"icon-remove\"></i>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
+    "      <button id=\"filter-toggle-btn\"\n" +
+    "              ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
+    "        <span ng-if=\"fitlerCtrl.showDrawer\"><i class=\"icon-caret-right\"></i></span>\n" +
+    "        <span ng-if=\"!fitlerCtrl.showDrawer\"><i class=\"icon-caret-left\"></i></span>\n" +
+    "      </button>\n" +
+    "      <h1>Filters</h1>\n" +
+    "      <div class=\"content\">\n" +
+    "         <ul >\n" +
+    "            <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
+    "              ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
+    "            Assigned to Me\n" +
+    "             <i class=\"icon-remove\"></i>\n" +
+    "            </li>\n" +
+    "            <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
+    "              ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
+    "            Reviewed by Me\n" +
+    "            <i class=\"icon-remove\"></i>\n" +
+    "            </li>\n" +
+    "            <!-- TODO: Make it work-->\n" +
+    "            <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
+    "              ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
+    "            Updated Recently\n" +
+    "            <i class=\"icon-remove\"></i>\n" +
+    "            </li>\n" +
+    "         </ul>\n" +
+    "         <h3>Collaborator</h3>\n" +
+    "         <ul class=\"collaborator\">\n" +
+    "            <li class=\"avatar\"\n" +
+    "              ng-repeat=\"user in repoModel.assignees\"\n" +
+    "              ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
+    "              ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
+    "            <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
+    "            </li>\n" +
+    "         </ul>\n" +
+    "         <h3>Milestone</h3>\n" +
+    "         <ul>\n" +
+    "            <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
+    "              ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
+    "              ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
+    "            {{milestone.title}}\n" +
+    "            <i class=\"icon-remove\"></i>\n" +
+    "            </li>\n" +
+    "         </ul>\n" +
+    "         <h3>Label</h3>\n" +
+    "         <ul>\n" +
+    "            <!--TODO: Get filter to work?-->\n" +
+    "            <li ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "              ng-click=\"filterCtrl.setFilter('label', label.name)\"\n" +
+    "              ng-class=\"{active: issueFilters.label == label.name}\" >\n" +
+    "                <span class=\"color-preview\"\n" +
+    "                    style=\"background-color: #{{label.color}}\"></span>\n" +
+    "            {{label.name}}\n" +
+    "            <i class=\"icon-remove\"></i>\n" +
+    "            </li>\n" +
+    "         </ul>\n" +
+    "      </div>\n" +
+    "   </div>\n" +
     "</div>\n" +
-    "  </div>\n" +
+    "");
+}]);
+
+angular.module("login/create_token.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("login/create_token.tpl.html",
+    "<class=\"modal-header\">\n" +
+    "  <h3>Create Authentication Token</h3>\n" +
+    "</h1>\n" +
+    "\n" +
+    "<div class=\"modal-body\">\n" +
+    "  <p>A token is required to use Trestle.  May we create one for you?</p>\n" +
+    "  <p class=\"muted\">\n" +
+    "    The token will be added to GitHub with the description of \"trestle\".  If at any point you wish to revoke Trestles access to your account simply delete that token from your GitHub account.  If later on you want to use trestle again we will simply ask to creat the token then and our feelings wont be hurt.\n" +
+    "  </p>\n" +
     "\n" +
     "</div>\n" +
+    "<div class=\"modal-footer\">\n" +
+    "  <button ng-click=\"$close('create')\"\n" +
+    "          class=\"btn btn-primary\">Create Token</button>\n" +
+    "  <button ng-click=\"$dismiss('cancel')\"\n" +
+    "          class=\"btn\">Cancel</button>\n" +
+    "</div>\n" +
+    "\n" +
     "");
 }]);
 

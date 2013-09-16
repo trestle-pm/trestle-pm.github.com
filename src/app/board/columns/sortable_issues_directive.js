@@ -27,7 +27,9 @@ angular.module('Trestle.board')
             connectWith: '.column-body',
             helper:      'clone',
             opacity:     0.8,
-            placeholder: 'drop-area'
+            placeholder: 'drop-area',
+            scroll: false,
+            appendTo: 'body'
          };
 
          // Extract the handler funcstions syntax.

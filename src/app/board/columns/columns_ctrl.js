@@ -7,10 +7,6 @@ angular.module('Trestle.board')
       var config      = trRepoModel.config,
           num_columns = config ? config.columns.length : 0;
 
-      if($scope.showBacklog) {
-         num_columns += 1;
-      }
-
       return { width: (99.0 / num_columns) + '%'};
    };
 

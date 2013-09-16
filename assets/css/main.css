@@ -1,4 +1,4 @@
-/* line 8, ../../../src/scss/main.scss */
+/* line 7, ../../../src/scss/main.scss */
 [draggable] {
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -9,83 +9,125 @@
   -webkit-user-drag: element;
 }
 
-/* line 18, ../../../src/scss/main.scss */
-body {
+/* line 17, ../../../src/scss/main.scss */
+html, body {
   background: #2c3e50;
-}
-
-/* line 22, ../../../src/scss/main.scss */
-.repos_base.container {
+  overflow: hidden;
+  height: 100%;
   width: 100%;
 }
 
-/* line 28, ../../../src/scss/main.scss */
+/* line 25, ../../../src/scss/main.scss */
+.repos_base.container {
+  width: 100%;
+  height: 100%;
+}
+
+/* line 32, ../../../src/scss/main.scss */
 .avatar {
   max-width: 30px;
   max-height: 30px;
   border-radius: 5px;
 }
 
-/* line 35, ../../../src/scss/main.scss */
+/* line 39, ../../../src/scss/main.scss */
 .no-scroll {
   overflow: hidden;
 }
 
-/* line 2, ../../../src/app/toolbar/toolbar.scss */
+/* line 1, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar {
+  margin-bottom: 1px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 45px;
+}
+/* line 9, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .navbar-inner {
+  border-radius: 0;
+}
+/* line 12, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .brand img {
   height: 1em;
 }
-/* line 6, ../../../src/app/toolbar/toolbar.scss */
+/* line 16, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list {
   width: 400px;
 }
-/* line 9, ../../../src/app/toolbar/toolbar.scss */
+/* line 19, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list .filter {
   margin: 5px;
 }
-/* line 12, ../../../src/app/toolbar/toolbar.scss */
+/* line 22, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list .filter .search-query {
   width: 100%;
   padding: 13px;
   box-sizing: border-box;
 }
-/* line 19, ../../../src/app/toolbar/toolbar.scss */
+/* line 29, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list .repo-list {
   height: 300px;
   overflow: auto;
 }
-/* line 25, ../../../src/app/toolbar/toolbar.scss */
+/* line 35, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #issue-search {
   width: 20em;
   margin: 5px;
 }
-/* line 30, ../../../src/app/toolbar/toolbar.scss */
+/* line 40, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #settings {
   padding: 5px;
 }
 
-/* line 2, ../../../src/app/board/columns/issue_columns.scss */
+/***************************************
+ *        COLUMNS
+ ***************************************/
+/* line 12, ../../../src/app/board/columns/issue_columns.scss */
 .card-wrapper {
   list-style: none;
 }
 
-/* line 4, ../../../src/app/board/columns/issue_columns.scss */
-ul.user-list, ul.issue-columns, ul.milestone-columns, ul.column-body {
+/* line 19, ../../../src/app/board/columns/issue_columns.scss */
+.user-list,
+.issue-columns,
+.milestone-columns,
+.column-body {
   margin: 0;
   padding: 0;
 }
 
-/* line 9, ../../../src/app/board/columns/issue_columns.scss */
-ul.issue-columns, ul.milestone-columns {
+/************* COLUMNS ****************/
+/* line 30, ../../../src/app/board/columns/issue_columns.scss */
+.columns,
+.columns > div {
+  height: 100%;
+}
+
+/* line 36, ../../../src/app/board/columns/issue_columns.scss */
+.issue-columns,
+.milestone-columns {
   margin: 0;
   padding: 0;
   border: 0;
   overflow: hidden;
   *zoom: 1;
   margin-left: 25px;
+  overflow: auto;
+  height: 100%;
+  padding-top: 8px;
+  padding-top: 53px;
+  box-sizing: border-box;
+  -webkit-transition: margin 0.5s ease-in;
+  -moz-transition: margin 0.5s ease-in;
+  -o-transition: margin 0.5s ease-in;
+  transition: margin 0.5s ease-in;
 }
-/* line 13, ../../../src/app/board/columns/issue_columns.scss */
-ul.issue-columns > li, ul.milestone-columns > li {
+/* line 47, ../../../src/app/board/columns/issue_columns.scss */
+.issue-columns > li,
+.milestone-columns > li {
   list-style-image: none;
   list-style-type: none;
   margin-left: 0;
@@ -99,63 +141,158 @@ ul.issue-columns > li, ul.milestone-columns > li {
   vertical-align: top;
 }
 
-/* line 21, ../../../src/app/board/columns/issue_columns.scss */
-.btn.backlog {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-  -webkit-transform-origin: 0 100%;
-  -moz-transform-origin: 0 100%;
-  -ms-transform-origin: 0 100%;
-  -o-transform-origin: 0 100%;
-  transform-origin: 0 100%;
-  position: absolute;
-  top: 175px;
-}
-
-/* line 29, ../../../src/app/board/columns/issue_columns.scss */
+/* line 54, ../../../src/app/board/columns/issue_columns.scss */
 .column-header {
-  text-align: center;
   position: relative;
   box-sizing: border-box;
   margin-top: 0;
-  color: #555;
-  line-height: 20px;
   margin-bottom: 10px;
-  padding: 3px;
-  padding-left: 10px;
-  border: 1px solid #e5e5e5;
-  background: #f3f3f3;
-  font-size: 100%;
+  padding: 3px 4px 3px 7px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.4) inset;
+  font-size: 1em;
+  line-height: 1.5em;
+  text-align: left;
+  color: #2c3e50;
 }
-/* line 45, ../../../src/app/board/columns/issue_columns.scss */
-.column-header .wip_count {
-  border: solid;
-  border-width: 1px;
-  border-radius: 2px;
-  border-color: light-grey;
+/* line 68, ../../../src/app/board/columns/issue_columns.scss */
+.column-header .wip-count {
   float: right;
+  padding: 3px 5px;
+  background: transparent;
+  border-radius: 50px;
+  color: rgba(44, 62, 80, 0.6);
+  line-height: 1em;
 }
-/* line 52, ../../../src/app/board/columns/issue_columns.scss */
-.column-header .wip_count.over_limit {
-  background: red;
+/* line 77, ../../../src/app/board/columns/issue_columns.scss */
+.column-header .wip-count.over-limit {
+  background: #e74c3c;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+  color: white;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
 }
 
-/* line 59, ../../../src/app/board/columns/issue_columns.scss */
+/* line 87, ../../../src/app/board/columns/issue_columns.scss */
 .column {
+  box-sizing: border-box;
+  min-height: 100%;
   margin: 0;
   padding: 0 10px;
   margin-before: 0;
   vertical-align: top;
-  box-sizing: border-box;
+}
+
+/* line 96, ../../../src/app/board/columns/issue_columns.scss */
+.column-body {
   min-height: 1000px;
 }
 
-/* line 72, ../../../src/app/board/columns/issue_columns.scss */
-.column-body {
-  min-height: 1000px;
+/************* BACKLOG PANEL ****************/
+/* line 103, ../../../src/app/board/columns/issue_columns.scss */
+#backlog-drawer {
+  position: fixed;
+  top: 45px;
+  bottom: 0;
+  left: 0;
+  width: 235px;
+  -webkit-transition: width 0.5s ease-in;
+  -moz-transition: width 0.5s ease-in;
+  -o-transition: width 0.5s ease-in;
+  transition: width 0.5s ease-in;
+}
+/* line 113, ../../../src/app/board/columns/issue_columns.scss */
+#backlog-drawer .drawer {
+  position: fixed;
+  left: 0;
+  top: 45px;
+  bottom: 0;
+  box-sizing: border-box;
+  -webkit-transition: left 0.5s ease-in;
+  -moz-transition: left 0.5s ease-in;
+  -o-transition: left 0.5s ease-in;
+  transition: left 0.5s ease-in;
+  z-index: 1;
+  width: 235px;
+  background: #42576d;
+  border-radius: 0 0 0 3px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 12px 10px 8px;
+}
+
+/* line 132, ../../../src/app/board/columns/issue_columns.scss */
+#backlog-toggle-btn {
+  position: absolute;
+  top: 5px;
+  right: -20px;
+  z-index: 10;
+  padding: 5px;
+  padding-bottom: 6px;
+  background: #e8ecec;
+  border: 1px solid #ccd4d5;
+  border-radius: 0 3px 3px 0;
+  color: #95a5a6;
+  text-shadow: 0 1px 0 white;
+  font-size: 1.5em;
+}
+
+/* line 150, ../../../src/app/board/columns/issue_columns.scss */
+.show-bl #backlog-drawer .drawer {
+  left: 0;
+}
+/* line 154, ../../../src/app/board/columns/issue_columns.scss */
+.show-bl .issue-columns {
+  margin-left: 247px;
+}
+
+/* line 162, ../../../src/app/board/columns/issue_columns.scss */
+.hide-bl #backlog-drawer {
+  width: 0;
+}
+/* line 165, ../../../src/app/board/columns/issue_columns.scss */
+.hide-bl #backlog-drawer .drawer {
+  left: -235px;
+}
+
+/* line 172, ../../../src/app/board/columns/issue_columns.scss */
+#new-issue {
+  display: block;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  padding: 5px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: bold;
+}
+/* line 183, ../../../src/app/board/columns/issue_columns.scss */
+#new-issue:hover, #new-issue:active {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5faee3), color-stop(100%, #258cd1));
+  background-image: -webkit-linear-gradient(#5faee3, #258cd1);
+  background-image: -moz-linear-gradient(#5faee3, #258cd1);
+  background-image: -o-linear-gradient(#5faee3, #258cd1);
+  background-image: linear-gradient(#5faee3, #258cd1);
+  border: 1px solid #3498db;
+  border-color: #258cd1 #258cd1 #1d6fa5;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  padding: 6px;
+  color: white;
+  text-decoration: none;
+}
+/* line 193, ../../../src/app/board/columns/issue_columns.scss */
+#new-issue:active {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #217dbb), color-stop(100%, #258cd1));
+  background-image: -webkit-linear-gradient(#217dbb, #258cd1);
+  background-image: -moz-linear-gradient(#217dbb, #258cd1);
+  background-image: -o-linear-gradient(#217dbb, #258cd1);
+  background-image: linear-gradient(#217dbb, #258cd1);
+}
+
+/* line 200, ../../../src/app/board/columns/issue_columns.scss */
+.milestone-selection {
+  width: 100%;
 }
 
 /***************************************
@@ -306,7 +443,11 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 150, ../../../src/app/issue/issues.scss */
+/* line 149, ../../../src/app/issue/issues.scss */
+.card.updated {
+  border: 4px solid blue;
+}
+/* line 154, ../../../src/app/issue/issues.scss */
 .card .header {
   position: relative;
   margin: 0;
@@ -317,21 +458,21 @@ ul.issue-columns > li, ul.milestone-columns > li {
   font-size: 1em;
   font-weight: bold;
 }
-/* line 160, ../../../src/app/issue/issues.scss */
+/* line 164, ../../../src/app/issue/issues.scss */
 .card .header:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
-/* line 165, ../../../src/app/issue/issues.scss */
+/* line 169, ../../../src/app/issue/issues.scss */
 .card .header:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-/* line 172, ../../../src/app/issue/issues.scss */
+/* line 176, ../../../src/app/issue/issues.scss */
 .card .title {
   white-space: normal;
 }
-/* line 177, ../../../src/app/issue/issues.scss */
+/* line 181, ../../../src/app/issue/issues.scss */
 .card .avatar {
   height: 35px;
   max-height: 35px;
@@ -343,7 +484,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-radius: 17.5px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 189, ../../../src/app/issue/issues.scss */
+/* line 193, ../../../src/app/issue/issues.scss */
 .card .avatar.empty {
   height: 25px;
   right: 0;
@@ -352,13 +493,13 @@ ul.issue-columns > li, ul.milestone-columns > li {
   box-shadow: none;
   opacity: .7;
 }
-/* line 200, ../../../src/app/issue/issues.scss */
+/* line 204, ../../../src/app/issue/issues.scss */
 .card .content {
   margin: 0;
   padding: 0 5px;
   white-space: normal;
 }
-/* line 206, ../../../src/app/issue/issues.scss */
+/* line 210, ../../../src/app/issue/issues.scss */
 .card .milestone {
   display: inline-block;
   padding: 2px 10px 2px 7px;
@@ -376,13 +517,13 @@ ul.issue-columns > li, ul.milestone-columns > li {
   vertical-align: baseline;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 225, ../../../src/app/issue/issues.scss */
+/* line 229, ../../../src/app/issue/issues.scss */
 .card .reviews {
   position: relative;
   white-space: normal;
   padding: 3px 6px 1px;
 }
-/* line 231, ../../../src/app/issue/issues.scss */
+/* line 235, ../../../src/app/issue/issues.scss */
 .card .vote-avatar {
   max-width: 20px;
   max-height: 20px;
@@ -390,15 +531,15 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border: 3px solid #95a5a6;
   vertical-align: middle;
 }
-/* line 238, ../../../src/app/issue/issues.scss */
+/* line 242, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.yes {
   border-color: #229955;
 }
-/* line 239, ../../../src/app/issue/issues.scss */
+/* line 243, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.no {
   border-color: #e43725;
 }
-/* line 243, ../../../src/app/issue/issues.scss */
+/* line 247, ../../../src/app/issue/issues.scss */
 .card .stats {
   position: absolute;
   right: 3px;
@@ -407,24 +548,24 @@ ul.issue-columns > li, ul.milestone-columns > li {
   color: #95a5a6;
   font-size: 1.2em;
 }
-/* line 251, ../../../src/app/issue/issues.scss */
+/* line 255, ../../../src/app/issue/issues.scss */
 .card .stats:hover {
   color: #3e4a4a;
 }
-/* line 256, ../../../src/app/issue/issues.scss */
+/* line 260, ../../../src/app/issue/issues.scss */
 .card .stats span {
   margin-right: 10px;
 }
-/* line 259, ../../../src/app/issue/issues.scss */
+/* line 263, ../../../src/app/issue/issues.scss */
 .card .stats span.todos i {
   margin-right: 5px;
 }
-/* line 263, ../../../src/app/issue/issues.scss */
+/* line 267, ../../../src/app/issue/issues.scss */
 .card .stats span:last-child {
   margin-right: 0;
 }
 
-/* line 270, ../../../src/app/issue/issues.scss */
+/* line 274, ../../../src/app/issue/issues.scss */
 .drop-area {
   height: 70px;
   background: rgba(255, 255, 255, 0.15);
@@ -433,7 +574,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
 }
 
 /************* DETAILS ****************/
-/* line 279, ../../../src/app/issue/issues.scss */
+/* line 283, ../../../src/app/issue/issues.scss */
 .modal {
   max-height: 80%;
   overflow: auto;
@@ -443,7 +584,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-/* line 289, ../../../src/app/issue/issues.scss */
+/* line 293, ../../../src/app/issue/issues.scss */
 .modal .header {
   position: relative;
   margin: 0;
@@ -454,35 +595,35 @@ ul.issue-columns > li, ul.milestone-columns > li {
   font-size: 1.2em;
   font-weight: bold;
 }
-/* line 301, ../../../src/app/issue/issues.scss */
+/* line 305, ../../../src/app/issue/issues.scss */
 .modal .title {
   white-space: normal;
   line-height: 1.3em;
 }
-/* line 307, ../../../src/app/issue/issues.scss */
+/* line 311, ../../../src/app/issue/issues.scss */
 .modal .issue-number {
   position: absolute;
   top: 2px;
   right: 28px;
   padding: 3px 4px;
 }
-/* line 315, ../../../src/app/issue/issues.scss */
+/* line 319, ../../../src/app/issue/issues.scss */
 .modal .close {
   float: none;
   position: absolute;
   right: 5px;
   top: 3px;
 }
-/* line 323, ../../../src/app/issue/issues.scss */
+/* line 327, ../../../src/app/issue/issues.scss */
 .modal .user-selector {
   position: static;
 }
-/* line 326, ../../../src/app/issue/issues.scss */
+/* line 330, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-toggle {
   position: static;
   z-index: 100;
 }
-/* line 331, ../../../src/app/issue/issues.scss */
+/* line 335, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-toggle .avatar {
   height: 60px;
   max-height: 60px;
@@ -495,12 +636,12 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-radius: 35px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 346, ../../../src/app/issue/issues.scss */
+/* line 350, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu {
   z-index: 50;
   margin-top: 19px;
 }
-/* line 350, ../../../src/app/issue/issues.scss */
+/* line 354, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu h4 {
   margin: 0;
   padding: 6px 5px 0;
@@ -508,11 +649,11 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-bottom: 1px solid #b1bdbd;
   font-size: .8em;
 }
-/* line 358, ../../../src/app/issue/issues.scss */
+/* line 362, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu .avatar {
   border-radius: 2px;
 }
-/* line 365, ../../../src/app/issue/issues.scss */
+/* line 369, ../../../src/app/issue/issues.scss */
 .modal .status-header {
   width: 100%;
   height: 28px;
@@ -522,7 +663,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-top: 1px solid #798d8f;
   border-bottom: 1px solid #798d8f;
 }
-/* line 375, ../../../src/app/issue/issues.scss */
+/* line 379, ../../../src/app/issue/issues.scss */
 .modal .build-status {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -535,27 +676,27 @@ ul.issue-columns > li, ul.milestone-columns > li {
   padding: 3px 0 3px 65px;
   border-right: 1px solid #6d8082;
 }
-/* line 385, ../../../src/app/issue/issues.scss */
+/* line 389, ../../../src/app/issue/issues.scss */
 .modal .build-status.success {
   background: #89e5b0;
   color: #19703e;
 }
-/* line 386, ../../../src/app/issue/issues.scss */
+/* line 390, ../../../src/app/issue/issues.scss */
 .modal .build-status.failure {
   background: #f8c9c4;
   color: #bf2718;
 }
-/* line 387, ../../../src/app/issue/issues.scss */
+/* line 391, ../../../src/app/issue/issues.scss */
 .modal .build-status.pending {
   background: #b6daf2;
   color: #1d6fa5;
 }
-/* line 388, ../../../src/app/issue/issues.scss */
+/* line 392, ../../../src/app/issue/issues.scss */
 .modal .build-status.unknown {
   background: #e8ecec;
   color: #6d8082;
 }
-/* line 392, ../../../src/app/issue/issues.scss */
+/* line 396, ../../../src/app/issue/issues.scss */
 .modal .comment-summary {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -573,34 +714,34 @@ ul.issue-columns > li, ul.milestone-columns > li {
   font-size: 1.2em;
   text-align: right;
 }
-/* line 408, ../../../src/app/issue/issues.scss */
+/* line 412, ../../../src/app/issue/issues.scss */
 .modal .comment-summary i {
   color: #e8ecec;
 }
-/* line 413, ../../../src/app/issue/issues.scss */
+/* line 417, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span {
   margin-right: 10px;
 }
-/* line 416, ../../../src/app/issue/issues.scss */
+/* line 420, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span.todos i {
   margin-right: 4px;
 }
-/* line 420, ../../../src/app/issue/issues.scss */
+/* line 424, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span:last-child {
   margin-right: 0;
 }
-/* line 428, ../../../src/app/issue/issues.scss */
+/* line 432, ../../../src/app/issue/issues.scss */
 .modal .branch-info {
   display: none;
 }
-/* line 433, ../../../src/app/issue/issues.scss */
+/* line 437, ../../../src/app/issue/issues.scss */
 .modal .controls {
   padding: 5px 10px;
   background: white;
   border-bottom: 1px solid #dae0e0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-/* line 441, ../../../src/app/issue/issues.scss */
+/* line 445, ../../../src/app/issue/issues.scss */
 .modal select.milestone {
   display: inline-block;
   width: 25%;
@@ -609,7 +750,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   color: black;
   font-size: 1em;
 }
-/* line 451, ../../../src/app/issue/issues.scss */
+/* line 455, ../../../src/app/issue/issues.scss */
 .modal .label-bar {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -618,7 +759,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   width: 55%;
   padding: 0 4px;
 }
-/* line 458, ../../../src/app/issue/issues.scss */
+/* line 462, ../../../src/app/issue/issues.scss */
 .modal .label-bar .labels {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -633,17 +774,17 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border: 1px solid #ccd4d5;
   border-radius: 0 2px 2px 0;
 }
-/* line 471, ../../../src/app/issue/issues.scss */
+/* line 475, ../../../src/app/issue/issues.scss */
 .modal .label-bar .label {
   margin: 2px;
   opacity: 1;
 }
-/* line 478, ../../../src/app/issue/issues.scss */
+/* line 482, ../../../src/app/issue/issues.scss */
 .modal .label-editor {
   display: inline-block;
   width: 20%;
 }
-/* line 483, ../../../src/app/issue/issues.scss */
+/* line 487, ../../../src/app/issue/issues.scss */
 .modal .label-editor .btn {
   width: 100%;
   padding: 4px;
@@ -651,67 +792,75 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-radius: 3px 0 0 3px;
   font-size: .85em;
 }
-/* line 491, ../../../src/app/issue/issues.scss */
+/* line 495, ../../../src/app/issue/issues.scss */
 .modal .label-editor .btn span {
   font-size: .85em;
 }
-/* line 498, ../../../src/app/issue/issues.scss */
+/* line 502, ../../../src/app/issue/issues.scss */
 .modal .label-editor .open .btn {
   border-radius: 3px 0 0 0;
 }
-/* line 502, ../../../src/app/issue/issues.scss */
+/* line 506, ../../../src/app/issue/issues.scss */
 .modal .label-editor .dropdown-menu {
   margin: -2px 0 0;
   border-radius: 0 4px 4px 4px;
   border-top: 6px solid #e6e6e6;
   padding: 0;
 }
-/* line 511, ../../../src/app/issue/issues.scss */
+/* line 515, ../../../src/app/issue/issues.scss */
 .modal .label-editor .label-item:first-child {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 516, ../../../src/app/issue/issues.scss */
+/* line 520, ../../../src/app/issue/issues.scss */
 .modal .label-editor .label-item.enabled {
   background: #bfc8c9;
 }
-/* line 523, ../../../src/app/issue/issues.scss */
+/* line 525, ../../../src/app/issue/issues.scss */
+.modal .label-editor .label-item .color-preview {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin: 0 3px;
+}
+/* line 536, ../../../src/app/issue/issues.scss */
 .modal .convert-pull {
   height: 29px;
   width: 20%;
   padding: 0 4px;
 }
-/* line 530, ../../../src/app/issue/issues.scss */
+/* line 543, ../../../src/app/issue/issues.scss */
 .modal .description {
   padding: 10px 20px;
   background: white;
   border-bottom: 1px solid #ccd4d5;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
 }
-/* line 537, ../../../src/app/issue/issues.scss */
+/* line 550, ../../../src/app/issue/issues.scss */
 .modal .description.empty {
   display: none;
 }
-/* line 541, ../../../src/app/issue/issues.scss */
+/* line 554, ../../../src/app/issue/issues.scss */
 .modal .description h4 {
   margin: 0;
   color: #95a5a6;
   font-size: 1em;
 }
-/* line 549, ../../../src/app/issue/issues.scss */
+/* line 562, ../../../src/app/issue/issues.scss */
 .modal .comments {
   padding: 10px;
   border-radius: 0 0 3px 3px;
 }
-/* line 553, ../../../src/app/issue/issues.scss */
+/* line 566, ../../../src/app/issue/issues.scss */
 .modal .comments .comment {
   position: relative;
   margin: 0 0 10px;
 }
-/* line 558, ../../../src/app/issue/issues.scss */
+/* line 571, ../../../src/app/issue/issues.scss */
 .modal .comments .comment:last-child {
   margin: 0;
 }
-/* line 563, ../../../src/app/issue/issues.scss */
+/* line 576, ../../../src/app/issue/issues.scss */
 .modal .comments .commenter {
   height: 40px;
   max-height: 40px;
@@ -722,45 +871,45 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border: 2px solid #b1bdbd;
   border-radius: 25px;
 }
-/* line 574, ../../../src/app/issue/issues.scss */
+/* line 587, ../../../src/app/issue/issues.scss */
 .modal .comments .comment-body {
   margin: 0 0 0 30px;
   padding: 7px 10px 7px 15px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 581, ../../../src/app/issue/issues.scss */
+/* line 594, ../../../src/app/issue/issues.scss */
 .modal .comments .comment-body p:last-child {
   margin: 0;
 }
-/* line 587, ../../../src/app/issue/issues.scss */
+/* line 600, ../../../src/app/issue/issues.scss */
 .modal .comments h4 {
   margin: 0 0 0 47px;
   font-size: 1em;
   color: #95a5a6;
   font-weight: normal;
 }
-/* line 594, ../../../src/app/issue/issues.scss */
+/* line 607, ../../../src/app/issue/issues.scss */
 .modal .comments h4 em {
   font-style: normal;
   color: #6d8082;
   font-weight: bold;
 }
 
-/* line 605, ../../../src/app/issue/issues.scss */
+/* line 618, ../../../src/app/issue/issues.scss */
 .pull select.milestone {
   width: 35%;
 }
-/* line 609, ../../../src/app/issue/issues.scss */
+/* line 622, ../../../src/app/issue/issues.scss */
 .pull .label-bar {
   width: 65%;
   padding-left: 10px;
 }
-/* line 615, ../../../src/app/issue/issues.scss */
+/* line 628, ../../../src/app/issue/issues.scss */
 .pull .convert-pull {
   display: none;
 }
-/* line 620, ../../../src/app/issue/issues.scss */
+/* line 633, ../../../src/app/issue/issues.scss */
 .pull .branch-info {
   display: block;
   -webkit-box-sizing: border-box;
@@ -773,7 +922,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   font-size: .9em;
   text-align: center;
 }
-/* line 631, ../../../src/app/issue/issues.scss */
+/* line 644, ../../../src/app/issue/issues.scss */
 .pull .branch-info pre {
   display: inline;
   padding: 1px 4px;
@@ -784,15 +933,15 @@ ul.issue-columns > li, ul.milestone-columns > li {
 }
 
 /************* CONVERT TO PULL ****************/
-/* line 644, ../../../src/app/issue/issues.scss */
+/* line 657, ../../../src/app/issue/issues.scss */
 .convert-to-pull {
   margin: 8px;
 }
-/* line 647, ../../../src/app/issue/issues.scss */
+/* line 660, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-selector {
   display: inline-block;
 }
-/* line 651, ../../../src/app/issue/issues.scss */
+/* line 664, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown {
   width: 300px;
   margin-top: 4px;
@@ -807,7 +956,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 665, ../../../src/app/issue/issues.scss */
+/* line 678, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
@@ -817,12 +966,12 @@ ul.issue-columns > li, ul.milestone-columns > li {
   background-repeat: repeat-x;
   border-bottom: 1px solid #ddd;
 }
-/* line 675, ../../../src/app/issue/issues.scss */
+/* line 688, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 680, ../../../src/app/issue/issues.scss */
+/* line 693, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-item {
   cursor: pointer;
   border-bottom: 1px solid #eee;
@@ -832,37 +981,37 @@ ul.issue-columns > li, ul.milestone-columns > li {
   overflow: hidden;
   color: inherit;
 }
-/* line 689, ../../../src/app/issue/issues.scss */
+/* line 702, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-item:hover {
   background: blue;
 }
 
 /***************************************
- *        FILTER PANEL
+ *        FILTERS
  ***************************************/
-/* line 15, ../../../src/app/issue_filters/issue_filter.scss */
+/************* FILTER PANEL ****************/
+/* line 16, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer {
   position: fixed;
-  top: 45px;
-  bottom: 45px;
+  top: 44px;
+  bottom: 0;
   right: 0;
 }
-/* line 22, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 23, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .drawer {
   position: fixed;
   right: 0;
-  top: 45px;
+  top: 44px;
   bottom: 0;
   box-sizing: border-box;
-  -webkit-transition: right 0.75s ease-in;
-  -moz-transition: right 0.75s ease-in;
-  -o-transition: right 0.75s ease-in;
-  transition: right 0.75s ease-in;
+  -webkit-transition: right 0.5s ease-in;
+  -moz-transition: right 0.5s ease-in;
+  -o-transition: right 0.5s ease-in;
+  transition: right 0.5s ease-in;
   z-index: 1;
   width: 175px;
-  margin-bottom: 45px;
   background: white;
-  border-radius: 0 0 0 3px;
+  border-radius: 0;
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 }
 /* line 37, ../../../src/app/issue_filters/issue_filter.scss */
@@ -877,10 +1026,9 @@ ul.issue-columns > li, ul.milestone-columns > li {
 /* line 48, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer #filter-toggle-btn {
   position: absolute;
-  top: 0px;
+  top: 1px;
   left: -20px;
   padding: 5px;
-  padding-bottom: 6px;
   background: #e8ecec;
   border: 1px solid #ccd4d5;
   border-right-color: #e8ecec;
@@ -889,7 +1037,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   text-shadow: 0 1px 0 white;
   font-size: 1.5em;
 }
-/* line 65, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 64, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer h1 {
   position: relative;
   z-index: 100;
@@ -903,7 +1051,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   line-height: 1.2em;
   text-shadow: 0 1px 0 white;
 }
-/* line 80, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 79, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .content {
   position: absolute;
   top: 0;
@@ -915,7 +1063,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   overflow-x: hidden;
   padding-top: 2.4em;
 }
-/* line 93, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 92, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer h3 {
   padding: 0 6px;
   margin: 6px 0 3px;
@@ -923,46 +1071,46 @@ ul.issue-columns > li, ul.milestone-columns > li {
   font-size: .9em;
   line-height: .9em;
 }
-/* line 102, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 101, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer ul {
   list-style: none;
   margin: 0;
 }
-/* line 108, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 107, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer li {
   padding: 6px;
   margin: 2px 6px;
   border-radius: 3px;
   cursor: pointer;
 }
-/* line 116, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 115, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer li .icon-remove {
   float: right;
   display: none;
   padding: 3px;
 }
-/* line 122, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 121, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer li:hover {
   background: #e8ecec;
 }
-/* line 128, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 127, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .active {
   background: #3498db;
   color: white;
 }
-/* line 132, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 131, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .active:hover {
   background: #217dbb;
 }
-/* line 137, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 136, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .active:hover .icon-remove {
   display: block;
 }
-/* line 144, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 143, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .collaborator {
   margin-left: 12px;
 }
-/* line 149, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 148, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .avatar {
   display: inline-block;
   padding: 0;
@@ -970,17 +1118,175 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border: 3px solid white;
   border-radius: 0;
 }
-/* line 156, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 155, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .avatar.active {
   border-color: #3498db;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
   position: relative;
 }
-/* line 161, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 160, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .avatar.active:hover {
   border-color: #217dbb;
 }
-/* line 166, ../../../src/app/issue_filters/issue_filter.scss */
+/* line 165, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .avatar:hover {
   border-color: #e8ecec;
+}
+
+/* Gmail style scrollbar */
+/* line 52, ../../../src/scss/main.scss */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* line 55, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb {
+  border-width: 1px 1px 1px 2px;
+}
+
+/* line 58, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track {
+  border-width: 0;
+}
+
+/* line 61, ../../../src/scss/main.scss */
+::-webkit-scrollbar {
+  height: 16px;
+  overflow: visible;
+  width: 16px;
+}
+
+/* line 66, ../../../src/scss/main.scss */
+::-webkit-scrollbar-button {
+  height: 0;
+  width: 0;
+}
+
+/* line 70, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 0 0 0 4px;
+}
+
+/* line 75, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:horizontal {
+  border-width: 4px 0 0;
+}
+
+/* line 78, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+/* line 82, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:horizontal:hover {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* line 85, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:active {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 89, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:horizontal:active {
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 92, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 1px 1px 1px 6px;
+  min-height: 28px;
+  padding: 100px 0 0;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 101, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 6px 1px 1px;
+  padding: 0 0 0 100px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1), inset -1px 0 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 106, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+/* line 110, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* line 114, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track {
+  border-width: 0 1px 0 6px;
+}
+
+/* line 117, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:horizontal {
+  border-width: 6px 0 1px;
+}
+
+/* line 120, ../../../src/scss/main.scss */
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(0, 0, 0, 0.035);
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14), inset -1px -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 124, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb {
+  border-width: 0 1px 0 6px;
+}
+
+/* line 127, ../../../src/scss/main.scss */
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 6px 0 1px;
+}
+
+/* line 130, ../../../src/scss/main.scss */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* line 133, ../../../src/scss/main.scss */
+body::-webkit-scrollbar-track-piece {
+  background-clip: padding-box;
+  background-color: #f5f5f5;
+  border: solid #fff;
+  border-width: 0 0 0 3px;
+  box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 140, ../../../src/scss/main.scss */
+body::-webkit-scrollbar-track-piece:horizontal {
+  border-width: 3px 0 0;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.14), inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+
+/* line 144, ../../../src/scss/main.scss */
+body::-webkit-scrollbar-thumb {
+  border-width: 1px 1px 1px 5px;
+}
+
+/* line 147, ../../../src/scss/main.scss */
+body::-webkit-scrollbar-thumb:horizontal {
+  border-width: 5px 1px 1px;
+}
+
+/* line 150, ../../../src/scss/main.scss */
+body::-webkit-scrollbar-corner {
+  background-clip: padding-box;
+  background-color: #f5f5f5;
+  border: solid #fff;
+  border-width: 3px 0 0 3px;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14);
 }

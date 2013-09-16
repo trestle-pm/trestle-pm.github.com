@@ -1,11 +1,13 @@
 var mod = angular.module('Trestle.issue', []);
 
-mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh) {
+mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh, trIssueCache) {
    // init
 
    _.extend(this, {
       init: function(issue) {
-         this.issue = issue;
+         this.issue          = issue;
+         this.lastViewedData = trIssueCache.getLastViewedData(this.issue);
+
          $scope.$id = "IssueCtrl:" + issue.number + $scope.$id;
       },
 
@@ -76,6 +78,10 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
       },
 
       showIssueDetails: function() {
+         var me = this;
+
+         me.markAsViewed();
+
          // Create a local scope for the template and add the issue into it
          var modal_scope = $rootScope.$new();
          modal_scope.$id = "modal:issue_details:" + modal_scope.$id;
@@ -90,12 +96,14 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
             keyboard     : true,
             templateUrl  : "issue/issue_details.tpl.html"
          };
-
          // todo: remove this setting when future version of $modal adds automatically
          // - see: https://github.com/trestle-pm/trestle/issues/80
          $rootScope.modalIsUp = true;
-         $modal.open(opts).finally(function() {
+         $modal.open(opts).result.finally(function() {
             $rootScope.modalIsUp = false;
+
+            // mark is as viewed in case we did the modification
+            me.markAsViewed();
          });
       },
 
@@ -155,7 +163,24 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
                console.log('assign milestone: success');
             }
          );
+      },
+
+      /** Return true if we think the issue has been updated in some way
+      * since our last view
+      */
+      hasBeenUpdatedSinceLastView: function() {
+         var viewed_data = trIssueCache.buildViewData(this.issue);
+         return !_.isEqual(viewed_data, this.lastViewedData);
+      },
+
+      /**
+      * Mark the issue as being read and store any temporal information we need
+      * for caching to show changes.
+      */
+      markAsViewed: function() {
+         this.lastViewedData = trIssueCache.setLastViewedData(this.issue);
       }
+
    });
 
    this.init($scope.$parent.issue);
