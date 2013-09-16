@@ -26,6 +26,11 @@ body {
   border-radius: 5px;
 }
 
+/* line 35, ../../../src/scss/main.scss */
+.no-scroll {
+  overflow: hidden;
+}
+
 /* line 2, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .brand img {
   height: 1em;
@@ -60,12 +65,17 @@ body {
 }
 
 /* line 2, ../../../src/app/board/columns/issue_columns.scss */
+.card-wrapper {
+  list-style: none;
+}
+
+/* line 4, ../../../src/app/board/columns/issue_columns.scss */
 ul.user-list, ul.issue-columns, ul.milestone-columns, ul.column-body {
   margin: 0;
   padding: 0;
 }
 
-/* line 7, ../../../src/app/board/columns/issue_columns.scss */
+/* line 9, ../../../src/app/board/columns/issue_columns.scss */
 ul.issue-columns, ul.milestone-columns {
   margin: 0;
   padding: 0;
@@ -74,7 +84,7 @@ ul.issue-columns, ul.milestone-columns {
   *zoom: 1;
   margin-left: 25px;
 }
-/* line 11, ../../../src/app/board/columns/issue_columns.scss */
+/* line 13, ../../../src/app/board/columns/issue_columns.scss */
 ul.issue-columns > li, ul.milestone-columns > li {
   list-style-image: none;
   list-style-type: none;
@@ -89,7 +99,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   vertical-align: top;
 }
 
-/* line 19, ../../../src/app/board/columns/issue_columns.scss */
+/* line 21, ../../../src/app/board/columns/issue_columns.scss */
 .btn.backlog {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
@@ -105,7 +115,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   top: 175px;
 }
 
-/* line 27, ../../../src/app/board/columns/issue_columns.scss */
+/* line 29, ../../../src/app/board/columns/issue_columns.scss */
 .column-header {
   text-align: center;
   position: relative;
@@ -120,7 +130,7 @@ ul.issue-columns > li, ul.milestone-columns > li {
   background: #f3f3f3;
   font-size: 100%;
 }
-/* line 43, ../../../src/app/board/columns/issue_columns.scss */
+/* line 45, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip_count {
   border: solid;
   border-width: 1px;
@@ -128,14 +138,13 @@ ul.issue-columns > li, ul.milestone-columns > li {
   border-color: light-grey;
   float: right;
 }
-/* line 50, ../../../src/app/board/columns/issue_columns.scss */
+/* line 52, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip_count.over_limit {
   background: red;
 }
 
-/* line 57, ../../../src/app/board/columns/issue_columns.scss */
+/* line 59, ../../../src/app/board/columns/issue_columns.scss */
 .column {
-  width: 16%;
   margin: 0;
   padding: 0 10px;
   margin-before: 0;
@@ -144,129 +153,197 @@ ul.issue-columns > li, ul.milestone-columns > li {
   min-height: 1000px;
 }
 
-/* line 71, ../../../src/app/board/columns/issue_columns.scss */
+/* line 72, ../../../src/app/board/columns/issue_columns.scss */
 .column-body {
   min-height: 1000px;
 }
 
-/* line 2, ../../../src/app/issue/issues.scss */
-.card_wrapper {
-  list-style: none;
+/***************************************
+ *        ISSUES/PULLS
+ ***************************************/
+/* line 28, ../../../src/app/issue/issues.scss */
+.issue-number {
+  display: inline-block;
+  padding: 2px 4px;
+  background: #f7fbfe;
+  border: 1px solid #3498db;
+  border-radius: 3px;
+  color: #3498db;
+  font-size: .9em;
+  font-weight: normal;
+  line-height: .9em;
+}
+/* line 39, ../../../src/app/issue/issues.scss */
+.issue-number .icon-code-fork {
+  margin-right: -1px;
+  color: #6d8082;
+  font-size: 1em;
+  font-weight: bold;
+}
+/* line 46, ../../../src/app/issue/issues.scss */
+.issue-number:hover {
+  background: #3498db;
+  color: white;
+  text-decoration: none;
+}
+/* line 51, ../../../src/app/issue/issues.scss */
+.issue-number:hover .icon-code-fork {
+  color: white;
 }
 
-/* line 5, ../../../src/app/issue/issues.scss */
+/* line 58, ../../../src/app/issue/issues.scss */
+.label {
+  display: inline-block;
+  overflow: hidden;
+  margin: 2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  border-right: 1px solid rgba(0, 0, 0, 0.35);
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
+  opacity: .6;
+}
+/* line 66, ../../../src/app/issue/issues.scss */
+.label:hover {
+  opacity: 1;
+}
+
+/* line 72, ../../../src/app/issue/issues.scss */
+.color-preview {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin: 0 3px;
+}
+
+/* line 81, ../../../src/app/issue/issues.scss */
+.vote-count {
+  display: inline-block;
+  margin: 0 0 2px 0;
+  padding: 2px 8px 3px;
+  background: #95a5a6;
+  border-radius: 13px 0 0 13px;
+  box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.45), 1px 1px 0 rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 1em;
+  font-weight: bold;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+/* line 93, ../../../src/app/issue/issues.scss */
+.vote-count.positive {
+  background: #27ae60;
+}
+/* line 94, ../../../src/app/issue/issues.scss */
+.vote-count.negative {
+  background: #e74c3c;
+}
+
+/* line 97, ../../../src/app/issue/issues.scss */
+.dropdown-menu {
+  padding: 0;
+}
+/* line 101, ../../../src/app/issue/issues.scss */
+.dropdown-menu .label-item, .dropdown-menu li {
+  margin: 0;
+  padding: 1px 4px;
+  border-bottom: 1px solid #dae0e0;
+  cursor: pointer;
+  font-size: .95em;
+}
+/* line 108, ../../../src/app/issue/issues.scss */
+.dropdown-menu .label-item:last-child, .dropdown-menu li:last-child {
+  border-bottom-width: 0;
+}
+/* line 112, ../../../src/app/issue/issues.scss */
+.dropdown-menu .label-item:hover, .dropdown-menu li:hover {
+  background-color: #e8ecec;
+}
+
+/************* CARDS ****************/
+/* line 122, ../../../src/app/issue/issues.scss */
 .card {
-  border: 1px solid #080b0e;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  border-radius: 3px;
   width: 100%;
+  min-height: 42px;
   position: relative;
   margin: 8px 0;
   padding: 0;
   background: #e8ecec;
+  border: 1px solid #080b0e;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   list-style-type: none;
-  min-height: 42px;
-  /** styling for the build headers */
-  /** Voting styling */
 }
-/* line 18, ../../../src/app/issue/issues.scss */
-.card .build_header {
+/* line 136, ../../../src/app/issue/issues.scss */
+.card .build-header {
   height: 5px;
-  margin-top: -1px;
   width: 100%;
+  margin-top: -1px;
   border-radius: 3px 3px 0 0;
   background: #95a5a6;
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 29, ../../../src/app/issue/issues.scss */
-.card.success .build_header {
+/* line 144, ../../../src/app/issue/issues.scss */
+.card.success .build-header {
   background: #27ae60;
   border-top: 1px solid #4bd786;
   border-bottom: 1px solid #1e8449;
 }
-/* line 35, ../../../src/app/issue/issues.scss */
-.card.failure .build_header {
+/* line 145, ../../../src/app/issue/issues.scss */
+.card.failure .build-header {
   background: #e74c3c;
   border-top: 1px solid #ef8b80;
   border-bottom: 1px solid #d62c1a;
 }
-/* line 41, ../../../src/app/issue/issues.scss */
-.card.pending .build_header {
+/* line 146, ../../../src/app/issue/issues.scss */
+.card.pending .build-header {
   background: #3498db;
   border-top: 1px solid #75b9e7;
   border-bottom: 1px solid #217dbb;
 }
-/* line 47, ../../../src/app/issue/issues.scss */
-.card.unknown .build_header {
+/* line 147, ../../../src/app/issue/issues.scss */
+.card.unknown .build-header {
   background: #95a5a6;
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 54, ../../../src/app/issue/issues.scss */
-.card.dragging {
-  background: blue;
-}
-/* line 58, ../../../src/app/issue/issues.scss */
+/* line 150, ../../../src/app/issue/issues.scss */
 .card .header {
-  margin: 0;
-  padding: 3px 50px 3px 5px;
-  font-size: 1.2em;
-  font-weight: bold;
-  background: #fff;
-  border-bottom: 1px solid #ccd4d5;
   position: relative;
-}
-/* line 66, ../../../src/app/issue/issues.scss */
-.card .header:first-child {
-  border-radius: 3px 3px 0 0;
-}
-/* line 70, ../../../src/app/issue/issues.scss */
-.card .icon-code-fork {
-  color: #6d8082;
+  margin: 0;
+  padding: 3px 35px 3px 5px;
+  background: white;
+  border-bottom: 1px solid #ccd4d5;
+  border-radius: 0;
   font-size: 1em;
   font-weight: bold;
-  margin-right: 3px;
 }
-/* line 76, ../../../src/app/issue/issues.scss */
-.card .number {
-  display: inline-block;
-  border: 1px solid #3498db;
-  color: #3498db;
-  font-size: .85em;
-  font-weight: normal;
-  padding: 0 4px;
-  border-radius: 3px;
-  background-color: #f7fbfe;
+/* line 160, ../../../src/app/issue/issues.scss */
+.card .header:first-child {
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
-/* line 85, ../../../src/app/issue/issues.scss */
-.card .number:hover {
-  text-decoration: none;
-  background-color: #3498db;
-  color: #fff;
+/* line 165, ../../../src/app/issue/issues.scss */
+.card .header:last-child {
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
-/* line 89, ../../../src/app/issue/issues.scss */
-.card .number:hover .icon-code-fork {
-  color: #fff;
-}
-/* line 94, ../../../src/app/issue/issues.scss */
+/* line 172, ../../../src/app/issue/issues.scss */
 .card .title {
   white-space: normal;
-  line-height: 1.3em;
 }
-/* line 99, ../../../src/app/issue/issues.scss */
+/* line 177, ../../../src/app/issue/issues.scss */
 .card .avatar {
-  height: 50px;
-  max-height: 50px;
-  max-width: 50px;
+  height: 35px;
+  max-height: 35px;
+  max-width: 35px;
   position: absolute;
   right: -5px;
   top: -6px;
-  border-radius: 25px;
   border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 17.5px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 109, ../../../src/app/issue/issues.scss */
+/* line 189, ../../../src/app/issue/issues.scss */
 .card .avatar.empty {
   height: 25px;
   right: 0;
@@ -275,89 +352,53 @@ ul.issue-columns > li, ul.milestone-columns > li {
   box-shadow: none;
   opacity: .7;
 }
-/* line 118, ../../../src/app/issue/issues.scss */
+/* line 200, ../../../src/app/issue/issues.scss */
 .card .content {
   margin: 0;
   padding: 0 5px;
   white-space: normal;
 }
-/* line 124, ../../../src/app/issue/issues.scss */
+/* line 206, ../../../src/app/issue/issues.scss */
 .card .milestone {
   display: inline-block;
   padding: 2px 10px 2px 7px;
-  margin: 1px 2px 0 -8px;
-  line-height: 14px;
-  color: #ffffff;
-  vertical-align: baseline;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
-  background-color: #95a5a6;
+  margin: 1px 2px 1px -8px;
+  background: #95a5a6;
   border: 1px solid #617374;
   border-top-color: #a3b1b2;
   border-left-color: #272e2e;
+  border-radius: 0 3px 3px 0;
+  font-size: .9em;
+  line-height: 1.2em;
+  color: white;
   font-style: italic;
   font-weight: normal;
-  font-size: .9em;
-  border-radius: 0 3px 3px 0;
+  vertical-align: baseline;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 142, ../../../src/app/issue/issues.scss */
-.card .label {
-  overflow: hidden;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
-  border-right: 1px solid rgba(0, 0, 0, 0.35);
-  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
-  display: inline-block;
-  margin: 2px;
-}
-/* line 156, ../../../src/app/issue/issues.scss */
+/* line 225, ../../../src/app/issue/issues.scss */
 .card .reviews {
   position: relative;
   white-space: normal;
   padding: 3px 6px 1px;
 }
-/* line 160, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_count {
-  display: inline-block;
-  margin: 0 0 2px 0;
-  padding: 2px 8px 3px;
-  border-radius: 13px 0 0 13px;
-  background: #95a5a6;
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
-  box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.45), 1px 1px 0 white;
-  font-weight: bold;
-  font-size: 1em;
-}
-/* line 174, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_count.even {
-  border-radius: 13px;
-}
-/* line 177, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_count.positive {
-  background: #27ae60;
-}
-/* line 180, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_count.negative {
-  background: #e74c3c;
-}
-/* line 185, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_avatar {
+/* line 231, ../../../src/app/issue/issues.scss */
+.card .vote-avatar {
   max-width: 20px;
   max-height: 20px;
-  border-style: solid;
-  border-width: 3px;
   margin: 0 4px 2px -1px;
-  border-color: grey;
+  border: 3px solid #95a5a6;
   vertical-align: middle;
 }
-/* line 193, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_avatar.yes {
+/* line 238, ../../../src/app/issue/issues.scss */
+.card .vote-avatar.yes {
   border-color: #229955;
 }
-/* line 196, ../../../src/app/issue/issues.scss */
-.card .reviews .vote_avatar.no {
+/* line 239, ../../../src/app/issue/issues.scss */
+.card .vote-avatar.no {
   border-color: #e43725;
 }
-/* line 204, ../../../src/app/issue/issues.scss */
+/* line 243, ../../../src/app/issue/issues.scss */
 .card .stats {
   position: absolute;
   right: 3px;
@@ -366,83 +407,393 @@ ul.issue-columns > li, ul.milestone-columns > li {
   color: #95a5a6;
   font-size: 1.2em;
 }
-/* line 211, ../../../src/app/issue/issues.scss */
+/* line 251, ../../../src/app/issue/issues.scss */
 .card .stats:hover {
   color: #3e4a4a;
 }
-/* line 214, ../../../src/app/issue/issues.scss */
+/* line 256, ../../../src/app/issue/issues.scss */
 .card .stats span {
   margin-right: 10px;
 }
-/* line 216, ../../../src/app/issue/issues.scss */
+/* line 259, ../../../src/app/issue/issues.scss */
 .card .stats span.todos i {
   margin-right: 5px;
 }
-/* line 219, ../../../src/app/issue/issues.scss */
+/* line 263, ../../../src/app/issue/issues.scss */
 .card .stats span:last-child {
   margin-right: 0;
 }
 
-/* line 230, ../../../src/app/issue/issues.scss */
-.issue_detail .user-selector .dropdown-menu li {
-  margin: 4px;
-}
-/* line 231, ../../../src/app/issue/issues.scss */
-.issue_detail .user-selector .dropdown-menu li:hover {
-  background: blue;
-}
-/* line 236, ../../../src/app/issue/issues.scss */
-.issue_detail .user-selector .dropdown-menu li .avatar {
-  padding: 4px;
-}
-/* line 243, ../../../src/app/issue/issues.scss */
-.issue_detail .label_bar {
-  border-style: solid;
-  border-width: 1px;
-  border-right: none;
-  min-width: 300px;
-  display: inline-block;
-  border-radius: 2px;
-  padding: 2px;
-  margin: 2px;
-  margin-right: 0px;
-}
-/* line 255, ../../../src/app/issue/issues.scss */
-.issue_detail .label_bar .label {
-  margin: 2px;
-}
-/* line 260, ../../../src/app/issue/issues.scss */
-.issue_detail .label_editor {
-  display: inline-block;
-}
-/* line 263, ../../../src/app/issue/issues.scss */
-.issue_detail .label_editor .label-item {
-  margin: 3px;
-  padding: 2px;
-  border-style: line;
-  border-width: 1px;
-  border-radius: 2px;
-}
 /* line 270, ../../../src/app/issue/issues.scss */
-.issue_detail .label_editor .label-item.enabled {
-  background-color: blue;
-}
-/* line 274, ../../../src/app/issue/issues.scss */
-.issue_detail .label_editor .label-item .pill {
-  border-radius: 2px;
-  padding: 2px;
+.drop-area {
+  height: 70px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
 }
 
-/* line 282, ../../../src/app/issue/issues.scss */
-.convert_to_pull {
-  margin: 8px;
-}
-/* line 285, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-selector {
-  display: inline-block;
+/************* DETAILS ****************/
+/* line 279, ../../../src/app/issue/issues.scss */
+.modal {
+  max-height: 80%;
+  overflow: auto;
+  padding: 0;
+  background: #e8ecec;
+  border: 1px solid black;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 /* line 289, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-pulldown {
+.modal .header {
+  position: relative;
+  margin: 0;
+  padding: 3px 90px 3px 65px;
+  background: #e8ecec;
+  border-bottom: 1px solid #ccd4d5;
+  border-radius: 3px 3px 0 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+/* line 301, ../../../src/app/issue/issues.scss */
+.modal .title {
+  white-space: normal;
+  line-height: 1.3em;
+}
+/* line 307, ../../../src/app/issue/issues.scss */
+.modal .issue-number {
+  position: absolute;
+  top: 2px;
+  right: 28px;
+  padding: 3px 4px;
+}
+/* line 315, ../../../src/app/issue/issues.scss */
+.modal .close {
+  float: none;
+  position: absolute;
+  right: 5px;
+  top: 3px;
+}
+/* line 323, ../../../src/app/issue/issues.scss */
+.modal .user-selector {
+  position: static;
+}
+/* line 326, ../../../src/app/issue/issues.scss */
+.modal .user-selector .dropdown-toggle {
+  position: static;
+  z-index: 100;
+}
+/* line 331, ../../../src/app/issue/issues.scss */
+.modal .user-selector .dropdown-toggle .avatar {
+  height: 60px;
+  max-height: 60px;
+  max-width: 60px;
+  position: absolute;
+  left: -5px;
+  top: -6px;
+  z-index: 100;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 35px;
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
+}
+/* line 346, ../../../src/app/issue/issues.scss */
+.modal .user-selector .dropdown-menu {
+  z-index: 50;
+  margin-top: 19px;
+}
+/* line 350, ../../../src/app/issue/issues.scss */
+.modal .user-selector .dropdown-menu h4 {
+  margin: 0;
+  padding: 6px 5px 0;
+  background: #ccd4d5;
+  border-bottom: 1px solid #b1bdbd;
+  font-size: .8em;
+}
+/* line 358, ../../../src/app/issue/issues.scss */
+.modal .user-selector .dropdown-menu .avatar {
+  border-radius: 2px;
+}
+/* line 365, ../../../src/app/issue/issues.scss */
+.modal .status-header {
+  width: 100%;
+  height: 28px;
+  position: relative;
+  padding: 0;
+  background: #95a5a6;
+  border-top: 1px solid #798d8f;
+  border-bottom: 1px solid #798d8f;
+}
+/* line 375, ../../../src/app/issue/issues.scss */
+.modal .build-status {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+  width: 60%;
+  z-index: 10;
+  overflow: hidden;
+  padding: 3px 0 3px 65px;
+  border-right: 1px solid #6d8082;
+}
+/* line 385, ../../../src/app/issue/issues.scss */
+.modal .build-status.success {
+  background: #89e5b0;
+  color: #19703e;
+}
+/* line 386, ../../../src/app/issue/issues.scss */
+.modal .build-status.failure {
+  background: #f8c9c4;
+  color: #bf2718;
+}
+/* line 387, ../../../src/app/issue/issues.scss */
+.modal .build-status.pending {
+  background: #b6daf2;
+  color: #1d6fa5;
+}
+/* line 388, ../../../src/app/issue/issues.scss */
+.modal .build-status.unknown {
+  background: #e8ecec;
+  color: #6d8082;
+}
+/* line 392, ../../../src/app/issue/issues.scss */
+.modal .comment-summary {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  right: 1px;
+  top: 0;
+  z-index: 0;
+  min-width: 40%;
+  height: 100%;
+  padding: 3px 0;
+  margin: 0;
+  color: white;
+  font-size: 1.2em;
+  text-align: right;
+}
+/* line 408, ../../../src/app/issue/issues.scss */
+.modal .comment-summary i {
+  color: #e8ecec;
+}
+/* line 413, ../../../src/app/issue/issues.scss */
+.modal .comment-summary span {
+  margin-right: 10px;
+}
+/* line 416, ../../../src/app/issue/issues.scss */
+.modal .comment-summary span.todos i {
+  margin-right: 4px;
+}
+/* line 420, ../../../src/app/issue/issues.scss */
+.modal .comment-summary span:last-child {
+  margin-right: 0;
+}
+/* line 428, ../../../src/app/issue/issues.scss */
+.modal .branch-info {
+  display: none;
+}
+/* line 433, ../../../src/app/issue/issues.scss */
+.modal .controls {
+  padding: 5px 10px;
+  background: white;
+  border-bottom: 1px solid #dae0e0;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+/* line 441, ../../../src/app/issue/issues.scss */
+.modal select.milestone {
+  display: inline-block;
+  width: 25%;
+  margin: 2px 0 0 0;
+  padding: 0;
+  color: black;
+  font-size: 1em;
+}
+/* line 451, ../../../src/app/issue/issues.scss */
+.modal .label-bar {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 55%;
+  padding: 0 4px;
+}
+/* line 458, ../../../src/app/issue/issues.scss */
+.modal .label-bar .labels {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 80%;
+  height: 30px;
+  overflow: hidden;
+  margin: 0;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.025);
+  border: 1px solid #ccd4d5;
+  border-radius: 0 2px 2px 0;
+}
+/* line 471, ../../../src/app/issue/issues.scss */
+.modal .label-bar .label {
+  margin: 2px;
+  opacity: 1;
+}
+/* line 478, ../../../src/app/issue/issues.scss */
+.modal .label-editor {
+  display: inline-block;
+  width: 20%;
+}
+/* line 483, ../../../src/app/issue/issues.scss */
+.modal .label-editor .btn {
+  width: 100%;
+  padding: 4px;
+  margin-top: 1px;
+  border-radius: 3px 0 0 3px;
+  font-size: .85em;
+}
+/* line 491, ../../../src/app/issue/issues.scss */
+.modal .label-editor .btn span {
+  font-size: .85em;
+}
+/* line 498, ../../../src/app/issue/issues.scss */
+.modal .label-editor .open .btn {
+  border-radius: 3px 0 0 0;
+}
+/* line 502, ../../../src/app/issue/issues.scss */
+.modal .label-editor .dropdown-menu {
+  margin: -2px 0 0;
+  border-radius: 0 4px 4px 4px;
+  border-top: 6px solid #e6e6e6;
+  padding: 0;
+}
+/* line 511, ../../../src/app/issue/issues.scss */
+.modal .label-editor .label-item:first-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+/* line 516, ../../../src/app/issue/issues.scss */
+.modal .label-editor .label-item.enabled {
+  background: #bfc8c9;
+}
+/* line 523, ../../../src/app/issue/issues.scss */
+.modal .convert-pull {
+  height: 29px;
+  width: 20%;
+  padding: 0 4px;
+}
+/* line 530, ../../../src/app/issue/issues.scss */
+.modal .description {
+  padding: 10px 20px;
+  background: white;
+  border-bottom: 1px solid #ccd4d5;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+/* line 537, ../../../src/app/issue/issues.scss */
+.modal .description.empty {
+  display: none;
+}
+/* line 541, ../../../src/app/issue/issues.scss */
+.modal .description h4 {
+  margin: 0;
+  color: #95a5a6;
+  font-size: 1em;
+}
+/* line 549, ../../../src/app/issue/issues.scss */
+.modal .comments {
+  padding: 10px;
+  border-radius: 0 0 3px 3px;
+}
+/* line 553, ../../../src/app/issue/issues.scss */
+.modal .comments .comment {
+  position: relative;
+  margin: 0 0 10px;
+}
+/* line 558, ../../../src/app/issue/issues.scss */
+.modal .comments .comment:last-child {
+  margin: 0;
+}
+/* line 563, ../../../src/app/issue/issues.scss */
+.modal .comments .commenter {
+  height: 40px;
+  max-height: 40px;
+  max-width: 40px;
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  border: 2px solid #b1bdbd;
+  border-radius: 25px;
+}
+/* line 574, ../../../src/app/issue/issues.scss */
+.modal .comments .comment-body {
+  margin: 0 0 0 30px;
+  padding: 7px 10px 7px 15px;
+  background: #fff;
+  border: 3px solid #ccd4d5;
+}
+/* line 581, ../../../src/app/issue/issues.scss */
+.modal .comments .comment-body p:last-child {
+  margin: 0;
+}
+/* line 587, ../../../src/app/issue/issues.scss */
+.modal .comments h4 {
+  margin: 0 0 0 47px;
+  font-size: 1em;
+  color: #95a5a6;
+  font-weight: normal;
+}
+/* line 594, ../../../src/app/issue/issues.scss */
+.modal .comments h4 em {
+  font-style: normal;
+  color: #6d8082;
+  font-weight: bold;
+}
+
+/* line 605, ../../../src/app/issue/issues.scss */
+.pull select.milestone {
+  width: 35%;
+}
+/* line 609, ../../../src/app/issue/issues.scss */
+.pull .label-bar {
+  width: 65%;
+  padding-left: 10px;
+}
+/* line 615, ../../../src/app/issue/issues.scss */
+.pull .convert-pull {
+  display: none;
+}
+/* line 620, ../../../src/app/issue/issues.scss */
+.pull .branch-info {
+  display: block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 3px 5px;
+  background: #f6f7f7;
+  border-bottom: 1px solid #dae0e0;
+  font-size: .9em;
+  text-align: center;
+}
+/* line 631, ../../../src/app/issue/issues.scss */
+.pull .branch-info pre {
+  display: inline;
+  padding: 1px 4px;
+  background: #e1f0fa;
+  border-color: #b6daf2;
+  white-space: nowrap;
+  font-size: .95em;
+}
+
+/************* CONVERT TO PULL ****************/
+/* line 644, ../../../src/app/issue/issues.scss */
+.convert-to-pull {
+  margin: 8px;
+}
+/* line 647, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-selector {
+  display: inline-block;
+}
+/* line 651, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-pulldown {
   width: 300px;
   margin-top: 4px;
   margin-bottom: 20px;
@@ -451,57 +802,185 @@ ul.issue-columns > li, ul.milestone-columns > li {
   color: #666;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 303, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-pulldown .menu-header {
+/* line 665, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
   background-image: -moz-linear-gradient(#fafafa, #eeeeee);
   background-image: -webkit-linear-gradient(#fafafa, #eeeeee);
   background-image: linear-gradient(#fafafa, #eeeeee);
   background-repeat: repeat-x;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
 }
-/* line 313, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-pulldown .menu-list {
+/* line 675, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 318, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-pulldown .menu-item {
+/* line 680, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-pulldown .menu-item {
   cursor: pointer;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #eee;
   display: table;
   table-layout: fixed;
   width: 100%;
   overflow: hidden;
   color: inherit;
 }
-/* line 327, ../../../src/app/issue/issues.scss */
-.convert_to_pull .branch-pulldown .menu-item:hover {
+/* line 689, ../../../src/app/issue/issues.scss */
+.convert-to-pull .branch-pulldown .menu-item:hover {
   background: blue;
 }
 
-/* line 1, ../../../src/app/issue_filters/issue_filter.scss */
+/***************************************
+ *        FILTER PANEL
+ ***************************************/
+/* line 15, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer {
-  position: absolute;
-  top: 40px;
+  position: fixed;
+  top: 45px;
+  bottom: 45px;
   right: 0;
 }
-
-/* line 7, ../../../src/app/issue_filters/issue_filter.scss */
-.drawer {
+/* line 22, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .drawer {
+  position: fixed;
+  right: 0;
+  top: 45px;
+  bottom: 0;
+  box-sizing: border-box;
+  -webkit-transition: right 0.75s ease-in;
+  -moz-transition: right 0.75s ease-in;
+  -o-transition: right 0.75s ease-in;
+  transition: right 0.75s ease-in;
+  z-index: 1;
+  width: 175px;
+  margin-bottom: 45px;
   background: white;
+  border-radius: 0 0 0 3px;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.5);
 }
-/* line 9, ../../../src/app/issue_filters/issue_filter.scss */
-.drawer.hide {
-  display: none;
-}
-/* line 13, ../../../src/app/issue_filters/issue_filter.scss */
-.drawer.show {
+/* line 37, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .drawer.hide {
   display: block;
+  right: -175px;
+}
+/* line 42, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .drawer.show {
+  right: 0;
+}
+/* line 48, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer #filter-toggle-btn {
+  position: absolute;
+  top: 0px;
+  left: -20px;
+  padding: 5px;
+  padding-bottom: 6px;
+  background: #e8ecec;
+  border: 1px solid #ccd4d5;
+  border-right-color: #e8ecec;
+  border-radius: 3px 0 0 3px;
+  color: #95a5a6;
+  text-shadow: 0 1px 0 white;
+  font-size: 1.5em;
+}
+/* line 65, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer h1 {
+  position: relative;
+  z-index: 100;
+  margin: 0;
+  padding: 6px;
+  background: #e8ecec;
+  border-top: 1px solid #ccd4d5;
+  border-bottom: 1px solid #ccd4d5;
+  color: #95a5a6;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  text-shadow: 0 1px 0 white;
+}
+/* line 80, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 2.4em;
+}
+/* line 93, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer h3 {
+  padding: 0 6px;
+  margin: 6px 0 3px;
+  color: #95a5a6;
+  font-size: .9em;
+  line-height: .9em;
+}
+/* line 102, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer ul {
+  list-style: none;
+  margin: 0;
+}
+/* line 108, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer li {
+  padding: 6px;
+  margin: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+/* line 116, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer li .icon-remove {
+  float: right;
+  display: none;
+  padding: 3px;
+}
+/* line 122, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer li:hover {
+  background: #e8ecec;
+}
+/* line 128, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .active {
+  background: #3498db;
+  color: white;
+}
+/* line 132, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .active:hover {
+  background: #217dbb;
+}
+/* line 137, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .active:hover .icon-remove {
+  display: block;
+}
+/* line 144, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .collaborator {
+  margin-left: 12px;
+}
+/* line 149, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .avatar {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  border: 3px solid white;
+  border-radius: 0;
+}
+/* line 156, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .avatar.active {
+  border-color: #3498db;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+/* line 161, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .avatar.active:hover {
+  border-color: #217dbb;
+}
+/* line 166, ../../../src/app/issue_filters/issue_filter.scss */
+#issue-filters-drawer .avatar:hover {
+  border-color: #e8ecec;
 }

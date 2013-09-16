@@ -11,7 +11,7 @@ angular.module('Trestle.board')
          num_columns += 1;
       }
 
-      return { width: (100.0 / num_columns) + '%'};
+      return { width: (99.0 / num_columns) + '%'};
    };
 
    /** Return a list of objects

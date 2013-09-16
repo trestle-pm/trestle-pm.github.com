@@ -13,7 +13,7 @@ angular.module('Trestle.board')
    this.getColumnWidth = function() {
       var num_columns = trRepoModel.milestones ? trRepoModel.milestones.length : 0;
 
-      return { width: (100.0 / (num_columns + 1) ) + '%'};
+      return { width: (99.0 / (num_columns + 1) ) + '%'};
    };
 
 })

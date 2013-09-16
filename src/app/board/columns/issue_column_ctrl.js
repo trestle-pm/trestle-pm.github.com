@@ -1,6 +1,11 @@
 angular.module('Trestle.board')
 
 .controller('IssueColumnCtrl', function($scope, $filter, gh, trRepoModel, trIssueHelpers) {
+   // Flag which will disable writing drag and drop changes to GitHub.
+   // This is useful when debugging issues as we can make sure the values are
+   // updated without affecting a GitHub repository.
+   var disable_save = false;
+
    /**
     * options:
     *    labelName: The string for the label for this column or undefined.
@@ -22,44 +27,21 @@ angular.module('Trestle.board')
       }
 
       $scope.$id = "ColumnCtrl_" + this.columnName + $scope.$id;
-
-      this.issues = [];
-      this._updateIssueList();
-      trRepoModel.$watch('issues', angular.bind(this, this._updateIssueList), true);
    };
 
-   /**
-   * Helper to refresh/update the list of issues that we should track
-   * and display based upon our current settings and local filters.
-   */
-   this._updateIssueList = function() {
-      var issues;
-
-      if (this.isBacklog) {
-         issues = $filter('issuesInBacklog')(trRepoModel.issues);
-      } else if (this.isNoMilestone) {
-         issues = $filter('filterMilestones')(trRepoModel.issues, 'none');
-      } else if (this.milestone) {
-         issues = $filter('filterMilestones')(trRepoModel.issues, this.milestone.title);
-      } else {
-         issues = $filter('issuesWithLabel')(trRepoModel.issues, this.labelName);
-      }
-
-      this.issues = _.sortBy(issues, function(issue) {
-         return [issue.config.weight, issue.title.toLowerCase()];
-      });
+   //{ Helpers for working with the two column types
+   this._getIssueWeight = function(issue) {
+      return issue.config[this._isEditingMilestone() ? 'milestoneWeight' : 'columnWeight'];
    };
 
-   this._findIssueIdx = function(issues, selectableObj) {
-      var issue_id = $(selectableObj.item).data('issue-id');
-
-      // Loop over the issues and find the one with the dragged issues id.
-      var issue_idx = _.findIndex(issues, function(issue) {
-         return issue.id === issue_id;
-      });
-
-      return issue_idx;
+   this._setIssueWeight = function(issue, newWeight) {
+      issue.config[this._isEditingMilestone() ? 'milestoneWeight' : 'columnWeight'] = newWeight;
    };
+
+   this._isEditingMilestone = function() {
+      return this.milestone || this.isNoMilestone;
+   };
+   //}
 
    /**
     * Called after the user has successfully moved an issue to a new location
@@ -68,26 +50,17 @@ angular.module('Trestle.board')
     * @precondition  The scope issue list is already updated
     * @postcondition The issue ordering in GitHub has been updated
     */
-   this._onIssueMoved = function(evt, obj) {
-      var issues = this.issues,
-          issue_idx = this._findIssueIdx(issues, obj);
+   this.onIssueMoved = function(issues, issue) {
+      var new_idx = issues.indexOf(issue);
 
-      console.log('moved', issue_idx);
+      var above = Number.MIN_VALUE,
+          below = Number.MAX_VALUE,
+          weight;
 
-      // If the issue is not found that our column was updated due to the issue
-      // being moved elsewhere.
-      if (issue_idx === -1) {
-         return;
-      }
-
-      var weight,
-          above = Number.MIN_VALUE,
-          below = Number.MAX_VALUE;
-
-      if (issue_idx === 0) {
+      if (new_idx === 0) {
          if (issues.length > 1) {
             // Place the issue just below the old top of column
-            below  = issues[1].config.weight;
+            below  = this._getIssueWeight(issues[1]);
             weight = below - 1;
          }
          else {
@@ -95,9 +68,9 @@ angular.module('Trestle.board')
             weight = 0;
          }
       }
-      else if (issue_idx === issues.length - 1) {
+      else if (new_idx === issues.length - 1) {
          if (issues.length > 1) {
-            above  = issues[issues.length - 2].config.weight;
+            above  = this._getIssueWeight(issues[issues.length - 2]);
             weight = above + 1;
          }
          else {
@@ -106,8 +79,8 @@ angular.module('Trestle.board')
          }
       }
       else {
-         above = issues[issue_idx - 1].config.weight;
-         below = issues[issue_idx + 1].config.weight;
+         above = this._getIssueWeight(issues[new_idx - 1]);
+         below = this._getIssueWeight(issues[new_idx + 1]);
 
          if (above === 0) {
             weight = below / 2.0;
@@ -120,90 +93,44 @@ angular.module('Trestle.board')
          }
       }
 
-      // Determine if any data needs to be updated.
-      var moved_issue = issues[issue_idx],
-          cur_weight = moved_issue.config.weight;
-
-      if ( (below <= cur_weight) || (above >= cur_weight) ) {
-         // short circuit the loop to GitHub so that future drags have access to
-         // the correct weight
-         moved_issue.config.weight = weight;
-
-         // Update the copy in GitHub
-         gh.getIssue(trRepoModel.owner, trRepoModel.repo, moved_issue.number)
-            .then(function(serverIssue) {
-               var new_body = trIssueHelpers.mergeBodyConfig(
-                  serverIssue.body,
-                  _.defaults({weight: weight}, serverIssue.config));
-
-               return gh.updateIssue(trRepoModel.owner,
-                                     trRepoModel.repo,
-                                     moved_issue.number,
-                                     {body: new_body});
-            });
+      // short circuit the loop to GitHub
+      // - Set the new weight so that future drags have access to it
+      this._setIssueWeight(issue, weight);
+      // - Update the label so that our scope watches get updated
+      // * remove all column labels
+      issue.labels = _.filter(issue.labels, function(label) {
+         return ! _.contains(trRepoModel.config.columns, label.name);
+      });
+      // * add the current column in (if the issue was moved to backlog then
+      //   we do nothing leaving the column labels off)
+      if (this.labelName) {
+         var col_label_obj = _.findWhere(trRepoModel.labels, {name: this.labelName});
+         issue.labels.push(col_label_obj);
       }
-   };
+      issue.tr_label_names = _.pluck(issue.labels, 'name');
 
-   this._onIssueReceived = function(evt, obj) {
-      var issues = this.issues,
-          issue = issues[this._findIssueIdx(issues, obj)],
-          ms_number = null,
-          me = this;
+      // * ensure the issue is in the correct milestone (ie. milestone page)
+      if (this._isEditingMilestone()) {
+         // Clear the milestone
+         issue.milestone = null;
 
-      if(this.isBacklog || this.labelName) {
-         // KANBAN COLUMN
-         // Update the issues labels to only have our columns label
-         // XXX: Do we still need this get?
-         gh.getIssue(trRepoModel.owner, trRepoModel.repo, issue.number)
-            .then(function(issue) {
-               // - Remove any of the old columns
-               var labels = _.filter(_.pluck(issue.labels, 'name'), function(label) {
-                  return !_.contains(trRepoModel.config.columns, label);
-
-               });
-               // - Add our column
-               labels.push(me.labelName);
-               gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
-                              issue.number, {labels: labels})
-               .then(function(updatedIssue) {
-                  console.log('move between columns done');
-               });
-            });
-      } else {
-         // MILESTONE COLUMN
-         if(me.milestone) {
-            ms_number = me.milestone.number;
-         }
+         // Set the new milestone if there is one
          issue.milestone = this.milestone;
-         gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
-                        issue.number, {milestone: ms_number})
-            .then(function(result) {
-               console.log('assigned new milestone to issue');
-            });
       }
+
+      if (disable_save) {return;}
+
+      // Update the copy in GitHub
+      var new_body = trIssueHelpers.mergeBodyConfig(issue.body, issue.config);
+
+      gh.updateIssue(trRepoModel.owner,
+                     trRepoModel.repo,
+                     issue.number,
+                     {
+                        body:      new_body,
+                        labels:    issue.tr_label_names,
+                        milestone: issue.milestone ? issue.milestone.number : null
+                     });
+
    };
-
-   this.getSortableOptions = function() {
-      var me = this;
-
-      return {
-         // Handle reorders
-         // Note: Since jquery is triggering this we need to wrap it in a scope
-         //       in order to $http and other angular services to know what to do.
-         // Note: Using `stop` is `update` does not have the list updated yet
-         stop: function(evt, obj) {
-            $scope.$apply(me._onIssueMoved.call(me, evt, obj));
-         },
-
-         receive: function(evt, obj) {
-            $scope.$apply(me._onIssueReceived.call(me, evt, obj));
-         },
-
-         // Allow dragging between the columns
-         connectWith: '.column-body',
-         helper: 'clone',
-         opacity: 0.8
-      };
-   };
-
 });

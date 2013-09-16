@@ -91,7 +91,12 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
             templateUrl  : "issue/issue_details.tpl.html"
          };
 
-         $modal.open(opts);
+         // todo: remove this setting when future version of $modal adds automatically
+         // - see: https://github.com/trestle-pm/trestle/issues/80
+         $rootScope.modalIsUp = true;
+         $modal.open(opts).finally(function() {
+            $rootScope.modalIsUp = false;
+         });
       },
 
       /**

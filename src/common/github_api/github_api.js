@@ -173,9 +173,12 @@ angular.module('github.api', ['restangular'])
    this.listRepoIssues = function(owner, repo, args) {
       // XXX look at how to get more then 100 uses
       // - paging
+      var headers = {
+         Accept: 'application/vnd.github.full+json'
+      };
       return GitHubRestangular
          .one(['repos', owner, repo, 'issues'].join('/'))
-         .get(angular.extend(args || {}, {per_page: 100}));
+         .get(angular.extend(args || {}, {per_page: 100}), headers);
    };
 
    this.listRepos = function() {

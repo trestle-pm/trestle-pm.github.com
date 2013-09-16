@@ -158,7 +158,8 @@ angular.module('Trestle')
    function resolveIssueConf(issue) {
       var config = {
          // XXX only do this if the config did not have it already
-         weight: _.random(-1000, 1000)//Number.MIN_VALUE, Number.MAX_VALUE)
+         columnWeight:    _.random(-1000, 1000),
+         milestoneWeight: _.random(-1000, 1000)
       };
 
       var body = issue.body;

@@ -17,7 +17,10 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
     "        ng-init=\"colCtrl.init({isBacklog:true})\" >\n" +
     "\n" +
-    "      <h1 class=\"column-header\">{{colCtrl.columnName}}</h1>\n" +
+    "      <h1 class=\"column-header\">\n" +
+    "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
+    "        <span class=\"wip_count\">{{colCtrl.issues.length}}</span>\n" +
+    "      </h1>\n" +
     "\n" +
     "      <a class=\"btn btn-success\"\n" +
     "         ng-href=\"https://github.com/{{repoModel.owner}}/{{repoModel.repo}}/issues/new\"\n" +
@@ -32,10 +35,10 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "\n" +
     "      <!-- CARDS List -->\n" +
     "      <ul class=\"column-body\"\n" +
-    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\">\n" +
     "\n" +
-    "        <li class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in colCtrl.issues | filterMilestones:msFilterVal | globalIssueFilter\"\n" +
+    "        <li class=\"card-wrapper\"\n" +
+    "             ng-repeat=\"issue in repoModel.issues | issuesInBacklog | filterMilestones:msFilterVal | globalIssueFilter | orderBy:'config.columnWeight'\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -58,17 +61,17 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      </h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
-    "      <ul class=\"column-body\"\n" +
-    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "      <ul class=\"column-body\" tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\" >\n" +
     "\n" +
-    "        <li class=\"card_wrapper\"\n" +
-    "            ng-repeat=\"issue in colCtrl.issues | globalIssueFilter\"\n" +
+    "        <li class=\"card-wrapper\"\n" +
+    "            ng-repeat=\"issue in repoModel.issues | issuesWithLabel:colCtrl.labelName | globalIssueFilter | orderBy:'config.columnWeight'\"\n" +
     "            data-issue-id=\"{{issue.id}}\" >\n" +
     "\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "\n" +
     "        </li>\n" +
     "      </ul>\n" +
+    "\n" +
     "      <!-- end of card list -->\n" +
     "    </li>\n" +
     "\n" +
@@ -91,10 +94,10 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
     "\n" +
     "      <!-- CARDS List -->\n" +
     "      <ul class=\"column-body\"\n" +
-    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\" >\n" +
     "\n" +
-    "        <li class=\"card_wrapper\"\n" +
-    "             ng-repeat=\"issue in colCtrl.issues | filter:issueFilters.searchText\"\n" +
+    "        <li class=\"card-wrapper\"\n" +
+    "             ng-repeat=\"issue in repoModel.issues | filterMilestones:'none' | filter:issueFilters.searchText | orderBy:'config.milestoneWeight'\"\n" +
     "             data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -114,10 +117,10 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
     "\n" +
     "      <!-- CARDS List -->\n" +
     "      <ul class=\"column-body\"\n" +
-    "          ui-sortable=\"colCtrl.getSortableOptions()\" >\n" +
+    "          tr-issue-sortable=\"colCtrl.onIssueMoved(issues, issue)\" >\n" +
     "\n" +
-    "        <li class=\"card_wrapper\"\n" +
-    "            ng-repeat=\"issue in colCtrl.issues | filter:issueFilters.searchText\"\n" +
+    "        <li class=\"card-wrapper\"\n" +
+    "            ng-repeat=\"issue in repoModel.issues | filterMilestones:colCtrl.milestone.title | filter:issueFilters.searchText | orderBy:'config.milestoneWeight'\"\n" +
     "            data-issue-id=\"{{issue.id}}\" >\n" +
     "          <tr-issue-card issue=\"issue\" />\n" +
     "        </li>\n" +
@@ -132,7 +135,7 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
 
 angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/convert_to_pull.tpl.html",
-    "<div class=\"convert_to_pull\"\n" +
+    "<div class=\"convert-to-pull\"\n" +
     "     ng-controller=\"ConvertToPullCtrl as convertCtrl\"\n" +
     "     ng-init=\"convertCtrl.init(issue)\" >\n" +
     "\n" +
@@ -241,207 +244,205 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
 
 angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/issue.tpl.html",
-    "<div ng-controller=\"IssueCtrl as issueCtrl\"\n" +
-    "     class=\"card\"\n" +
-    "     ng-class=\"issueCtrl.getBuildStatus()\"\n" +
-    "     ng-click=\"issueCtrl.showIssueDetails()\"\n" +
-    "    >\n" +
-    "\n" +
-    "  <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
-    "       class=\"build_header\"></div>\n" +
-    "  <div class=\"header\">\n" +
-    "    <a ng-href=\"{{issueCtrl.issue.html_url}}\"\n" +
-    "       ng-click=\"$event.stopPropagation()\"\n" +
-    "       target=\"_blank\"\n" +
-    "       title=\"Open on GitHub\"\n" +
-    "       class=\"number ng-scope\">\n" +
-    "       <i ng-if=\"issueCtrl.isPullRequest()\" class=\"icon-code-fork\"></i>\n" +
-    "       {{issueCtrl.issue.number}}\n" +
-    "    </a>\n" +
-    "    <span class=\"title\">\n" +
-    "      {{issueCtrl.issue.title}}\n" +
-    "    </span>\n" +
-    "    <img class=\"avatar\"\n" +
-    "         ng-class=\"{\n" +
-    "            empty: !issueCtrl.issue.assignee\n" +
-    "         }\"\n" +
-    "         title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
-    "         ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
-    "  </div>\n" +
-    "  <div class=\"content\">\n" +
-    "      <span class=\"milestone\" ng-show=\"issue.milestone\">\n" +
-    "        {{issueCtrl.issue.milestone.title}}\n" +
+    "<div class=\"card\"\n" +
+    "      ng-controller=\"IssueCtrl as issueCtrl\"\n" +
+    "      ng-class=\"issueCtrl.getBuildStatus()\"\n" +
+    "      ng-click=\"issueCtrl.showIssueDetails()\">\n" +
+    "   <div class=\"build-header\"\n" +
+    "         ng-if=\"issueCtrl.isPullRequest()\">\n" +
+    "   </div>\n" +
+    "   <div class=\"header\">\n" +
+    "      <a class=\"issue-number\"\n" +
+    "            target=\"_blank\"\n" +
+    "            title=\"Open on GitHub\"\n" +
+    "            ng-href=\"{{issueCtrl.issue.html_url}}\"\n" +
+    "            ng-click=\"$event.stopPropagation()\">\n" +
+    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.isPullRequest()\"></i>\n" +
+    "         {{issueCtrl.issue.number}}\n" +
+    "      </a>\n" +
+    "      <span class=\"title\">\n" +
+    "         {{issueCtrl.issue.title}}\n" +
+    "      </span>\n" +
+    "      <img class=\"avatar\"\n" +
+    "            ng-class=\"{\n" +
+    "               empty: !issueCtrl.issue.assignee\n" +
+    "            }\"\n" +
+    "            title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
+    "            ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
+    "   </div>\n" +
+    "   <div class=\"content\">\n" +
+    "      <span class=\"milestone\"\n" +
+    "            ng-show=\"issue.milestone\">\n" +
+    "         {{issueCtrl.issue.milestone.title}}\n" +
     "      </span>\n" +
     "      <span class=\"label\"\n" +
-    "            ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
-    "            style=\"background-color: #{{label.color}}\">\n" +
-    "          {{label.name}}\n" +
+    "            style=\"background-color: #{{label.color}}\"\n" +
+    "            ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels | orderBy:'name'\">\n" +
+    "         {{label.name}}\n" +
     "      </span>\n" +
-    "  </div>\n" +
-    "  <div class=\"reviews\"\n" +
-    "       ng-if=\"issueCtrl.issue.tr_comments.length > 0\">\n" +
-    "    <div class=\"votes\">\n" +
-    "        <div class=\"vote_count\"\n" +
-    "             ng-class=\"{\n" +
-    "              positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
-    "              negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
-    "             }\">\n" +
-    "          {{issueCtrl.issue.tr_comment_voting.total}}\n" +
-    "        </div>\n" +
-    "        <img ng-repeat=\"(login, details) in issueCtrl.issue.tr_comment_voting.users\"\n" +
-    "             class=\"vote_avatar\"\n" +
-    "             title=\"{{login}} {{details.count}}\"\n" +
-    "             ng-src=\"{{details.avatar_url}}?s=30\"\n" +
-    "             ng-class=\"{\n" +
-    "              yes: details.count > 0,\n" +
-    "              no: details.count < 0\n" +
-    "             }\"\n" +
-    "             />\n" +
-    "    </div>\n" +
-    "    <div class=\"stats\">\n" +
-    "        <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
-    "        <span class=\"comments\">\n" +
+    "   </div>\n" +
+    "   <div class=\"reviews\"\n" +
+    "         ng-if=\"issueCtrl.issue.tr_comments.length > 0\">\n" +
+    "      <div class=\"votes\">\n" +
+    "         <div class=\"vote-count\"\n" +
+    "               ng-class=\"{\n" +
+    "                  positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
+    "                  negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
+    "               }\">\n" +
+    "            {{issueCtrl.issue.tr_comment_voting.total}}\n" +
+    "         </div>\n" +
+    "         <img class=\"vote-avatar\"\n" +
+    "               title=\"{{login}} {{details.count}}\"\n" +
+    "               ng-repeat=\"(login, details) in issueCtrl.issue.tr_comment_voting.users\"\n" +
+    "               ng-src=\"{{details.avatar_url}}?s=30\"\n" +
+    "               ng-class=\"{\n" +
+    "                  yes: details.count > 0,\n" +
+    "                  no: details.count < 0\n" +
+    "               }\"/>\n" +
+    "      </div>\n" +
+    "      <div class=\"stats\">\n" +
+    "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
+    "         <span class=\"comments\">\n" +
     "            <i class=\"icon-comments\"></i>\n" +
     "            {{issueCtrl.issue.tr_comments.length}}\n" +
-    "        </span>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
+    "         </span>\n" +
+    "      </div>\n" +
+    "   </div>\n" +
     "</div>\n" +
-    "\n" +
     "");
 }]);
 
 angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/issue_details.tpl.html",
     "<div class=\"issue_detail\"\n" +
-    "     ng-controller=\"IssueCtrl as issueCtrl\"\n" +
-    "     ng-init=\"issueCtrl.init(issue)\" >\n" +
-    "\n" +
-    "  <div class=\"header\">\n" +
-    "    <li class=\"user-selector dropdown\">\n" +
-    "      <a class=\"dropdown-toggle\">\n" +
-    "        <img class=\"avatar\"\n" +
-    "            ng-class=\"{\n" +
-    "                empty: !issueCtrl.issue.assignee\n" +
-    "             }\"\n" +
-    "             title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
-    "             ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
+    "      ng-controller=\"IssueCtrl as issueCtrl\"\n" +
+    "      ng-init=\"issueCtrl.init(issue)\"\n" +
+    "      ng-class=\"{pull: issueCtrl.isPullRequest()}\">\n" +
+    "   <div class=\"header\">\n" +
+    "      <span class=\"user-selector dropdown\">\n" +
+    "         <a class=\"dropdown-toggle\">\n" +
+    "            <img class=\"avatar\"\n" +
+    "                  ng-class=\"{\n" +
+    "                     empty: !issueCtrl.issue.assignee\n" +
+    "                  }\"\n" +
+    "                  title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
+    "                  ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
+    "         </a>\n" +
+    "         <ul class=\"dropdown-menu\">\n" +
+    "            <h4>Assign to:</h4>\n" +
+    "            <li class=\"assignee\"\n" +
+    "                  ng-repeat=\"user in repoModel.assignees\"\n" +
+    "                  ng-click=\"issueCtrl.assignUser(user)\">\n" +
+    "               <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\"></img>\n" +
+    "               <span class=\"user_login\">\n" +
+    "                  {{user.login}}\n" +
+    "               </span>\n" +
+    "            </li>\n" +
+    "         </ul>\n" +
+    "      </span>\n" +
+    "      <span class=\"title\">\n" +
+    "         {{issueCtrl.issue.title}}\n" +
+    "      </span>\n" +
+    "      <a class=\"issue-number\"\n" +
+    "            target=\"_blank\"\n" +
+    "            href=\"{{issueCtrl.issue.html_url}}\"\n" +
+    "            title=\"Open on GitHub\">\n" +
+    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.isPullRequest()\"></i>\n" +
+    "         {{issueCtrl.issue.number}}\n" +
     "      </a>\n" +
-    "      <ul class=\"dropdown-menu\">\n" +
-    "        <li ng-repeat=\"user in repoModel.assignees\"\n" +
-    "            class=\"assignee\"\n" +
-    "            ng-click=\"issueCtrl.assignUser(user)\">\n" +
-    "          <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\"></img>\n" +
-    "          <span class=\"user_login\">{{user.login}}</span>\n" +
-    "        </li>\n" +
-    "      </ul>\n" +
-    "    </li>\n" +
-    "\n" +
-    "    <span class=\"title\">\n" +
-    "      {{issueCtrl.issue.title}}\n" +
-    "    </span>\n" +
-    "    <a target=\"_blank\" ng-href=\"{{issueCtrl.issue.html_url}}\">\n" +
-    "      <i class=\"icon-share\"></i>\n" +
-    "    </a>\n" +
-    "    <i class=\"icon-remove\" ng-click=\"$close()\"></i>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"status_header\">\n" +
-    "    <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
-    "         class=\"build_status\"\n" +
-    "         ng-class=\"issueCtrl.getBuildStatus()\">\n" +
-    "      <a href=\"{{issueCtrl.tr_top_build_status.target_url}}\" target=\"_blank\">\n" +
-    "      {{issueCtrl.tr_top_build_status.description}}\n" +
-    "      </a>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"comment_summary\">\n" +
-    "      <div class=\"summary\">\n" +
-    "         {{issueCtrl.tr_comments.length}} comments\n" +
+    "      <i class=\"close icon-remove\" ng-click=\"$close()\"></i>\n" +
+    "   </div>\n" +
+    "   <div class=\"status-header\">\n" +
+    "      <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
+    "            class=\"build-status\"\n" +
+    "            ng-class=\"issueCtrl.getBuildStatus()\">\n" +
+    "         <a target=\"_blank\"\n" +
+    "               href=\"{{issueCtrl.tr_top_build_status.target_url}}\" >\n" +
+    "            {{issueCtrl.tr_top_build_status.description}}\n" +
+    "         </a>\n" +
     "      </div>\n" +
-    "\n" +
-    "      <div class=\"vote_count\"\n" +
-    "          ng-class=\"{\n" +
-    "           positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
-    "           negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
-    "          }\">\n" +
-    "       {{issueCtrl.issue.tr_comment_voting.total}}\n" +
-    "     </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"details\">\n" +
-    "\n" +
-    "    <div class=\"milestone\">\n" +
-    "      <select ng-init=\"msValue=issueCtrl.issue.milestone.number\"\n" +
-    "              ng-model=\"msValue\"\n" +
-    "              ng-options=\"m.number as m.title for m in repoModel.milestones\"\n" +
-    "              ng-change=\"issueCtrl.assignMilestone(msValue)\">\n" +
-    "        <option value=\"\">No Milestone</option>\n" +
-    "      </select>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"branch_info\" ng-show=\"issueCtrl.isPullRequest()\">\n" +
-    "      to {{issueCtrl.issue.tr_pull_details.base.label}}\n" +
-    "      from {{issueCtrl.issue.tr_pull_details.tr_head.label}}\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"label_bar\">\n" +
-    "    <span class=\"label\"\n" +
-    "      ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels\"\n" +
-    "      style=\"background-color: #{{label.color}}\">\n" +
-    "      {{label.name}}\n" +
-    "    </span>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"label_editor dropdown\">\n" +
-    "    <button class=\"btn dropdown-toggle-no-close\">Edit<span class=\"caret\"/></button>\n" +
-    "\n" +
-    "    <div class=\"dropdown-menu\">\n" +
-    "      <div class=\"label-list no-close\">\n" +
-    "         <div class=\"label-item\"\n" +
-    "              ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
-    "              ng-click=\"issueCtrl.toggleLabel(label)\"\n" +
-    "              ng-class=\"{\n" +
-    "                enabled: issueCtrl.isLabelEnabled(label.name)\n" +
-    "              }\">\n" +
-    "              <span class=\"pill\" style=\"background-color: #{{label.color}}\">\n" +
-    "                 {{label.name}}\n" +
-    "              </span>\n" +
-    "          </div>\n" +
+    "      <div class=\"comment-summary\">\n" +
+    "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
+    "         <span class=\"comment_number\">\n" +
+    "            <i class=\"icon-comments\"></i>\n" +
+    "            {{issueCtrl.tr_comments.length}}\n" +
+    "         </span>\n" +
+    "         <span class=\"vote-count\"\n" +
+    "               ng-class=\"{\n" +
+    "                  positive: issueCtrl.issue.tr_comment_voting.total > 0,\n" +
+    "                  negative: issueCtrl.issue.tr_comment_voting.total < 0\n" +
+    "               }\">\n" +
+    "            {{issueCtrl.issue.tr_comment_voting.total}}\n" +
+    "         </span>\n" +
     "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div>\n" +
-    "    <button ng-if=\"!issueCtrl.isPullRequest()\"\n" +
-    "            class=\"convert_pull btn btn-primary\"\n" +
+    "   </div>\n" +
+    "   <div class=\"branch-info\"\n" +
+    "         ng-show=\"issueCtrl.isPullRequest()\">\n" +
+    "      to <pre>{{issueCtrl.issue.tr_pull_details.base.label}}</pre>\n" +
+    "      from <pre>{{issueCtrl.issue.tr_pull_details.tr_head.label}}</pre>\n" +
+    "   </div>\n" +
+    "   <div class=\"controls\">\n" +
+    "      <select class=\"milestone\"\n" +
+    "            ng-init=\"msValue=issueCtrl.issue.milestone.number\"\n" +
+    "            ng-model=\"msValue\"\n" +
+    "            ng-options=\"m.number as m.title for m in repoModel.milestones\"\n" +
+    "            ng-change=\"issueCtrl.assignMilestone(msValue)\">\n" +
+    "         <option value=\"\">No Milestone</option>\n" +
+    "      </select><!--Keep collapsed to prevent spacing bug--><div class=\"label-bar\">\n" +
+    "         <div class=\"label-editor dropdown\">\n" +
+    "            <button class=\"btn dropdown-toggle-no-close\">\n" +
+    "               Labels&nbsp;<span class=\"caret\"></span>\n" +
+    "            </button>\n" +
+    "            <div class=\"dropdown-menu\">\n" +
+    "               <div class=\"label-list no-close\">\n" +
+    "                  <div class=\"label-item\"\n" +
+    "                        ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "                        ng-click=\"issueCtrl.toggleLabel(label)\"\n" +
+    "                        ng-class=\"{\n" +
+    "                           enabled: issueCtrl.isLabelEnabled(label.name)\n" +
+    "                        }\">\n" +
+    "                     <span class=\"color-preview\"\n" +
+    "                           style=\"background-color: #{{label.color}}\">\n" +
+    "                     </span>\n" +
+    "                     {{label.name}}\n" +
+    "                  </div>\n" +
+    "               </div>\n" +
+    "             </div>\n" +
+    "         </div><!--Keep collapsed to prevent spacing bug--><div class=\"labels\">\n" +
+    "            <span class=\"label\"\n" +
+    "                  style=\"background-color: #{{label.color}}\"\n" +
+    "                  ng-repeat=\"label in issueCtrl.issue.labels | nonColumnLabels | orderBy:'name'\">\n" +
+    "               {{label.name}}\n" +
+    "            </span>&nbsp;\n" +
+    "         </div>\n" +
+    "      </div><!--Keep collapsed to prevent spacing bug--><button class=\"convert-pull btn btn-success\"\n" +
+    "            ng-if=\"!issueCtrl.isPullRequest()\"\n" +
     "            ng-click=\"issueCtrl.convertToPull()\">\n" +
-    "    Convert to Pull\n" +
-    "    </button>\n" +
-    "    <button ng-if=\"issueCtrl.isPullRequest()\"\n" +
-    "            class=\"convert_pull btn\">\n" +
-    "    View Pull\n" +
-    "    </button>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"scroll_area\">\n" +
-    "    <div class=\"description\">\n" +
-    "      {{issueCtrl.issue.body}}\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <div class=\"comments\">\n" +
-    "        <div class=\"comment\"\n" +
+    "         Convert to Pull\n" +
+    "      </button>\n" +
+    "   </div>\n" +
+    "   <div class=\"description\"\n" +
+    "        ng-class=\"{\n" +
+    "         empty: issueCtrl.issue.body.trim() === ''\n" +
+    "        }\">\n" +
+    "      <h4>Description:</h4>\n" +
+    "      <div class=\"issue-body\"\n" +
+    "         ng-bind-html=\"issueCtrl.issue.body_html\">\n" +
+    "      </div>\n" +
+    "   </div>\n" +
+    "   <div class=\"comments\">\n" +
+    "      <div class=\"comment\"\n" +
     "            ng-repeat=\"comment in issueCtrl.issue.tr_comments\">\n" +
-    "          <img class=\"commenter\"\n" +
+    "         <img class=\"commenter\"\n" +
     "               ng-src=\"{{comment.user.avatar_url}}?s=30\"/>\n" +
-    "          <div class=\"comment_body\" ng-bind-html=\"comment.body_html\"/>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
+    "         <h4>\n" +
+    "            <em>{{comment.user.login}}</em> commented:\n" +
+    "         </h4>\n" +
+    "         <div class=\"comment-body\"\n" +
+    "               ng-bind-html=\"comment.body_html\">\n" +
+    "         </div>\n" +
+    "      </div>\n" +
+    "   </div>\n" +
     "</div>\n" +
     "");
 }]);
@@ -452,45 +453,65 @@ angular.module("issue_filters/issue_filter.tpl.html", []).run(["$templateCache",
     "     ng-controller=\"IssueFilterCtrl as filterCtrl\"\n" +
     "     ng-init=\"filterCtrl.init()\" >\n" +
     "\n" +
-    "  <button id=\"filterToggleBtn\"\n" +
-    "          class=\"btn-primary\"\n" +
-    "          ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
-    "    <span ng-if=\"fitlerCtrl.showDrawer\">Hide</span>\n" +
-    "    <span ng-if=\"!fitlerCtrl.showDrawer\">Show</span>\n" +
-    "  </button>\n" +
-    "\n" +
-    "\n" +
     "  <div class=\"drawer\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
     "                                 hide: !fitlerCtrl.showDrawer}\" >\n" +
+    "    <button id=\"filter-toggle-btn\"\n" +
+    "            class=\"btn-primary\"\n" +
+    "            ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
+    "      <span ng-if=\"fitlerCtrl.showDrawer\"><i class=\"icon-caret-right\"></i></span>\n" +
+    "      <span ng-if=\"!fitlerCtrl.showDrawer\"><i class=\"icon-caret-left\"></i></span>\n" +
+    "    </button>\n" +
     "    <h1>Filters</h1>\n" +
+    "   <div class=\"content\">\n" +
     "    <ul >\n" +
     "      <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
     "          ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
     "        Assigned to Me\n" +
+    "         <i class=\"icon-remove\"></i>\n" +
     "      </li>\n" +
     "      <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
     "          ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
     "        Reviewed by Me\n" +
+    "        <i class=\"icon-remove\"></i>\n" +
+    "      </li>\n" +
+    "      <!-- TODO: Make it work-->\n" +
+    "      <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
+    "          ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
+    "        Updated Recently\n" +
+    "        <i class=\"icon-remove\"></i>\n" +
     "      </li>\n" +
     "    </ul>\n" +
-    "\n" +
-    "    <ul class=\"clearfix\" >\n" +
-    "      <li ng-repeat=\"user in repoModel.assignees\"\n" +
+    "    <h3>Collaborator</h3>\n" +
+    "    <ul class=\"collaborator\">\n" +
+    "      <li class=\"avatar\"\n" +
+    "          ng-repeat=\"user in repoModel.assignees\"\n" +
     "          ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
-    "          ng-class=\"{active: issueFilters.owner == user.login}\"\n" +
-    "          style=\"float: left;\" >\n" +
-    "        <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
+    "          ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
+    "        <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
     "      </li>\n" +
     "    </ul>\n" +
-    "\n" +
-    "    <ul class=\"clearfix\" >\n" +
+    "    <h3>Milestone</h3>\n" +
+    "    <ul>\n" +
     "      <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
     "          ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
     "          ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
     "        {{milestone.title}}\n" +
+    "        <i class=\"icon-remove\"></i>\n" +
     "      </li>\n" +
     "    </ul>\n" +
-    "\n" +
+    "   <h3>Label</h3>\n" +
+    "    <ul>\n" +
+    "      <!--TODO: Get filter to work?-->\n" +
+    "      <li ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "          ng-click=\"filterCtrl.setFilter('label', label.name)\"\n" +
+    "          ng-class=\"{active: issueFilters.label == label.name}\" >\n" +
+    "            <span class=\"color-preview\"\n" +
+    "                style=\"background-color: #{{label.color}}\"></span>\n" +
+    "        {{label.name}}\n" +
+    "        <i class=\"icon-remove\"></i>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "</div>\n" +
     "  </div>\n" +
     "\n" +
     "</div>\n" +
