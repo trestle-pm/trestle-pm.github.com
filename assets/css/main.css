@@ -195,7 +195,7 @@ html, body {
   top: 45px;
   bottom: 0;
   left: 0;
-  width: 235px;
+  width: 19%;
   -webkit-transition: width 0.5s ease-in;
   -moz-transition: width 0.5s ease-in;
   -o-transition: width 0.5s ease-in;
@@ -213,7 +213,7 @@ html, body {
   -o-transition: left 0.5s ease-in;
   transition: left 0.5s ease-in;
   z-index: 1;
-  width: 235px;
+  width: 19%;
   background: #42576d;
   border-radius: 0 0 0 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -244,7 +244,7 @@ html, body {
 }
 /* line 154, ../../../src/app/board/columns/issue_columns.scss */
 .show-bl .issue-columns {
-  margin-left: 247px;
+  margin-left: 21%;
 }
 
 /* line 162, ../../../src/app/board/columns/issue_columns.scss */
@@ -253,7 +253,7 @@ html, body {
 }
 /* line 165, ../../../src/app/board/columns/issue_columns.scss */
 .hide-bl #backlog-drawer .drawer {
-  left: -235px;
+  left: -19%;
 }
 
 /* line 172, ../../../src/app/board/columns/issue_columns.scss */
@@ -443,11 +443,20 @@ html, body {
   border-top: 1px solid #bfc8c9;
   border-bottom: 1px solid #798d8f;
 }
-/* line 149, ../../../src/app/issue/issues.scss */
+/* line 150, ../../../src/app/issue/issues.scss */
 .card.updated {
-  border: 4px solid blue;
+  border: 1px solid #217dbb;
+  box-shadow: 0 0 2px 2px #5faee3;
 }
 /* line 154, ../../../src/app/issue/issues.scss */
+.card.updated .header {
+  background: #dff0fc;
+}
+/* line 157, ../../../src/app/issue/issues.scss */
+.card.updated .stats {
+  color: #3498db;
+}
+/* line 163, ../../../src/app/issue/issues.scss */
 .card .header {
   position: relative;
   margin: 0;
@@ -458,21 +467,21 @@ html, body {
   font-size: 1em;
   font-weight: bold;
 }
-/* line 164, ../../../src/app/issue/issues.scss */
+/* line 173, ../../../src/app/issue/issues.scss */
 .card .header:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
-/* line 169, ../../../src/app/issue/issues.scss */
+/* line 178, ../../../src/app/issue/issues.scss */
 .card .header:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-/* line 176, ../../../src/app/issue/issues.scss */
+/* line 185, ../../../src/app/issue/issues.scss */
 .card .title {
   white-space: normal;
 }
-/* line 181, ../../../src/app/issue/issues.scss */
+/* line 190, ../../../src/app/issue/issues.scss */
 .card .avatar {
   height: 35px;
   max-height: 35px;
@@ -484,7 +493,7 @@ html, body {
   border-radius: 17.5px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 193, ../../../src/app/issue/issues.scss */
+/* line 202, ../../../src/app/issue/issues.scss */
 .card .avatar.empty {
   height: 25px;
   right: 0;
@@ -493,13 +502,13 @@ html, body {
   box-shadow: none;
   opacity: .7;
 }
-/* line 204, ../../../src/app/issue/issues.scss */
+/* line 213, ../../../src/app/issue/issues.scss */
 .card .content {
   margin: 0;
   padding: 0 5px;
   white-space: normal;
 }
-/* line 210, ../../../src/app/issue/issues.scss */
+/* line 219, ../../../src/app/issue/issues.scss */
 .card .milestone {
   display: inline-block;
   padding: 2px 10px 2px 7px;
@@ -517,13 +526,13 @@ html, body {
   vertical-align: baseline;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
-/* line 229, ../../../src/app/issue/issues.scss */
+/* line 238, ../../../src/app/issue/issues.scss */
 .card .reviews {
   position: relative;
   white-space: normal;
   padding: 3px 6px 1px;
 }
-/* line 235, ../../../src/app/issue/issues.scss */
+/* line 244, ../../../src/app/issue/issues.scss */
 .card .vote-avatar {
   max-width: 20px;
   max-height: 20px;
@@ -531,15 +540,15 @@ html, body {
   border: 3px solid #95a5a6;
   vertical-align: middle;
 }
-/* line 242, ../../../src/app/issue/issues.scss */
+/* line 251, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.yes {
   border-color: #229955;
 }
-/* line 243, ../../../src/app/issue/issues.scss */
+/* line 252, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.no {
   border-color: #e43725;
 }
-/* line 247, ../../../src/app/issue/issues.scss */
+/* line 256, ../../../src/app/issue/issues.scss */
 .card .stats {
   position: absolute;
   right: 3px;
@@ -548,24 +557,24 @@ html, body {
   color: #95a5a6;
   font-size: 1.2em;
 }
-/* line 255, ../../../src/app/issue/issues.scss */
+/* line 264, ../../../src/app/issue/issues.scss */
 .card .stats:hover {
   color: #3e4a4a;
 }
-/* line 260, ../../../src/app/issue/issues.scss */
+/* line 269, ../../../src/app/issue/issues.scss */
 .card .stats span {
   margin-right: 10px;
 }
-/* line 263, ../../../src/app/issue/issues.scss */
+/* line 272, ../../../src/app/issue/issues.scss */
 .card .stats span.todos i {
   margin-right: 5px;
 }
-/* line 267, ../../../src/app/issue/issues.scss */
+/* line 276, ../../../src/app/issue/issues.scss */
 .card .stats span:last-child {
   margin-right: 0;
 }
 
-/* line 274, ../../../src/app/issue/issues.scss */
+/* line 283, ../../../src/app/issue/issues.scss */
 .drop-area {
   height: 70px;
   background: rgba(255, 255, 255, 0.15);
@@ -574,7 +583,7 @@ html, body {
 }
 
 /************* DETAILS ****************/
-/* line 283, ../../../src/app/issue/issues.scss */
+/* line 292, ../../../src/app/issue/issues.scss */
 .modal {
   max-height: 80%;
   overflow: auto;
@@ -584,7 +593,7 @@ html, body {
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-/* line 293, ../../../src/app/issue/issues.scss */
+/* line 302, ../../../src/app/issue/issues.scss */
 .modal .header {
   position: relative;
   margin: 0;
@@ -595,35 +604,35 @@ html, body {
   font-size: 1.2em;
   font-weight: bold;
 }
-/* line 305, ../../../src/app/issue/issues.scss */
+/* line 314, ../../../src/app/issue/issues.scss */
 .modal .title {
   white-space: normal;
   line-height: 1.3em;
 }
-/* line 311, ../../../src/app/issue/issues.scss */
+/* line 320, ../../../src/app/issue/issues.scss */
 .modal .issue-number {
   position: absolute;
   top: 2px;
   right: 28px;
   padding: 3px 4px;
 }
-/* line 319, ../../../src/app/issue/issues.scss */
+/* line 328, ../../../src/app/issue/issues.scss */
 .modal .close {
   float: none;
   position: absolute;
   right: 5px;
   top: 3px;
 }
-/* line 327, ../../../src/app/issue/issues.scss */
+/* line 336, ../../../src/app/issue/issues.scss */
 .modal .user-selector {
   position: static;
 }
-/* line 330, ../../../src/app/issue/issues.scss */
+/* line 339, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-toggle {
   position: static;
   z-index: 100;
 }
-/* line 335, ../../../src/app/issue/issues.scss */
+/* line 344, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-toggle .avatar {
   height: 60px;
   max-height: 60px;
@@ -636,12 +645,12 @@ html, body {
   border-radius: 35px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 350, ../../../src/app/issue/issues.scss */
+/* line 359, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu {
   z-index: 50;
   margin-top: 19px;
 }
-/* line 354, ../../../src/app/issue/issues.scss */
+/* line 363, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu h4 {
   margin: 0;
   padding: 6px 5px 0;
@@ -649,11 +658,11 @@ html, body {
   border-bottom: 1px solid #b1bdbd;
   font-size: .8em;
 }
-/* line 362, ../../../src/app/issue/issues.scss */
+/* line 371, ../../../src/app/issue/issues.scss */
 .modal .user-selector .dropdown-menu .avatar {
   border-radius: 2px;
 }
-/* line 369, ../../../src/app/issue/issues.scss */
+/* line 378, ../../../src/app/issue/issues.scss */
 .modal .status-header {
   width: 100%;
   height: 28px;
@@ -663,7 +672,7 @@ html, body {
   border-top: 1px solid #798d8f;
   border-bottom: 1px solid #798d8f;
 }
-/* line 379, ../../../src/app/issue/issues.scss */
+/* line 388, ../../../src/app/issue/issues.scss */
 .modal .build-status {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -676,27 +685,27 @@ html, body {
   padding: 3px 0 3px 65px;
   border-right: 1px solid #6d8082;
 }
-/* line 389, ../../../src/app/issue/issues.scss */
+/* line 398, ../../../src/app/issue/issues.scss */
 .modal .build-status.success {
   background: #89e5b0;
   color: #19703e;
 }
-/* line 390, ../../../src/app/issue/issues.scss */
+/* line 399, ../../../src/app/issue/issues.scss */
 .modal .build-status.failure {
   background: #f8c9c4;
   color: #bf2718;
 }
-/* line 391, ../../../src/app/issue/issues.scss */
+/* line 400, ../../../src/app/issue/issues.scss */
 .modal .build-status.pending {
   background: #b6daf2;
   color: #1d6fa5;
 }
-/* line 392, ../../../src/app/issue/issues.scss */
+/* line 401, ../../../src/app/issue/issues.scss */
 .modal .build-status.unknown {
   background: #e8ecec;
   color: #6d8082;
 }
-/* line 396, ../../../src/app/issue/issues.scss */
+/* line 405, ../../../src/app/issue/issues.scss */
 .modal .comment-summary {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -714,34 +723,34 @@ html, body {
   font-size: 1.2em;
   text-align: right;
 }
-/* line 412, ../../../src/app/issue/issues.scss */
+/* line 421, ../../../src/app/issue/issues.scss */
 .modal .comment-summary i {
   color: #e8ecec;
 }
-/* line 417, ../../../src/app/issue/issues.scss */
+/* line 426, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span {
   margin-right: 10px;
 }
-/* line 420, ../../../src/app/issue/issues.scss */
+/* line 429, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span.todos i {
   margin-right: 4px;
 }
-/* line 424, ../../../src/app/issue/issues.scss */
+/* line 433, ../../../src/app/issue/issues.scss */
 .modal .comment-summary span:last-child {
   margin-right: 0;
 }
-/* line 432, ../../../src/app/issue/issues.scss */
+/* line 441, ../../../src/app/issue/issues.scss */
 .modal .branch-info {
   display: none;
 }
-/* line 437, ../../../src/app/issue/issues.scss */
+/* line 446, ../../../src/app/issue/issues.scss */
 .modal .controls {
   padding: 5px 10px;
   background: white;
   border-bottom: 1px solid #dae0e0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-/* line 445, ../../../src/app/issue/issues.scss */
+/* line 454, ../../../src/app/issue/issues.scss */
 .modal select.milestone {
   display: inline-block;
   width: 25%;
@@ -750,7 +759,7 @@ html, body {
   color: black;
   font-size: 1em;
 }
-/* line 455, ../../../src/app/issue/issues.scss */
+/* line 464, ../../../src/app/issue/issues.scss */
 .modal .label-bar {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -760,13 +769,13 @@ html, body {
   padding: 0 4px;
   position: relative;
 }
-/* line 463, ../../../src/app/issue/issues.scss */
+/* line 472, ../../../src/app/issue/issues.scss */
 .modal .label-bar .labels {
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  width: 80%;
+  width: 100%;
   height: 30px;
   overflow: hidden;
   margin: 0;
@@ -776,21 +785,21 @@ html, body {
   border: 1px solid #ccd4d5;
   border-radius: 0 2px 2px 0;
 }
-/* line 478, ../../../src/app/issue/issues.scss */
+/* line 487, ../../../src/app/issue/issues.scss */
 .modal .label-bar .label {
   margin: 2px;
   opacity: 1;
 }
-/* line 485, ../../../src/app/issue/issues.scss */
+/* line 494, ../../../src/app/issue/issues.scss */
 .modal .label-editor {
   display: inline-block;
   width: 60px;
   position: absolute;
   top: -1px;
-  left: 10px;
+  left: 4px;
   z-index: 10;
 }
-/* line 494, ../../../src/app/issue/issues.scss */
+/* line 503, ../../../src/app/issue/issues.scss */
 .modal .label-editor .btn {
   width: 100%;
   padding: 4px;
@@ -798,30 +807,30 @@ html, body {
   border-radius: 3px 0 0 3px;
   font-size: .85em;
 }
-/* line 502, ../../../src/app/issue/issues.scss */
+/* line 511, ../../../src/app/issue/issues.scss */
 .modal .label-editor .btn span {
   font-size: .85em;
 }
-/* line 509, ../../../src/app/issue/issues.scss */
+/* line 518, ../../../src/app/issue/issues.scss */
 .modal .label-editor .open .btn {
   border-radius: 3px 0 0 0;
 }
-/* line 513, ../../../src/app/issue/issues.scss */
+/* line 522, ../../../src/app/issue/issues.scss */
 .modal .label-editor .dropdown-menu {
   margin: -2px 0 0;
   border-radius: 0 4px 4px 4px;
   border-top: 6px solid #e6e6e6;
   padding: 0;
 }
-/* line 522, ../../../src/app/issue/issues.scss */
+/* line 531, ../../../src/app/issue/issues.scss */
 .modal .label-editor .label-item:first-child {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 527, ../../../src/app/issue/issues.scss */
+/* line 536, ../../../src/app/issue/issues.scss */
 .modal .label-editor .label-item.enabled {
   background: #bfc8c9;
 }
-/* line 532, ../../../src/app/issue/issues.scss */
+/* line 541, ../../../src/app/issue/issues.scss */
 .modal .label-editor .label-item .color-preview {
   display: inline-block;
   width: 10px;
@@ -829,44 +838,44 @@ html, body {
   border-radius: 2px;
   margin: 0 3px;
 }
-/* line 543, ../../../src/app/issue/issues.scss */
+/* line 552, ../../../src/app/issue/issues.scss */
 .modal .convert-pull {
   height: 29px;
   width: 20%;
   padding: 0 4px;
 }
-/* line 550, ../../../src/app/issue/issues.scss */
+/* line 559, ../../../src/app/issue/issues.scss */
 .modal .description {
   padding: 10px 20px;
   background: white;
   border-bottom: 1px solid #ccd4d5;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
 }
-/* line 557, ../../../src/app/issue/issues.scss */
+/* line 566, ../../../src/app/issue/issues.scss */
 .modal .description.empty {
   display: none;
 }
-/* line 561, ../../../src/app/issue/issues.scss */
+/* line 570, ../../../src/app/issue/issues.scss */
 .modal .description h4 {
   margin: 0;
   color: #95a5a6;
   font-size: 1em;
 }
-/* line 569, ../../../src/app/issue/issues.scss */
+/* line 578, ../../../src/app/issue/issues.scss */
 .modal .comments {
   padding: 10px;
   border-radius: 0 0 3px 3px;
 }
-/* line 573, ../../../src/app/issue/issues.scss */
+/* line 582, ../../../src/app/issue/issues.scss */
 .modal .comments .comment {
   position: relative;
   margin: 0 0 10px;
 }
-/* line 578, ../../../src/app/issue/issues.scss */
+/* line 587, ../../../src/app/issue/issues.scss */
 .modal .comments .comment:last-child {
   margin: 0;
 }
-/* line 583, ../../../src/app/issue/issues.scss */
+/* line 592, ../../../src/app/issue/issues.scss */
 .modal .comments .commenter {
   height: 40px;
   max-height: 40px;
@@ -877,45 +886,49 @@ html, body {
   border: 2px solid #b1bdbd;
   border-radius: 25px;
 }
-/* line 594, ../../../src/app/issue/issues.scss */
+/* line 603, ../../../src/app/issue/issues.scss */
 .modal .comments .comment-body {
   margin: 0 0 0 30px;
   padding: 7px 10px 7px 15px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 601, ../../../src/app/issue/issues.scss */
+/* line 610, ../../../src/app/issue/issues.scss */
 .modal .comments .comment-body p:last-child {
   margin: 0;
 }
-/* line 607, ../../../src/app/issue/issues.scss */
+/* line 616, ../../../src/app/issue/issues.scss */
 .modal .comments h4 {
   margin: 0 0 0 47px;
   font-size: 1em;
   color: #95a5a6;
   font-weight: normal;
 }
-/* line 614, ../../../src/app/issue/issues.scss */
+/* line 623, ../../../src/app/issue/issues.scss */
 .modal .comments h4 em {
   font-style: normal;
   color: #6d8082;
   font-weight: bold;
 }
 
-/* line 625, ../../../src/app/issue/issues.scss */
+/* line 634, ../../../src/app/issue/issues.scss */
 .pull select.milestone {
   width: 35%;
 }
-/* line 629, ../../../src/app/issue/issues.scss */
+/* line 637, ../../../src/app/issue/issues.scss */
+.pull .label-editor {
+  left: 10px;
+}
+/* line 640, ../../../src/app/issue/issues.scss */
 .pull .label-bar {
   width: 65%;
   padding-left: 10px;
 }
-/* line 635, ../../../src/app/issue/issues.scss */
+/* line 646, ../../../src/app/issue/issues.scss */
 .pull .convert-pull {
   display: none;
 }
-/* line 640, ../../../src/app/issue/issues.scss */
+/* line 651, ../../../src/app/issue/issues.scss */
 .pull .branch-info {
   display: block;
   -webkit-box-sizing: border-box;
@@ -928,7 +941,7 @@ html, body {
   font-size: .9em;
   text-align: center;
 }
-/* line 651, ../../../src/app/issue/issues.scss */
+/* line 662, ../../../src/app/issue/issues.scss */
 .pull .branch-info pre {
   display: inline;
   padding: 1px 4px;
@@ -939,15 +952,15 @@ html, body {
 }
 
 /************* CONVERT TO PULL ****************/
-/* line 664, ../../../src/app/issue/issues.scss */
+/* line 675, ../../../src/app/issue/issues.scss */
 .convert-to-pull {
   margin: 8px;
 }
-/* line 667, ../../../src/app/issue/issues.scss */
+/* line 678, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-selector {
   display: inline-block;
 }
-/* line 671, ../../../src/app/issue/issues.scss */
+/* line 682, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown {
   width: 300px;
   margin-top: 4px;
@@ -957,12 +970,12 @@ html, body {
   color: #666;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 685, ../../../src/app/issue/issues.scss */
+/* line 696, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
@@ -970,24 +983,24 @@ html, body {
   background-image: -webkit-linear-gradient(#fafafa, #eeeeee);
   background-image: linear-gradient(#fafafa, #eeeeee);
   background-repeat: repeat-x;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #dddddd;
 }
-/* line 695, ../../../src/app/issue/issues.scss */
+/* line 706, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 700, ../../../src/app/issue/issues.scss */
+/* line 711, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-item {
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eeeeee;
   display: table;
   table-layout: fixed;
   width: 100%;
   overflow: hidden;
   color: inherit;
 }
-/* line 709, ../../../src/app/issue/issues.scss */
+/* line 720, ../../../src/app/issue/issues.scss */
 .convert-to-pull .branch-pulldown .menu-item:hover {
   background: blue;
 }
@@ -1267,7 +1280,7 @@ html, body {
 body::-webkit-scrollbar-track-piece {
   background-clip: padding-box;
   background-color: #f5f5f5;
-  border: solid #fff;
+  border: solid white;
   border-width: 0 0 0 3px;
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07);
 }
@@ -1292,7 +1305,7 @@ body::-webkit-scrollbar-thumb:horizontal {
 body::-webkit-scrollbar-corner {
   background-clip: padding-box;
   background-color: #f5f5f5;
-  border: solid #fff;
+  border: solid white;
   border-width: 3px 0 0 3px;
   box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14);
 }
