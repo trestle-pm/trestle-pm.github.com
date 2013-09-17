@@ -31,7 +31,7 @@ angular.module('Trestle')
  * Service to hold information about the repository that we are
  * connected to and using.
 */
-.service('trReposSrv', function($modal, $q, gh, $stateParams,
+.service('trReposSrv', function($modal, $q, gh, $stateParams, issueWatchSrv,
                                 trRepoModel, trIssueHelpers, auth) {
    var TRESTLE_CONFIG_TITLE = 'TRESTLE_CONFIG',
        DEFAULT_CONFIG = {
@@ -41,6 +41,9 @@ angular.module('Trestle')
 
    this.refreshSettings = function(stateParams) {
       stateParams = stateParams || $stateParams;
+
+      // Cancel any previous watchers
+      issueWatchSrv.stop();
 
       trRepoModel.owner = stateParams.owner;
       trRepoModel.repo  = stateParams.repo;
@@ -56,6 +59,8 @@ angular.module('Trestle')
       // Spawn off the configuration loading
       var has_repo = trRepoModel.owner && trRepoModel.repo;
       if( has_repo && auth.getAuthToken()) {
+         issueWatchSrv.start();
+
          return $q.all([
             this._loadConfig(),
             this._loadIssues(),
@@ -72,6 +77,10 @@ angular.module('Trestle')
          done.resolve(true);
          return done.promise;
       }
+   };
+
+   this.stop = function() {
+      issueWatchSrv.stop();
    };
 
    this._loadIssues = function() {
@@ -168,7 +177,7 @@ angular.module('Trestle')
       // Attempt to lookup the configuration issue for this repository
       // - If found, then set it and continue
       // - If not, then prompt to create and try loading it again
-      return me.readConfig().then(
+      return me._readConfig().then(
          function(configResult) {
             if(null !== configResult) {
                console.log('config loaded');
@@ -199,7 +208,7 @@ angular.module('Trestle')
    * the repository or null if not found.
    * It is rejected if the config fails to parse.
    */
-   this.readConfig = function() {
+   this._readConfig = function() {
       var read_deferred = $q.defer(),
           conf          = {};
 

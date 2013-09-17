@@ -20,7 +20,7 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      <div class=\"drawer\">\n" +
     "          <h1 class=\"column-header\">\n" +
     "             <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
-    "             <span class=\"wip-count\">{{colCtrl.issues.length}}</span>\n" +
+    "             <span class=\"wip-count\">{{(repoModel.issues | issuesInBacklog).length}}</span>\n" +
     "         </h1>\n" +
     "      <select class=\"milestone-selection\"\n" +
     "              ng-init=\"msFilterVal='*'\"\n" +
@@ -50,14 +50,14 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "        ng-style=\"columnsCtrl.getColumnWidth()\"\n" +
     "\n" +
     "        ng-controller=\"IssueColumnCtrl as colCtrl\"\n" +
-    "        ng-init=\"colCtrl.init({labelName:col_label})\" >\n" +
+    "        ng-init=\"colCtrl.init({labelName:col_label});\" >\n" +
     "\n" +
     "      <h1 class=\"column-header\">\n" +
     "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
     "        <span ng-class=\"{\n" +
-    "                'over-limit': colCtrl.issues.length > repoModel.config.wip_limit\n" +
+    "                'over-limit': (repoModel.issues | issuesWithLabel:colCtrl.labelName).length > repoModel.config.wip_limit\n" +
     "              }\"\n" +
-    "              class=\"wip-count\">{{colCtrl.issues.length}}</span>\n" +
+    "              class=\"wip-count\">{{(repoModel.issues | issuesWithLabel:colCtrl.labelName).length}}</span>\n" +
     "      </h1>\n" +
     "\n" +
     "      <!-- CARDS List -->\n" +
