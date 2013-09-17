@@ -109,7 +109,7 @@ angular.module('Trestle')
    this.stop = function() {
       // Stop asking for new data
       if (timeout_promise) {
-         timeout_promise.cancel();
+         $timeout.cancel(timeout_promise);
       }
       timeout_promise = null;
    };
