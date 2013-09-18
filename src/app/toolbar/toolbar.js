@@ -7,7 +7,8 @@ angular.module('Trestle.board')
  @description
  Provides the tools for handling the toolbar
  */
-.controller('ToolbarCtrl', function($location, $stateParams, gh, trReposSrv, $timeout) {
+.controller('ToolbarCtrl', function($location, $stateParams, gh, trReposSrv,
+                                    $timeout, $rootScope) {
    /**
     @ngdoc    method
     @name     init
@@ -53,6 +54,11 @@ angular.module('Trestle.board')
             me.isRefreshing = false;
          }, 1000);
       });
+   };
+
+   this.markAllRead = function() {
+      console.log('sending all marked');
+      $rootScope.$emit('markAllIssuesRead');
    };
 })
 

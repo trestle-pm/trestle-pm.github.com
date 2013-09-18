@@ -252,14 +252,15 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "      ng-class=\"issueCtrl.getBuildStatus()\"\n" +
     "      ng-click=\"issueCtrl.showIssueDetails()\">\n" +
     "   <div class=\"build-header\"\n" +
-    "         ng-if=\"issueCtrl.isPullRequest()\">\n" +
+    "         ng-if=\"issueCtrl.isPullRequest()\"\n" +
+    "         title=\"{{issueCtrl.issue.tr_top_build_status.description}}\">\n" +
     "   </div>\n" +
     "   <div class=\"header\">\n" +
     "      <a class=\"issue-number\"\n" +
     "            target=\"_blank\"\n" +
     "            title=\"Open on GitHub\"\n" +
     "            ng-href=\"{{issueCtrl.issue.html_url}}\"\n" +
-    "            ng-click=\"$event.stopPropagation()\">\n" +
+    "            ng-click=\"issueCtrl.markAsViewed(); $event.stopPropagation()\">\n" +
     "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.isPullRequest()\"></i>\n" +
     "         {{issueCtrl.issue.number}}\n" +
     "      </a>\n" +
@@ -360,8 +361,8 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "            class=\"build-status\"\n" +
     "            ng-class=\"issueCtrl.getBuildStatus()\">\n" +
     "         <a target=\"_blank\"\n" +
-    "               href=\"{{issueCtrl.tr_top_build_status.target_url}}\" >\n" +
-    "            {{issueCtrl.tr_top_build_status.description}}\n" +
+    "               href=\"{{issueCtrl.issue.tr_top_build_status.target_url}}\" >\n" +
+    "            Build Status: {{issueCtrl.issue.tr_top_build_status.description}}\n" +
     "         </a>\n" +
     "      </div>\n" +
     "      <div class=\"comment-summary\">\n" +
@@ -638,9 +639,16 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "    </ul>\n" +
     "\n" +
     "    <button class=\"pull-right btn\"\n" +
+    "            title=\"Refresh All Issues\"\n" +
     "            ng-click=\"toolbarCtrl.refreshRepo()\">\n" +
     "      <i class=\"icon-refresh\"\n" +
     "         ng-class=\"{ 'icon-spin': toolbarCtrl.isRefreshing }\"></i>\n" +
+    "    </button>\n" +
+    "\n" +
+    "    <button class=\"pull-right btn\"\n" +
+    "            title=\"Mark All Viewed\"\n" +
+    "            ng-click=\"toolbarCtrl.markAllRead()\">\n" +
+    "      <i class=\"icon-check\"></i>\n" +
     "    </button>\n" +
     "\n" +
     "    <ul class=\"nav pull-right\"\n" +

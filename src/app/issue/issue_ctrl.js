@@ -5,10 +5,16 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
 
    _.extend(this, {
       init: function(issue) {
+         var me = this;
+
          this.issue          = issue;
          this.lastViewedData = trIssueCache.getLastViewedData(this.issue);
 
          $scope.$id = "IssueCtrl:" + issue.number + $scope.$id;
+
+         $rootScope.$on('markAllIssuesRead', function(event) {
+            me.markAsViewed();
+         });
       },
 
       isPullRequest: function() {
