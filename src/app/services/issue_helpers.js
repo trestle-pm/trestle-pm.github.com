@@ -165,8 +165,25 @@ angular.module('Trestle')
       var body = issue.body;
 
       var lines = _.map(body.split('\n'), function(line) {return line.trim();}),
-          conf_begin = _.findIndex(lines, function(line) {return line === config_header;}),
-          conf_end   = _.findIndex(lines, function(line) {return line === config_footer;});
+          conf_begin = -1, conf_end = -1;
+
+      function find_matching_line(offset, text) {
+         var idx = _.findIndex(_.tail(lines, offset), function(line) {
+             return line === text;
+          });
+         if (idx > -1) {
+            idx = idx + offset;
+         }
+         return idx;
+      }
+
+      // Figure out where the configuration block is
+      // - If, for some reason, there are more then one configuration blocks
+      //   this will only find the first one.
+      conf_begin = find_matching_line(0, config_header);
+      if (conf_begin > -1) {
+          conf_end = find_matching_line(conf_begin, config_footer);
+      }
 
       if (conf_begin > -1 && conf_end > -1) {
          var config_str = lines.slice(conf_begin+1, conf_end).join('\n');
@@ -206,9 +223,10 @@ angular.module('Trestle')
                issue.tr_pull_details = pullResult;
 
                gh.getStatus(trRepoModel.owner, trRepoModel.repo, head_ref).then(
-                  function(statusResult) {
-                     issue.tr_build_status     = statusResult;
-                     issue.tr_top_build_status = statusResult[0];
+                  function(statusResults) {
+                     issue.tr_build_status     = statusResults;
+                     issue.tr_top_build_status = _.last(
+                        _.sortBy(statusResults, 'updated_at'));
                   }
                );
             }
