@@ -194,7 +194,11 @@ angular.module('Trestle.authentication', [])
             method: 'POST',
             url:    'https://api.github.com/authorizations',
             data: {
-               note: auth_key
+               note: auth_key,
+               // Gives us access to
+               // - users details
+               // - all public and private repos
+               scopes: ['user', 'repo']
             },
             headers: {
                Authorization: 'Basic ' + window.btoa(opts.username + ':' + opts.password)
