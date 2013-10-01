@@ -44,44 +44,81 @@ html, body {
   z-index: 1000;
   width: 100%;
   height: 45px;
+  /**
+   * Add styling for when a repo is hover (helps the user know which one they
+   * will be selecting.
+   */
 }
-/* line 9, ../../../src/app/toolbar/toolbar.scss */
+/* line 10, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .navbar-inner {
   border-radius: 0;
 }
-/* line 12, ../../../src/app/toolbar/toolbar.scss */
+/* line 14, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar .brand img {
   height: 1em;
 }
-/* line 16, ../../../src/app/toolbar/toolbar.scss */
+/* line 18, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar ol, .board-toolbar ul {
+  margin: 0;
+}
+/* line 22, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list {
   width: 400px;
 }
-/* line 19, ../../../src/app/toolbar/toolbar.scss */
+/* line 25, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list .filter {
   margin: 5px;
 }
-/* line 22, ../../../src/app/toolbar/toolbar.scss */
+/* line 28, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #repo-list .filter .search-query {
+  margin-top: 9px;
   width: 100%;
   padding: 13px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 29, ../../../src/app/toolbar/toolbar.scss */
-.board-toolbar #repo-list .repo-list {
+/* line 37, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list h3 {
+  margin: 0px;
+}
+/* line 41, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar #repo-list .org-list {
   height: 300px;
   overflow: auto;
 }
-/* line 35, ../../../src/app/toolbar/toolbar.scss */
+/* line 47, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #issue-search {
   width: 20em;
   margin: 5px;
 }
-/* line 40, ../../../src/app/toolbar/toolbar.scss */
+/* line 52, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar #settings {
   padding: 5px;
+}
+/* line 64, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .dropdown-menu li:hover {
+  background: none;
+}
+/* line 69, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .repo-list {
+  list-style: none;
+}
+/* line 11, ../../../../../.rvm/gems/ruby-1.9.3-p448/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
+.board-toolbar .repo-list li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+}
+/* line 72, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .repo-list > li {
+  font-weight: bold;
+  padding: 1px 9px;
+}
+/* line 76, ../../../src/app/toolbar/toolbar.scss */
+.board-toolbar .repo-list > li:hover {
+  background-color: #3498db;
+  color: white;
 }
 
 /***************************************

@@ -613,14 +613,14 @@ angular.module("toolbar/toolbar.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "        <div id=\"repo-list\" class=\"dropdown-menu\">\n" +
     "          <div class=\"filter no-close\" >\n" +
-    "            <input type=\"text\" placeholder=\"Search\" ng-model=\"repoSearchText\"\n" +
+    "            <input autofocus type=\"search\" placeholder=\"Search\" ng-model=\"repoSearchText\"\n" +
     "                   class=\"search-query\" ></input>\n" +
     "          </div>\n" +
     "\n" +
-    "          <ol class=\"repo-list\">\n" +
+    "          <ol class=\"org-list\">\n" +
     "            <li ng-repeat=\"(owner, repos) in toolbarCtrl.allRepos\">\n" +
-    "              {{owner}}\n" +
-    "              <ol>\n" +
+    "              <h3 class=\"muted\" >{{owner}}</h3>\n" +
+    "              <ol class=\"repo-list\" >\n" +
     "                <li ng-repeat=\"repo in repos | filter:repoSearchText\"\n" +
     "                    ng-click=\"toolbarCtrl.onSwitchToRepo(repo)\">\n" +
     "                  {{repo.full_name}}\n" +
