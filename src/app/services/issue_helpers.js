@@ -19,7 +19,7 @@ angular.module('Trestle')
 
    /**
    * Spawns off queries to resolve all grafted on information for the issue.
-   *  (all comments, counts, build status, etc)
+   *  (all comments, counts, build status, pull request info, etc)
    * We call this every time the issue is retrieved so that we can get
    * the full details.
    */
@@ -77,8 +77,16 @@ angular.module('Trestle')
    * Request all comments for the issue and attach them.
    * as part of this we are going to calculate voting information.
    */
+
+   function _updateAllCommentsArray(issue) {
+      issue.tr_all_comments = issue.tr_review_comments.concat(issue.tr_comments);
+   }
+
    function resolveIssueComments(issue) {
       issue.tr_comments = issue.tr_comments || [];
+      issue.tr_review_comments = issue.tr_review_comments || [];
+      _updateAllCommentsArray(issue);
+
       issue.tr_comment_voting = {
          users: {
             //username: {
@@ -95,40 +103,55 @@ angular.module('Trestle')
          .then(function(commentResults) {
             // Store on the issue
             issue.tr_comments = commentResults;
+            _updateAllCommentsArray(issue);
             _calculateCommentVoting(issue);
          }
       );
+
+      if (issue.pull_request && issue.pull_request.html_url) {
+         gh.getPullComments(trRepoModel.owner, trRepoModel.repo, issue.number, {asHtml: true})
+            .then(function(commentResults) {
+               // Store on the issue
+               issue.tr_review_comments = commentResults;
+               _updateAllCommentsArray(issue);
+               _calculateCommentVoting(issue);
+            });
+      }
    }
 
    /**
    * Helper to calculate the voting details for the current issue given
    * the comments.
    */
-   function _getCleanComment(commentText) {
-      return commentText
-         // - strip code blocks so that things like `i = i+1` do not trigger
-         //   the plus one counting.
-         .replace(/<code.*<\/code>/, '')
+   function _getCleanComment(commentHtml) {
+      var dom = $(commentHtml);
+      // strip code blocks so that things like `i = i+1` do not trigger
+      // the plus one counting.
+      $('code', dom).remove();
+      // Attempt to strip links since they can contain text we don't care about
+      $('a', dom).remove();
 
-         // - Attempt to strip links since they can contain text we don't care about
-         .replace(/https?.*\s?/, '');
+      return dom.text();
    }
 
    function _calculateCommentVoting(issue) {
-      // Calculate the counting
+      // Build set of all commentors so that reviewers appear in the list of
+      // interested people
+      var all_users = _.reduce(issue.tr_all_comments, function(memo, comment) {
+         // Add the user to the object with the default settings
+         memo[comment.user.login] = {
+            avatar_url : comment.user.avatar_url,
+            count      : 0
+         };
+         return memo;
+      }, {});
 
-      var votes = _.reduce(issue.tr_comments, function(votes, comment) {
+      // Only take the issues direct comments into account when doing plus one counts
+      var votes = _.reduce(issue.tr_comments, function(memo, comment) {
          var login = comment.user.login;
 
-         if(!votes[login]) {
-            votes[login] = {
-               avatar_url : comment.user.avatar_url,
-               count      : 0
-            };
-         }
-
          // Extract any math out of the comment
-         var counts = _getCleanComment(comment.body_html).match(/([-+][0-9]+)/g);
+         var counts = _getCleanComment(comment.body_html).match(/(?:\s|^)([-+][0-9]+)/gm);
          // - convert the string counts into numbers
          counts = _.map(counts, function(numStr) {return parseInt(numStr, 10);});
          // - Run the math for the comment (this is silly but allows people to
@@ -138,13 +161,14 @@ angular.module('Trestle')
          }, 0);
 
          // Update the users total count with the new information
-         votes[login].count = votes[login].count + total;
+         memo[login].count = memo[login].count + total;
 
-         return votes;
-      }, {});
+         return memo;
+      }, all_users);
 
       issue.tr_comment_voting = {
          users: votes,
+         // Provide a total count for the pull
          total: _.reduce(votes, function(count, voteDetails) {
             if(voteDetails.count < 0 || count < 0) {
                return -1;
@@ -157,9 +181,10 @@ angular.module('Trestle')
 
    function resolveIssueConf(issue) {
       var config = {
-         // XXX only do this if the config did not have it already
-         columnWeight:    _.random(-1000, 1000),
-         milestoneWeight: _.random(-1000, 1000)
+         // Defualt the weights so that they are stable and *should* be at the
+         // top of the columns.
+         columnWeight:    -issue.number,
+         milestoneWeight: -issue.number
       };
 
       var body = issue.body;
@@ -224,9 +249,27 @@ angular.module('Trestle')
 
                gh.getStatus(trRepoModel.owner, trRepoModel.repo, head_ref).then(
                   function(statusResults) {
-                     issue.tr_build_status     = statusResults;
-                     issue.tr_top_build_status = _.last(
-                        _.sortBy(statusResults, 'updated_at'));
+                     var sorted_statuses = null,
+                         success         = null;
+
+                     // Store all statuses
+                     issue.tr_build_status = statusResults;
+
+                     // Sort the build statuses
+                     sorted_statuses = _.sortBy(statusResults, 'updated_at');
+
+                     // Pick out the most recent successful build status.
+                     // This mimics github's behavior. Since the builds are all for the same
+                     // hash, as long as one of the builds passed we're good to go.
+                     success = _.last(_.where(sorted_statuses, {"state" : "success"}));
+
+                     // Use the successful status if we have one, otherwise the most recent.
+                     if(success) {
+                        issue.tr_top_build_status = success;
+                     } else {
+                        issue.tr_top_build_status = _.last(sorted_statuses);
+                     }
+
                   }
                );
             }

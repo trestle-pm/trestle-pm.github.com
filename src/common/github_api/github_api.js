@@ -294,6 +294,19 @@ angular.module('github.api', ['restangular'])
    };
 
    /**
+   * Return list of all pull comments (the code review ones)
+   */
+   this.getPullComments = function(owner, repo, issueNumber, options) {
+      var headers = {};
+      if (options.asHtml) {
+         headers.Accept = 'application/vnd.github.html+json';
+      }
+      return GitHubRestangular
+         .one(['repos', owner, repo, 'pulls', issueNumber, 'comments'].join('/'))
+         .get({}, headers);
+   };
+
+   /**
     @ngdoc    function
     @name     searchIssues
     @method   searchIssues

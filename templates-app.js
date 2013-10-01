@@ -286,7 +286,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "      </span>\n" +
     "   </div>\n" +
     "   <div class=\"reviews\"\n" +
-    "         ng-if=\"issueCtrl.issue.tr_comments.length > 0\">\n" +
+    "        ng-if=\"issueCtrl.issue.tr_all_comments.length > 0\">\n" +
     "      <div class=\"votes\">\n" +
     "         <div class=\"vote-count\"\n" +
     "               ng-class=\"{\n" +
@@ -308,7 +308,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
     "         <span class=\"comments\">\n" +
     "            <i class=\"icon-comments\"></i>\n" +
-    "            {{issueCtrl.issue.comments}}\n" +
+    "            {{issueCtrl.issue.tr_all_comments.length}}\n" +
     "         </span>\n" +
     "      </div>\n" +
     "   </div>\n" +
@@ -362,14 +362,14 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "            ng-class=\"issueCtrl.getBuildStatus()\">\n" +
     "         <a target=\"_blank\"\n" +
     "               href=\"{{issueCtrl.issue.tr_top_build_status.target_url}}\" >\n" +
-    "            Build Status: {{issueCtrl.issue.tr_top_build_status.description}}\n" +
+    "            {{issueCtrl.getBuildStatusText()}}\n" +
     "         </a>\n" +
     "      </div>\n" +
     "      <div class=\"comment-summary\">\n" +
     "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
     "         <span class=\"comment_number\">\n" +
     "            <i class=\"icon-comments\"></i>\n" +
-    "            {{issueCtrl.tr_comments.length}}\n" +
+    "            {{issueCtrl.issue.tr_all_comments.length}}\n" +
     "         </span>\n" +
     "         <span class=\"vote-count\"\n" +
     "               ng-class=\"{\n" +

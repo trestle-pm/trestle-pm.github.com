@@ -33,6 +33,26 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
       },
 
       /**
+       * Return the build status text for the pull.
+       **/
+      getBuildStatusText: function() {
+         var text   = "",
+             status = this.getBuildStatus();
+
+         if(status === "unknown") {
+            text = "Build not started";
+         } else if(status === "success") {
+            text = "Built successfully";
+         } else if(status === "failure") {
+            text = "Failed: " + this.issue.tr_top_build_status.description;
+         } else {
+            text = this.issue.tr_top_build_status.description;
+         }
+
+         return text;
+      },
+
+      /**
       * Return a obj of user details suitable for use in templates.
       */
       getAssignedUserDetails: function(avSize) {
