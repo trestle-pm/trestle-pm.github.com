@@ -464,65 +464,63 @@ angular.module("issue_filters/issue_filter.tpl.html", []).run(["$templateCache",
     "     ng-controller=\"IssueFilterCtrl as filterCtrl\"\n" +
     "     ng-init=\"filterCtrl.init()\" >\n" +
     "\n" +
-    "   <div class=\"drawer\" class=\"hide\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
-    "                                 hide: !fitlerCtrl.showDrawer}\" >\n" +
-    "      <button id=\"filter-toggle-btn\"\n" +
-    "              ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
-    "        <span ng-if=\"fitlerCtrl.showDrawer\"><i class=\"icon-caret-right\"></i></span>\n" +
-    "        <span ng-if=\"!fitlerCtrl.showDrawer\"><i class=\"icon-caret-left\"></i></span>\n" +
-    "      </button>\n" +
-    "      <h1>Filters</h1>\n" +
-    "      <div class=\"content\">\n" +
-    "         <ul >\n" +
-    "            <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
-    "              ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
-    "            Assigned to Me\n" +
-    "             <i class=\"icon-remove\"></i>\n" +
-    "            </li>\n" +
-    "            <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
-    "              ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
-    "            Reviewed by Me\n" +
-    "            <i class=\"icon-remove\"></i>\n" +
-    "            </li>\n" +
-    "            <!-- TODO: Make it work-->\n" +
-    "            <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
-    "              ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
-    "            Updated Recently\n" +
-    "            <i class=\"icon-remove\"></i>\n" +
-    "            </li>\n" +
-    "         </ul>\n" +
-    "         <h3>Collaborator</h3>\n" +
-    "         <ul class=\"collaborator\">\n" +
-    "            <li class=\"avatar\"\n" +
-    "              ng-repeat=\"user in repoModel.assignees\"\n" +
-    "              ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
-    "              ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
-    "            <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
-    "            </li>\n" +
-    "         </ul>\n" +
-    "         <h3>Milestone</h3>\n" +
-    "         <ul>\n" +
-    "            <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
-    "              ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
-    "              ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
-    "            {{milestone.title}}\n" +
-    "            <i class=\"icon-remove\"></i>\n" +
-    "            </li>\n" +
-    "         </ul>\n" +
-    "         <h3>Label</h3>\n" +
-    "         <ul>\n" +
-    "            <!--TODO: Get filter to work?-->\n" +
-    "            <li ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
-    "              ng-click=\"filterCtrl.setFilter('label', label.name)\"\n" +
-    "              ng-class=\"{active: issueFilters.label == label.name}\" >\n" +
-    "                <span class=\"color-preview\"\n" +
-    "                    style=\"background-color: #{{label.color}}\"></span>\n" +
-    "            {{label.name}}\n" +
-    "            <i class=\"icon-remove\"></i>\n" +
-    "            </li>\n" +
-    "         </ul>\n" +
-    "      </div>\n" +
-    "   </div>\n" +
+    "  <div class=\"drawer\" class=\"hide\" ng-class=\"{show: fitlerCtrl.showDrawer,\n" +
+    "                                             hide: !fitlerCtrl.showDrawer}\" >\n" +
+    "    <button id=\"filter-toggle-btn\"\n" +
+    "            ng-click=\"fitlerCtrl.showDrawer = !fitlerCtrl.showDrawer\" >\n" +
+    "      <span ng-if=\"fitlerCtrl.showDrawer\"><i class=\"icon-caret-right\"></i></span>\n" +
+    "      <span ng-if=\"!fitlerCtrl.showDrawer\"><i class=\"icon-caret-left\"></i></span>\n" +
+    "    </button>\n" +
+    "    <h1>Filters</h1>\n" +
+    "    <div class=\"content\">\n" +
+    "      <ul >\n" +
+    "        <li ng-click=\"filterCtrl.setFilter('owner', sessionModel.user.login)\"\n" +
+    "            ng-class=\"{active: issueFilters.owner == sessionModel.user.login}\">\n" +
+    "          Assigned to Me\n" +
+    "          <i class=\"icon-remove\"></i>\n" +
+    "        </li>\n" +
+    "        <li ng-click=\"filterCtrl.setFilter('reviewer', sessionModel.user.login)\"\n" +
+    "            ng-class=\"{active: issueFilters.reviewer == sessionModel.user.login}\">\n" +
+    "          Reviewed by Me\n" +
+    "          <i class=\"icon-remove\"></i>\n" +
+    "        </li>\n" +
+    "        <li ng-click=\"filterCtrl.setFilter('buildFailing', true)\"\n" +
+    "            ng-class=\"{active: issueFilters.buildFailing}\">\n" +
+    "          Failing Build\n" +
+    "          <i class=\"icon-remove\"></i>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "      <h3>Collaborator</h3>\n" +
+    "      <ul class=\"collaborator\">\n" +
+    "        <li class=\"avatar\"\n" +
+    "            ng-repeat=\"user in repoModel.assignees | filter:{login: '!'+sessionModel.user.login}\"\n" +
+    "            ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
+    "            ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
+    "          <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "      <h3>Milestone</h3>\n" +
+    "      <ul>\n" +
+    "        <li ng-repeat=\"milestone in repoModel.milestones\"\n" +
+    "            ng-click=\"filterCtrl.setFilter('milestone', milestone.title)\"\n" +
+    "            ng-class=\"{active: issueFilters.milestone == milestone.title}\" >\n" +
+    "          {{milestone.title}}\n" +
+    "          <i class=\"icon-remove\"></i>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "      <h3>Label</h3>\n" +
+    "      <ul>\n" +
+    "        <li ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "            ng-click=\"filterCtrl.toggleArrayFilter('labels', label.name)\"\n" +
+    "            ng-class=\"{active: issueFilters.labels.indexOf(label.name) >= 0}\" >\n" +
+    "          <span class=\"color-preview\"\n" +
+    "                style=\"background-color: #{{label.color}}\"></span>\n" +
+    "          {{label.name}}\n" +
+    "          <i class=\"icon-remove\"></i>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>\n" +
     "");
 }]);

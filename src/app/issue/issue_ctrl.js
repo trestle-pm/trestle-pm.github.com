@@ -117,7 +117,7 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
 
          var opts = {
             scope        : modal_scope,
-            windowClass  : 'issue_details_modal',
+            windowClass  : 'issue-details-modal',
             backdrop     : true,
             keyboard     : true,
             templateUrl  : "issue/issue_details.tpl.html"

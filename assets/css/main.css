@@ -104,7 +104,7 @@ html, body {
 .board-toolbar .repo-list {
   list-style: none;
 }
-/* line 11, ../../../../../.rvm/gems/ruby-2.0.0-p0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../.rvm/gems/ruby-1.9.3-p448/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
 .board-toolbar .repo-list li {
   list-style-image: none;
   list-style-type: none;
@@ -200,14 +200,15 @@ html, body {
 }
 /* line 68, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip-count {
-  float: right;
+  position: absolute;
+  right: 0;
   padding: 3px 5px;
   background: transparent;
   border-radius: 50px;
   color: rgba(44, 62, 80, 0.6);
   line-height: 1em;
 }
-/* line 77, ../../../src/app/board/columns/issue_columns.scss */
+/* line 79, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip-count.over-limit {
   background: #e74c3c;
   border-bottom: 1px solid rgba(0, 0, 0, 0.35);
@@ -216,7 +217,7 @@ html, body {
   text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
 }
 
-/* line 87, ../../../src/app/board/columns/issue_columns.scss */
+/* line 89, ../../../src/app/board/columns/issue_columns.scss */
 .column {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -228,13 +229,13 @@ html, body {
   vertical-align: top;
 }
 
-/* line 96, ../../../src/app/board/columns/issue_columns.scss */
+/* line 98, ../../../src/app/board/columns/issue_columns.scss */
 .column-body {
   min-height: 1000px;
 }
 
 /************* BACKLOG PANEL ****************/
-/* line 103, ../../../src/app/board/columns/issue_columns.scss */
+/* line 105, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-drawer {
   position: fixed;
   top: 45px;
@@ -246,7 +247,7 @@ html, body {
   -o-transition: width 0.5s ease-in;
   transition: width 0.5s ease-in;
 }
-/* line 113, ../../../src/app/board/columns/issue_columns.scss */
+/* line 115, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-drawer .drawer {
   position: fixed;
   left: 0;
@@ -269,7 +270,7 @@ html, body {
   padding: 8px 12px 10px 8px;
 }
 
-/* line 132, ../../../src/app/board/columns/issue_columns.scss */
+/* line 134, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-toggle-btn {
   position: absolute;
   top: 5px;
@@ -285,25 +286,25 @@ html, body {
   font-size: 1.5em;
 }
 
-/* line 150, ../../../src/app/board/columns/issue_columns.scss */
+/* line 152, ../../../src/app/board/columns/issue_columns.scss */
 .show-bl #backlog-drawer .drawer {
   left: 0;
 }
-/* line 154, ../../../src/app/board/columns/issue_columns.scss */
+/* line 156, ../../../src/app/board/columns/issue_columns.scss */
 .show-bl .issue-columns {
   margin-left: 21%;
 }
 
-/* line 162, ../../../src/app/board/columns/issue_columns.scss */
+/* line 164, ../../../src/app/board/columns/issue_columns.scss */
 .hide-bl #backlog-drawer {
   width: 0;
 }
-/* line 165, ../../../src/app/board/columns/issue_columns.scss */
+/* line 167, ../../../src/app/board/columns/issue_columns.scss */
 .hide-bl #backlog-drawer .drawer {
   left: -19%;
 }
 
-/* line 172, ../../../src/app/board/columns/issue_columns.scss */
+/* line 174, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue {
   display: block;
   text-align: center;
@@ -314,7 +315,7 @@ html, body {
   color: rgba(255, 255, 255, 0.5);
   font-weight: bold;
 }
-/* line 183, ../../../src/app/board/columns/issue_columns.scss */
+/* line 185, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue:hover, #new-issue:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5faee3), color-stop(100%, #258cd1));
   background-image: -webkit-linear-gradient(#5faee3, #258cd1);
@@ -328,7 +329,7 @@ html, body {
   color: white;
   text-decoration: none;
 }
-/* line 193, ../../../src/app/board/columns/issue_columns.scss */
+/* line 195, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #217dbb), color-stop(100%, #258cd1));
   background-image: -webkit-linear-gradient(#217dbb, #258cd1);
@@ -337,7 +338,7 @@ html, body {
   background-image: linear-gradient(#217dbb, #258cd1);
 }
 
-/* line 200, ../../../src/app/board/columns/issue_columns.scss */
+/* line 202, ../../../src/app/board/columns/issue_columns.scss */
 .milestone-selection {
   width: 100%;
 }
@@ -629,11 +630,24 @@ html, body {
   border-radius: 3px;
 }
 
-/************* DETAILS ****************/
-/* line 294, ../../../src/app/issue/issues.scss */
+/************* COMMON MODAL SETTINGS ************/
+/* line 293, ../../../src/app/issue/issues.scss */
 .modal {
-  min-height: 300px;
+  min-height: 50%;
   max-height: 80%;
+  /** Keep the modal at a decent width */
+  min-width: 700px;
+  width: 60%;
+  /* All the modal to resize and stay centered.
+  * - requires modals `position:fixed`
+  *   stretch the modal across the entire windows width
+  * - Give the left and right margins auto sizing which
+  *   will center the modal
+  */
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  /** Base styling for the modal */
   overflow: auto;
   padding: 0;
   background: #e8ecec;
@@ -641,7 +655,7 @@ html, body {
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-/* line 305, ../../../src/app/issue/issues.scss */
+/* line 320, ../../../src/app/issue/issues.scss */
 .modal .header {
   position: relative;
   margin: 0;
@@ -652,36 +666,38 @@ html, body {
   font-size: 1.2em;
   font-weight: bold;
 }
-/* line 317, ../../../src/app/issue/issues.scss */
+/* line 332, ../../../src/app/issue/issues.scss */
 .modal .title {
   white-space: normal;
   line-height: 1.3em;
 }
-/* line 323, ../../../src/app/issue/issues.scss */
-.modal .issue-number {
+
+/************* DETAILS ****************/
+/* line 344, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .issue-number {
   position: absolute;
   top: 2px;
   right: 28px;
   padding: 3px 4px;
 }
-/* line 331, ../../../src/app/issue/issues.scss */
-.modal .close {
+/* line 352, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .close {
   float: none;
   position: absolute;
   right: 5px;
   top: 3px;
 }
-/* line 339, ../../../src/app/issue/issues.scss */
-.modal .user-selector {
+/* line 360, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector {
   position: static;
 }
-/* line 342, ../../../src/app/issue/issues.scss */
-.modal .user-selector .dropdown-toggle {
+/* line 363, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector .dropdown-toggle {
   position: static;
   z-index: 100;
 }
-/* line 347, ../../../src/app/issue/issues.scss */
-.modal .user-selector .dropdown-toggle .avatar {
+/* line 368, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector .dropdown-toggle .avatar {
   height: 60px;
   max-height: 60px;
   max-width: 60px;
@@ -693,25 +709,28 @@ html, body {
   border-radius: 35px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 362, ../../../src/app/issue/issues.scss */
-.modal .user-selector .dropdown-menu {
+/* line 383, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector .dropdown-menu {
   z-index: 50;
   margin-top: 19px;
+  overflow: auto;
+  min-width: 200px;
+  max-height: 250px;
 }
-/* line 366, ../../../src/app/issue/issues.scss */
-.modal .user-selector .dropdown-menu h4 {
+/* line 390, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector .dropdown-menu h4 {
   margin: 0;
   padding: 6px 5px 0;
   background: #ccd4d5;
   border-bottom: 1px solid #b1bdbd;
   font-size: .8em;
 }
-/* line 374, ../../../src/app/issue/issues.scss */
-.modal .user-selector .dropdown-menu .avatar {
+/* line 398, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .user-selector .dropdown-menu .avatar {
   border-radius: 2px;
 }
-/* line 381, ../../../src/app/issue/issues.scss */
-.modal .status-header {
+/* line 405, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .status-header {
   width: 100%;
   height: 28px;
   position: relative;
@@ -720,8 +739,8 @@ html, body {
   border-top: 1px solid #798d8f;
   border-bottom: 1px solid #798d8f;
 }
-/* line 391, ../../../src/app/issue/issues.scss */
-.modal .build-status {
+/* line 415, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .build-status {
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -733,40 +752,40 @@ html, body {
   padding: 3px 0 3px 65px;
   border-right: 1px solid #6d8082;
 }
-/* line 401, ../../../src/app/issue/issues.scss */
-.modal .build-status.success {
+/* line 425, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .build-status.success {
   background: #89e5b0;
 }
 /* line 22, ../../../src/app/issue/issues.scss */
-.modal .build-status.success a {
+.modal.issue-details-modal .build-status.success a {
   color: #19703e;
 }
-/* line 402, ../../../src/app/issue/issues.scss */
-.modal .build-status.failure {
+/* line 426, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .build-status.failure {
   background: #f8c9c4;
 }
 /* line 22, ../../../src/app/issue/issues.scss */
-.modal .build-status.failure a {
+.modal.issue-details-modal .build-status.failure a {
   color: #bf2718;
 }
-/* line 403, ../../../src/app/issue/issues.scss */
-.modal .build-status.pending {
+/* line 427, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .build-status.pending {
   background: #b6daf2;
 }
 /* line 22, ../../../src/app/issue/issues.scss */
-.modal .build-status.pending a {
+.modal.issue-details-modal .build-status.pending a {
   color: #1d6fa5;
 }
-/* line 404, ../../../src/app/issue/issues.scss */
-.modal .build-status.unknown {
+/* line 428, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .build-status.unknown {
   background: #e8ecec;
 }
 /* line 22, ../../../src/app/issue/issues.scss */
-.modal .build-status.unknown a {
+.modal.issue-details-modal .build-status.unknown a {
   color: #6d8082;
 }
-/* line 408, ../../../src/app/issue/issues.scss */
-.modal .comment-summary {
+/* line 432, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comment-summary {
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -783,35 +802,35 @@ html, body {
   font-size: 1.2em;
   text-align: right;
 }
-/* line 424, ../../../src/app/issue/issues.scss */
-.modal .comment-summary i {
+/* line 448, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comment-summary i {
   color: #e8ecec;
 }
-/* line 429, ../../../src/app/issue/issues.scss */
-.modal .comment-summary span {
+/* line 453, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comment-summary span {
   margin-right: 10px;
 }
-/* line 432, ../../../src/app/issue/issues.scss */
-.modal .comment-summary span.todos i {
+/* line 456, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comment-summary span.todos i {
   margin-right: 4px;
 }
-/* line 436, ../../../src/app/issue/issues.scss */
-.modal .comment-summary span:last-child {
+/* line 460, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comment-summary span:last-child {
   margin-right: 0;
 }
-/* line 444, ../../../src/app/issue/issues.scss */
-.modal .branch-info {
+/* line 468, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .branch-info {
   display: none;
 }
-/* line 449, ../../../src/app/issue/issues.scss */
-.modal .controls {
+/* line 473, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .controls {
   padding: 5px 10px;
   background: white;
   border-bottom: 1px solid #dae0e0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-/* line 457, ../../../src/app/issue/issues.scss */
-.modal select.milestone {
+/* line 481, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal select.milestone {
   display: inline-block;
   width: 25%;
   margin: 2px 0 0 0;
@@ -819,8 +838,8 @@ html, body {
   color: black;
   font-size: 1em;
 }
-/* line 467, ../../../src/app/issue/issues.scss */
-.modal .label-bar {
+/* line 491, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-bar {
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -829,8 +848,8 @@ html, body {
   padding: 0 4px;
   position: relative;
 }
-/* line 475, ../../../src/app/issue/issues.scss */
-.modal .label-bar .labels {
+/* line 499, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-bar .labels {
   display: inline-block;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -845,13 +864,13 @@ html, body {
   border: 1px solid #ccd4d5;
   border-radius: 0 2px 2px 0;
 }
-/* line 490, ../../../src/app/issue/issues.scss */
-.modal .label-bar .label {
+/* line 514, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-bar .label {
   margin: 2px;
   opacity: 1;
 }
-/* line 497, ../../../src/app/issue/issues.scss */
-.modal .label-editor {
+/* line 521, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor {
   display: inline-block;
   width: 60px;
   position: absolute;
@@ -859,84 +878,84 @@ html, body {
   left: 4px;
   z-index: 10;
 }
-/* line 506, ../../../src/app/issue/issues.scss */
-.modal .label-editor .btn {
+/* line 530, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .btn {
   width: 100%;
   padding: 4px;
   margin-top: 1px;
   border-radius: 3px 0 0 3px;
   font-size: .85em;
 }
-/* line 514, ../../../src/app/issue/issues.scss */
-.modal .label-editor .btn span {
+/* line 538, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .btn span {
   font-size: .85em;
 }
-/* line 521, ../../../src/app/issue/issues.scss */
-.modal .label-editor .open .btn {
+/* line 545, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .open .btn {
   border-radius: 3px 0 0 0;
 }
-/* line 525, ../../../src/app/issue/issues.scss */
-.modal .label-editor .dropdown-menu {
+/* line 549, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .dropdown-menu {
   margin: -2px 0 0;
   border-radius: 0 4px 4px 4px;
   border-top: 6px solid #e6e6e6;
   padding: 0;
 }
-/* line 534, ../../../src/app/issue/issues.scss */
-.modal .label-editor .label-item:first-child {
+/* line 558, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .label-item:first-child {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 539, ../../../src/app/issue/issues.scss */
-.modal .label-editor .label-item.enabled {
+/* line 563, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .label-item.enabled {
   background: #bfc8c9;
 }
-/* line 544, ../../../src/app/issue/issues.scss */
-.modal .label-editor .label-item .color-preview {
+/* line 568, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .label-editor .label-item .color-preview {
   display: inline-block;
   width: 10px;
   height: 10px;
   border-radius: 2px;
   margin: 0 3px;
 }
-/* line 555, ../../../src/app/issue/issues.scss */
-.modal .convert-pull {
+/* line 579, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .convert-pull {
   height: 29px;
   width: 20%;
   padding: 0 4px;
 }
-/* line 562, ../../../src/app/issue/issues.scss */
-.modal .description {
+/* line 586, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .description {
   padding: 10px 20px;
   background: white;
   border-bottom: 1px solid #ccd4d5;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
 }
-/* line 569, ../../../src/app/issue/issues.scss */
-.modal .description.empty {
+/* line 593, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .description.empty {
   display: none;
 }
-/* line 573, ../../../src/app/issue/issues.scss */
-.modal .description h4 {
+/* line 597, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .description h4 {
   margin: 0;
   color: #95a5a6;
   font-size: 1em;
 }
-/* line 581, ../../../src/app/issue/issues.scss */
-.modal .comments {
+/* line 605, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments {
   padding: 10px;
   border-radius: 0 0 3px 3px;
 }
-/* line 585, ../../../src/app/issue/issues.scss */
-.modal .comments .comment {
+/* line 609, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments .comment {
   position: relative;
   margin: 0 0 10px;
 }
-/* line 590, ../../../src/app/issue/issues.scss */
-.modal .comments .comment:last-child {
+/* line 614, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments .comment:last-child {
   margin: 0;
 }
-/* line 595, ../../../src/app/issue/issues.scss */
-.modal .comments .commenter {
+/* line 619, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments .commenter {
   height: 40px;
   max-height: 40px;
   max-width: 40px;
@@ -946,49 +965,49 @@ html, body {
   border: 2px solid #b1bdbd;
   border-radius: 25px;
 }
-/* line 606, ../../../src/app/issue/issues.scss */
-.modal .comments .comment-body {
+/* line 630, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments .comment-body {
   margin: 0 0 0 30px;
   padding: 7px 10px 7px 15px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 613, ../../../src/app/issue/issues.scss */
-.modal .comments .comment-body p:last-child {
+/* line 637, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments .comment-body p:last-child {
   margin: 0;
 }
-/* line 619, ../../../src/app/issue/issues.scss */
-.modal .comments h4 {
+/* line 643, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments h4 {
   margin: 0 0 0 47px;
   font-size: 1em;
   color: #95a5a6;
   font-weight: normal;
 }
-/* line 626, ../../../src/app/issue/issues.scss */
-.modal .comments h4 em {
+/* line 650, ../../../src/app/issue/issues.scss */
+.modal.issue-details-modal .comments h4 em {
   font-style: normal;
   color: #6d8082;
   font-weight: bold;
 }
 
-/* line 637, ../../../src/app/issue/issues.scss */
+/* line 661, ../../../src/app/issue/issues.scss */
 .pull select.milestone {
   width: 35%;
 }
-/* line 640, ../../../src/app/issue/issues.scss */
+/* line 664, ../../../src/app/issue/issues.scss */
 .pull .label-editor {
   left: 10px;
 }
-/* line 643, ../../../src/app/issue/issues.scss */
+/* line 667, ../../../src/app/issue/issues.scss */
 .pull .label-bar {
   width: 65%;
   padding-left: 10px;
 }
-/* line 649, ../../../src/app/issue/issues.scss */
+/* line 673, ../../../src/app/issue/issues.scss */
 .pull .convert-pull {
   display: none;
 }
-/* line 654, ../../../src/app/issue/issues.scss */
+/* line 678, ../../../src/app/issue/issues.scss */
 .pull .branch-info {
   display: block;
   -webkit-box-sizing: border-box;
@@ -1001,7 +1020,7 @@ html, body {
   font-size: .9em;
   text-align: center;
 }
-/* line 665, ../../../src/app/issue/issues.scss */
+/* line 689, ../../../src/app/issue/issues.scss */
 .pull .branch-info pre {
   display: inline;
   padding: 1px 4px;
@@ -1012,33 +1031,28 @@ html, body {
 }
 
 /************* CONVERT TO PULL ****************/
-/* line 677, ../../../src/app/issue/issues.scss */
+/* line 701, ../../../src/app/issue/issues.scss */
 .convert-modal {
   min-height: 80%;
-  min-width: 700px;
-  width: 60%;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
 }
-/* line 692, ../../../src/app/issue/issues.scss */
+/* line 704, ../../../src/app/issue/issues.scss */
 .convert-modal .convert-header {
   margin: 0;
   font-size: 1.1em;
   line-height: 1.2em;
   padding: 6px 12px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
 }
-/* line 699, ../../../src/app/issue/issues.scss */
+/* line 711, ../../../src/app/issue/issues.scss */
 .convert-modal .branches {
   margin: 6px 12px;
   font-size: 1.3em;
 }
-/* line 704, ../../../src/app/issue/issues.scss */
+/* line 716, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-selector {
   display: inline-block;
 }
-/* line 708, ../../../src/app/issue/issues.scss */
+/* line 720, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown {
   width: 300px;
   margin-top: 4px;
@@ -1048,12 +1062,12 @@ html, body {
   color: #666;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 722, ../../../src/app/issue/issues.scss */
+/* line 734, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
@@ -1061,67 +1075,67 @@ html, body {
   background-image: -webkit-linear-gradient(#fafafa, #eeeeee);
   background-image: linear-gradient(#fafafa, #eeeeee);
   background-repeat: repeat-x;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
 }
-/* line 732, ../../../src/app/issue/issues.scss */
+/* line 744, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 737, ../../../src/app/issue/issues.scss */
+/* line 749, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-item {
   cursor: pointer;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #eee;
   display: table;
   table-layout: fixed;
   width: 100%;
   overflow: hidden;
   color: inherit;
 }
-/* line 746, ../../../src/app/issue/issues.scss */
+/* line 758, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-item:hover {
   background: blue;
 }
-/* line 752, ../../../src/app/issue/issues.scss */
+/* line 764, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary {
   margin: 8px;
 }
-/* line 761, ../../../src/app/issue/issues.scss */
+/* line 773, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .compare.btn {
   margin: 5px;
 }
-/* line 765, ../../../src/app/issue/issues.scss */
+/* line 777, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit {
   margin: 5px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 770, ../../../src/app/issue/issues.scss */
+/* line 782, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit .avatar {
   margin: 2px;
 }
-/* line 773, ../../../src/app/issue/issues.scss */
+/* line 785, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit .hash {
   float: right;
   margin: 5px;
 }
-/* line 782, ../../../src/app/issue/issues.scss */
+/* line 794, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .filename {
   font-weight: bold;
 }
-/* line 785, ../../../src/app/issue/issues.scss */
+/* line 797, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .additions {
   color: green;
 }
-/* line 787, ../../../src/app/issue/issues.scss */
+/* line 799, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .additions:before {
   content: "+";
 }
-/* line 792, ../../../src/app/issue/issues.scss */
+/* line 804, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .deletions {
   color: red;
 }
-/* line 794, ../../../src/app/issue/issues.scss */
+/* line 806, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .deletions:before {
   content: "-";
 }
@@ -1405,7 +1419,7 @@ html, body {
 body::-webkit-scrollbar-track-piece {
   background-clip: padding-box;
   background-color: #f5f5f5;
-  border: solid white;
+  border: solid #fff;
   border-width: 0 0 0 3px;
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.14), inset -1px 0 0 rgba(0, 0, 0, 0.07);
 }
@@ -1430,7 +1444,7 @@ body::-webkit-scrollbar-thumb:horizontal {
 body::-webkit-scrollbar-corner {
   background-clip: padding-box;
   background-color: #f5f5f5;
-  border: solid white;
+  border: solid #fff;
   border-width: 3px 0 0 3px;
   box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.14);
 }

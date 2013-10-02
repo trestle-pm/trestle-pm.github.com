@@ -16,10 +16,12 @@ angular.module('Trestle')
 .service('trIssueFilters', function($rootScope) {
    var scope = $rootScope.$new();
 
-   scope.searchText = null;
-   scope.owner      = null;
-   scope.milestone  = null;
-   scope.reviewer   = null;
+   scope.searchText   = null;
+   scope.owner        = null;
+   scope.milestone    = null;
+   scope.reviewer     = null;
+   scope.labels       = null;
+   scope.buildFailing = null;
 
    return scope;
 })
@@ -71,6 +73,21 @@ angular.module('Trestle')
          });
       }
 
+      var filter_labels = trIssueFilters.labels || [];
+      if (filter_labels.length > 0) {
+         issues = _.filter(issues, function(issue) {
+            var labels = _.pluck(issue.labels, 'name');
+            return _.difference(trIssueFilters.labels, labels).length === 0;
+         });
+      }
+
+      if (trIssueFilters.buildFailing) {
+         issues = _.filter(issues, function(issue) {
+            var state = (issue.tr_top_build_status || {}).state;
+            return state === 'failure';
+         });
+      }
+
       return issues;
    };
 })
@@ -85,6 +102,22 @@ angular.module('Trestle')
 
       // Update the actual filter
       trIssueFilters[filterName] = filterValue;
+   };
+
+   this.toggleArrayFilter = function(filterName, filterValue) {
+      var filters = trIssueFilters[filterName] || [];
+
+      // Toggle filters value in the array
+      if (_.contains(filters, filterValue)) {
+         // Remove the value from the filters
+         filters = _.without(filters, filterValue);
+      }
+      else {
+         filters.push(filterValue);
+      }
+
+      // Update the actual filter with the new array
+      trIssueFilters[filterName] = filters;
    };
 })
 
