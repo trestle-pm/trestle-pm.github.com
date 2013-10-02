@@ -36,7 +36,9 @@ angular.module('Trestle')
    var TRESTLE_CONFIG_TITLE = 'TRESTLE_CONFIG',
        DEFAULT_CONFIG = {
           "columns": ["In Progress", "Review", "CI", "Ship"],
-          "wip_limit": 10
+          "wip_limit": 10,
+          // Map from column name/label to int limit, defaults to wip_limit
+          "wip_limits": {}
        };
 
    this.refreshSettings = function(stateParams) {

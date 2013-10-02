@@ -143,7 +143,7 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
 
          var opts = {
             scope        : modal_scope,
-            windowClass  : 'convert_to_pull_modal',
+            windowClass  : 'convert-modal',
             backdrop     : true,
             keyboard     : true,
             templateUrl  : "issue/convert_to_pull.tpl.html"

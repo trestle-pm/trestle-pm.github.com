@@ -43,6 +43,13 @@ angular.module('Trestle.board')
    };
    //}
 
+   /** Return the work in progress limit for the given column. */
+   this.getWipLimit = function() {
+      var default_value = trRepoModel.config.wip_limit,
+          limit_value   = (trRepoModel.config.wip_limits || {})[this.labelName];
+      return limit_value || default_value;
+   };
+
    /**
     * Called after the user has successfully moved an issue to a new location
     * in the columns.

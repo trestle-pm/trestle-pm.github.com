@@ -55,7 +55,7 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "      <h1 class=\"column-header\">\n" +
     "        <span class=\"column_name\">{{colCtrl.columnName}}</span>\n" +
     "        <span ng-class=\"{\n" +
-    "                'over-limit': (repoModel.issues | issuesWithLabel:colCtrl.labelName).length > repoModel.config.wip_limit\n" +
+    "                'over-limit': (repoModel.issues | issuesWithLabel:colCtrl.labelName).length > colCtrl.getWipLimit()\n" +
     "              }\"\n" +
     "              class=\"wip-count\">{{(repoModel.issues | issuesWithLabel:colCtrl.labelName).length}}</span>\n" +
     "      </h1>\n" +
@@ -138,42 +138,13 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
     "<div class=\"convert-to-pull\"\n" +
     "     ng-controller=\"ConvertToPullCtrl as convertCtrl\"\n" +
     "     ng-init=\"convertCtrl.init(issue)\" >\n" +
-    "\n" +
-    "  <div class=\"modal-header\">\n" +
-    "    <h3>Convert Issue to pull</h3>\n" +
+    "  <div class=\"convert-header\">\n" +
+    "     Convert <em>\"{{convertCtrl.issue.title}}\"</em> to Pull&nbsp;Request</h3>\n" +
     "  </div>\n" +
-    "\n" +
-    "  <p>We are converting pull for issue: {{convertCtrl.issue.title}}</p>\n" +
-    "\n" +
+    "  <i class=\"close icon-remove\" ng-click=\"$close()\"></i>\n" +
     "  <div class=\"branches\">\n" +
-    "    <!-- Base Branch -->\n" +
-    "    <span class=\"branch_type\">Base Branch:</span>\n" +
-    "    <div class=\"branch-selector dropdown\" >\n" +
-    "      <a class=\"btn dropdown-toggle-no-close\" >\n" +
-    "        {{convertCtrl.baseBranch}}<span class=\"caret\"></span>\n" +
-    "      </a>\n" +
-    "\n" +
-    "      <div class=\"branch-pulldown dropdown-menu\">\n" +
-    "        <div class=\"menu-header no-close\">\n" +
-    "          <span class=\"menu-title\">Choose base branch</span>\n" +
-    "        </div>\n" +
-    "        <div class=\"menu-filter no-close\" >\n" +
-    "          <input type=\"text\" placeholder=\"Search\" ng-model=\"baseBranchSearch\"\n" +
-    "                 class=\"search-query\" ></input>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <div class=\"menu-list\">\n" +
-    "          <div class=\"menu-item\"\n" +
-    "              ng-repeat=\"branch in convertCtrl.branches | filter:baseBranchSearch\"\n" +
-    "              ng-click=\"convertCtrl.selectBaseBranch(branch.name)\">\n" +
-    "            {{branch.name}}\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "\n" +
     "    <!-- Topic Branch -->\n" +
-    "    <span class=\"branch_type\">Topic Branch:</span>\n" +
+    "    <span class=\"branch_type\">Merge from </span>\n" +
     "    <div class=\"branch-selector dropdown\" >\n" +
     "      <a class=\"btn dropdown-toggle-no-close\" >\n" +
     "        {{convertCtrl.topicBranch}}<span class=\"caret\"></span>\n" +
@@ -198,38 +169,74 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
     "      </div>\n" +
     "    </div>\n" +
     "\n" +
+    "    <!-- Base Branch -->\n" +
+    "    <span class=\"branch_type\">into</span>\n" +
+    "    <div class=\"branch-selector dropdown\" >\n" +
+    "      <a class=\"btn dropdown-toggle-no-close\" >\n" +
+    "        {{convertCtrl.baseBranch}}<span class=\"caret\"></span>\n" +
+    "      </a>\n" +
+    "\n" +
+    "      <div class=\"branch-pulldown dropdown-menu\">\n" +
+    "        <div class=\"menu-header no-close\">\n" +
+    "          <span class=\"menu-title\">Choose base branch</span>\n" +
+    "        </div>\n" +
+    "        <div class=\"menu-filter no-close\" >\n" +
+    "          <input type=\"text\" placeholder=\"Search\" ng-model=\"baseBranchSearch\"\n" +
+    "                 class=\"search-query\" ></input>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"menu-list\">\n" +
+    "          <div class=\"menu-item\"\n" +
+    "              ng-repeat=\"branch in convertCtrl.branches | filter:baseBranchSearch\"\n" +
+    "              ng-click=\"convertCtrl.selectBaseBranch(branch.name)\">\n" +
+    "            {{branch.name}}\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "   <button ng-click=\"convertCtrl.convertToPull()\"\n" +
+    "             class=\"btn btn-primary\"\n" +
+    "             ng-disabled=\"convertCtrl.baseBranch === convertCtrl.topicBranch\">\n" +
+    "       Convert\n" +
+    "     </button>\n" +
     "  </div>\n" +
     "\n" +
-    "  <button ng-click=\"convertCtrl.convertToPull()\"\n" +
-    "          class=\"btn btn-primary\"\n" +
-    "          ng-disabled=\"convertCtrl.baseBranch === convertCtrl.topicBranch\">\n" +
-    "    Convert\n" +
-    "  </button>\n" +
-    "\n" +
-    "  <div class=\"compare_summary\"\n" +
+    "  <div class=\"compare-summary\"\n" +
     "       ng-show=\"convertCtrl.compareResults\">\n" +
-    "    <p>Status: {{convertCtrl.compareResults.status}}</p>\n" +
-    "    <p>Total commits: {{convertCtrl.compareResults.total_commits}}</p>\n" +
-    "    <p>Files changed: {{convertCtrl.compareResults.files.length}}</p>\n" +
-    "    <a class=\"btn\" target=\"_blank\"\n" +
-    "     ng-href=\"{{convertCtrl.compareResults.html_url}}\">Compare</a>\n" +
     "\n" +
+    "    <h4>Stats</h4>\n" +
+    "    <ul class=\"stats-list\">\n" +
+    "      <li>Status: {{convertCtrl.compareResults.status}}</li>\n" +
+    "      <li>Total commits: {{convertCtrl.compareResults.total_commits}}</li>\n" +
+    "      <li>Files changed: {{convertCtrl.compareResults.files.length}}</li>\n" +
+    "    </ul>\n" +
+    "\n" +
+    "    <a class=\"compare btn\" target=\"_blank\"\n" +
+    "     ng-href=\"{{convertCtrl.compareResults.html_url}}\">\n" +
+    "      Compare <i class=\"icon-external-link\"/>\n" +
+    "    </a>\n" +
+    "\n" +
+    "    <h4>Commits</h4>\n" +
     "    <div class=\"commit_list\">\n" +
     "      <div class=\"commit\"\n" +
     "           ng-repeat=\"commit in convertCtrl.compareResults.commits\">\n" +
     "        <img class=\"avatar\"\n" +
     "             ng-src=\"{{commit.committer.avatar_url}}?s=30\"></img>\n" +
     "        <span class=\"committer\"> {{commit.committer.name}} </span>\n" +
-    "        <a ng-href=\"{{commit.url}}\" class=\"message\">{{commit.commit.message}}</span>\n" +
-    "        <a ng-href=\"{{commit.url}}\" class=\"sha\">{{commit.sha | limitTo:7}}</span>\n" +
+    "        <a class=\"message\" ng-href=\"{{commit.url}}\" class=\"message\">{{commit.commit.message}}</a>\n" +
+    "        <a class=\"hash\" ng-href=\"{{commit.url}}\" class=\"sha\">{{commit.sha | limitTo:7}}</a>\n" +
     "      </div>\n" +
     "    </div>\n" +
     "\n" +
+    "    <h4>Files</h4>\n" +
     "    <div class=\"file_list\">\n" +
-    "      <div>Files:</div>\n" +
     "      <div class=\"file_details\"\n" +
     "           ng-repeat=\"file in convertCtrl.compareResults.files\">\n" +
-    "        <div class=\"file_header\">{{file.filename}} - {{file.additions}} - {{file.deletions}}</div>\n" +
+    "        <div class=\"file_header\">\n" +
+    "          <span class=\"filename\">{{file.filename}}</span>\n" +
+    "          <span class=\"additions\">{{file.additions}}</span>\n" +
+    "          <span class=\"deletions\">{{file.deletions}}</span>\n" +
+    "        <div>\n" +
     "        <div class=\"patch\">\n" +
     "          <pre>{{file.patch}}</pre>\n" +
     "        </div>\n" +
