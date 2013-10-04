@@ -17,6 +17,29 @@ angular.module('Trestle')
       return [body, config_header, JSON.stringify(configObj), config_footer].join('\n');
    };
 
+   this.updateBuildStatus = function(issue) {
+      var head_ref = issue.tr_pull_details.tr_head.sha;
+
+      return gh.getStatus(trRepoModel.owner, trRepoModel.repo, head_ref).then(
+         function(statusResults) {
+            var sorted_statuses = null,
+                success         = null;
+
+            // Sort the build statuses
+            sorted_statuses = _.sortBy(statusResults, 'updated_at');
+
+            // Pick out the most recent successful build status.
+            // This mimics github's behavior. Since the builds are all for the same
+            // hash, as long as one of the builds passed we're good to go.
+            success = _.last(_.where(sorted_statuses, {"state" : "success"}));
+
+            issue.tr_build_status = statusResults;
+            // Use the successful status if we have one, otherwise the most recent.
+            issue.tr_top_build_status = success ? success : _.last(sorted_statuses);
+         }
+      );
+   };
+
    /**
    * Spawns off queries to resolve all grafted on information for the issue.
    *  (all comments, counts, build status, pull request info, etc)
@@ -78,14 +101,15 @@ angular.module('Trestle')
    * as part of this we are going to calculate voting information.
    */
 
-   function _updateAllCommentsArray(issue) {
+   function _onCommentsUpdated(issue) {
       issue.tr_all_comments = issue.tr_review_comments.concat(issue.tr_comments);
+      _calculateCommentVoting(issue);
    }
 
    function resolveIssueComments(issue) {
       issue.tr_comments = issue.tr_comments || [];
       issue.tr_review_comments = issue.tr_review_comments || [];
-      _updateAllCommentsArray(issue);
+      _onCommentsUpdated(issue);
 
       issue.tr_comment_voting = {
          users: {
@@ -103,8 +127,8 @@ angular.module('Trestle')
          .then(function(commentResults) {
             // Store on the issue
             issue.tr_comments = commentResults;
-            _updateAllCommentsArray(issue);
-            _calculateCommentVoting(issue);
+            _onCommentsUpdated(issue);
+            _calculateTodos(issue);
          }
       );
 
@@ -113,10 +137,42 @@ angular.module('Trestle')
             .then(function(commentResults) {
                // Store on the issue
                issue.tr_review_comments = commentResults;
-               _updateAllCommentsArray(issue);
-               _calculateCommentVoting(issue);
+               _onCommentsUpdated(issue);
             });
       }
+   }
+
+   /**
+    Finds all todos on the issue and creates a count of all and pending todos
+    for an issue.
+    */
+   function _calculateTodos(issue) {
+      // NOTE: We only look at the issue comments (not the review ones)
+      // - convert all comments into doms by passing them to jquery
+      var comments = _.map(_.pluck(issue.tr_comments, 'body_html'), $);
+
+      var total = _.reduce(comments, function(count, comment) {
+         // Find the comments
+         return count + $('.task-list-item-checkbox', comment).length;
+      }, 0);
+
+      var finished = _.reduce(comments, function(count, comment) {
+         // Find the comments
+         return count + $('.task-list-item-checkbox:checked', comment).length;
+      }, 0);
+
+      if (total > 0) {
+         issue.tr_todos = {
+            total:     total,
+            finished:  finished,
+            remaining: total - finished
+         };
+         console.log(issue.tr_todos);
+      }
+      else {
+         issue.tr_todos = null;
+      }
+
    }
 
    /**
@@ -161,7 +217,13 @@ angular.module('Trestle')
          }, 0);
 
          // Update the users total count with the new information
-         memo[login].count = memo[login].count + total;
+         // - Once a user has blackballed a pull it stays there
+         if (total < 0 || memo[login].count < 0) {
+            memo[login].count = -1;
+         }
+         else {
+            memo[login].count = memo[login].count + total;
+         }
 
          return memo;
       }, all_users);
@@ -169,6 +231,8 @@ angular.module('Trestle')
       issue.tr_comment_voting = {
          users: votes,
          // Provide a total count for the pull
+         // - If anyone gave the pull a negative review then the total is -1
+         //   to blackball the issue.
          total: _.reduce(votes, function(count, voteDetails) {
             if(voteDetails.count < 0 || count < 0) {
                return -1;
@@ -242,38 +306,11 @@ angular.module('Trestle')
 
       // If we have a valid pull for the issue, spawn off query for it's details
       if(issue.pull_request && issue.pull_request.html_url) {
-         gh.getPull(trRepoModel.owner, trRepoModel.repo, issue.number).then(
-            function(pullResult) {
-               var head_ref = pullResult.tr_head.sha;
+         gh.getPull(trRepoModel.owner, trRepoModel.repo, issue.number)
+            .then(function(pullResult) {
                issue.tr_pull_details = pullResult;
-
-               gh.getStatus(trRepoModel.owner, trRepoModel.repo, head_ref).then(
-                  function(statusResults) {
-                     var sorted_statuses = null,
-                         success         = null;
-
-                     // Store all statuses
-                     issue.tr_build_status = statusResults;
-
-                     // Sort the build statuses
-                     sorted_statuses = _.sortBy(statusResults, 'updated_at');
-
-                     // Pick out the most recent successful build status.
-                     // This mimics github's behavior. Since the builds are all for the same
-                     // hash, as long as one of the builds passed we're good to go.
-                     success = _.last(_.where(sorted_statuses, {"state" : "success"}));
-
-                     // Use the successful status if we have one, otherwise the most recent.
-                     if(success) {
-                        issue.tr_top_build_status = success;
-                     } else {
-                        issue.tr_top_build_status = _.last(sorted_statuses);
-                     }
-
-                  }
-               );
-            }
-         );
+               me.updateBuildStatus(issue);
+            });
       }
    }
 
@@ -366,6 +403,5 @@ angular.module('Trestle')
       });
    };
 })
-
 
 ;

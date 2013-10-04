@@ -312,11 +312,17 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "               }\"/>\n" +
     "      </div>\n" +
     "      <div class=\"stats\">\n" +
-    "         <!--<span class=\"todos\"><i class=\"icon-check\"></i>3/6</span>-->\n" +
-    "         <span class=\"comments\">\n" +
-    "            <i class=\"icon-comments\"></i>\n" +
-    "            {{issueCtrl.issue.tr_all_comments.length}}\n" +
-    "         </span>\n" +
+    "\n" +
+    "        <span class=\"todos\" ng-if=\"issueCtrl.issue.tr_todos\">\n" +
+    "          <i class=\"icon-check\"></i>\n" +
+    "          {{issueCtrl.issue.tr_todos.finished}}/{{issueCtrl.issue.tr_todos.total}}\n" +
+    "        </span>\n" +
+    "\n" +
+    "        <span class=\"comments\">\n" +
+    "          <i class=\"icon-comments\"></i>\n" +
+    "          {{issueCtrl.issue.tr_all_comments.length}}\n" +
+    "        </span>\n" +
+    "\n" +
     "      </div>\n" +
     "   </div>\n" +
     "</div>\n" +
