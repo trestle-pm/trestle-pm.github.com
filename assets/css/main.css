@@ -579,8 +579,10 @@ html, body {
   position: relative;
   white-space: normal;
   padding: 3px 6px 1px;
+  overflow: hidden;
+  *zoom: 1;
 }
-/* line 246, ../../../src/app/issue/issues.scss */
+/* line 248, ../../../src/app/issue/issues.scss */
 .card .vote-avatar {
   max-width: 20px;
   max-height: 20px;
@@ -588,41 +590,42 @@ html, body {
   border: 3px solid #95a5a6;
   vertical-align: middle;
 }
-/* line 253, ../../../src/app/issue/issues.scss */
+/* line 255, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.yes {
   border-color: #229955;
 }
-/* line 254, ../../../src/app/issue/issues.scss */
+/* line 256, ../../../src/app/issue/issues.scss */
 .card .vote-avatar.no {
   border-color: #e43725;
 }
-/* line 258, ../../../src/app/issue/issues.scss */
-.card .stats {
-  position: absolute;
-  right: 3px;
-  bottom: 5px;
-  padding: 0 4px;
-  color: #95a5a6;
-  font-size: 1.2em;
+/* line 259, ../../../src/app/issue/issues.scss */
+.card .votes {
+  float: left;
 }
-/* line 266, ../../../src/app/issue/issues.scss */
+/* line 264, ../../../src/app/issue/issues.scss */
+.card .stats {
+  float: right;
+  padding-top: 4px;
+  color: #95a5a6;
+}
+/* line 269, ../../../src/app/issue/issues.scss */
 .card .stats:hover {
   color: #3e4a4a;
 }
-/* line 271, ../../../src/app/issue/issues.scss */
+/* line 274, ../../../src/app/issue/issues.scss */
 .card .stats span {
   margin-right: 10px;
 }
-/* line 274, ../../../src/app/issue/issues.scss */
+/* line 277, ../../../src/app/issue/issues.scss */
 .card .stats span.todos i {
   margin-right: 5px;
 }
-/* line 278, ../../../src/app/issue/issues.scss */
+/* line 281, ../../../src/app/issue/issues.scss */
 .card .stats span:last-child {
   margin-right: 0;
 }
 
-/* line 285, ../../../src/app/issue/issues.scss */
+/* line 288, ../../../src/app/issue/issues.scss */
 .drop-area {
   height: 70px;
   background: rgba(255, 255, 255, 0.15);
@@ -631,7 +634,7 @@ html, body {
 }
 
 /************* COMMON MODAL SETTINGS ************/
-/* line 293, ../../../src/app/issue/issues.scss */
+/* line 296, ../../../src/app/issue/issues.scss */
 .modal {
   min-height: 50%;
   max-height: 80%;
@@ -655,7 +658,7 @@ html, body {
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
-/* line 320, ../../../src/app/issue/issues.scss */
+/* line 323, ../../../src/app/issue/issues.scss */
 .modal .header {
   position: relative;
   margin: 0;
@@ -666,37 +669,37 @@ html, body {
   font-size: 1.2em;
   font-weight: bold;
 }
-/* line 332, ../../../src/app/issue/issues.scss */
+/* line 335, ../../../src/app/issue/issues.scss */
 .modal .title {
   white-space: normal;
   line-height: 1.3em;
 }
 
 /************* DETAILS ****************/
-/* line 344, ../../../src/app/issue/issues.scss */
+/* line 347, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .issue-number {
   position: absolute;
   top: 2px;
   right: 28px;
   padding: 3px 4px;
 }
-/* line 352, ../../../src/app/issue/issues.scss */
+/* line 355, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .close {
   float: none;
   position: absolute;
   right: 5px;
   top: 3px;
 }
-/* line 360, ../../../src/app/issue/issues.scss */
+/* line 363, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector {
   position: static;
 }
-/* line 363, ../../../src/app/issue/issues.scss */
+/* line 366, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector .dropdown-toggle {
   position: static;
   z-index: 100;
 }
-/* line 368, ../../../src/app/issue/issues.scss */
+/* line 371, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector .dropdown-toggle .avatar {
   height: 60px;
   max-height: 60px;
@@ -709,7 +712,7 @@ html, body {
   border-radius: 35px;
   box-shadow: 1px 0 4px rgba(0, 0, 0, 0.5);
 }
-/* line 383, ../../../src/app/issue/issues.scss */
+/* line 386, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector .dropdown-menu {
   z-index: 50;
   margin-top: 19px;
@@ -717,7 +720,7 @@ html, body {
   min-width: 200px;
   max-height: 250px;
 }
-/* line 390, ../../../src/app/issue/issues.scss */
+/* line 393, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector .dropdown-menu h4 {
   margin: 0;
   padding: 6px 5px 0;
@@ -725,11 +728,11 @@ html, body {
   border-bottom: 1px solid #b1bdbd;
   font-size: .8em;
 }
-/* line 398, ../../../src/app/issue/issues.scss */
+/* line 401, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .user-selector .dropdown-menu .avatar {
   border-radius: 2px;
 }
-/* line 405, ../../../src/app/issue/issues.scss */
+/* line 408, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .status-header {
   width: 100%;
   height: 28px;
@@ -739,7 +742,7 @@ html, body {
   border-top: 1px solid #798d8f;
   border-bottom: 1px solid #798d8f;
 }
-/* line 415, ../../../src/app/issue/issues.scss */
+/* line 418, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .build-status {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -752,7 +755,7 @@ html, body {
   padding: 3px 0 3px 65px;
   border-right: 1px solid #6d8082;
 }
-/* line 425, ../../../src/app/issue/issues.scss */
+/* line 428, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .build-status.success {
   background: #89e5b0;
 }
@@ -760,7 +763,7 @@ html, body {
 .modal.issue-details-modal .build-status.success a {
   color: #19703e;
 }
-/* line 426, ../../../src/app/issue/issues.scss */
+/* line 429, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .build-status.failure {
   background: #f8c9c4;
 }
@@ -768,7 +771,7 @@ html, body {
 .modal.issue-details-modal .build-status.failure a {
   color: #bf2718;
 }
-/* line 427, ../../../src/app/issue/issues.scss */
+/* line 430, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .build-status.pending {
   background: #b6daf2;
 }
@@ -776,7 +779,7 @@ html, body {
 .modal.issue-details-modal .build-status.pending a {
   color: #1d6fa5;
 }
-/* line 428, ../../../src/app/issue/issues.scss */
+/* line 431, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .build-status.unknown {
   background: #e8ecec;
 }
@@ -784,7 +787,7 @@ html, body {
 .modal.issue-details-modal .build-status.unknown a {
   color: #6d8082;
 }
-/* line 432, ../../../src/app/issue/issues.scss */
+/* line 435, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comment-summary {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -802,34 +805,34 @@ html, body {
   font-size: 1.2em;
   text-align: right;
 }
-/* line 448, ../../../src/app/issue/issues.scss */
+/* line 451, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comment-summary i {
   color: #e8ecec;
 }
-/* line 453, ../../../src/app/issue/issues.scss */
+/* line 456, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comment-summary span {
   margin-right: 10px;
 }
-/* line 456, ../../../src/app/issue/issues.scss */
+/* line 459, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comment-summary span.todos i {
   margin-right: 4px;
 }
-/* line 460, ../../../src/app/issue/issues.scss */
+/* line 463, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comment-summary span:last-child {
   margin-right: 0;
 }
-/* line 468, ../../../src/app/issue/issues.scss */
+/* line 471, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .branch-info {
   display: none;
 }
-/* line 473, ../../../src/app/issue/issues.scss */
+/* line 476, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .controls {
   padding: 5px 10px;
   background: white;
   border-bottom: 1px solid #dae0e0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-/* line 481, ../../../src/app/issue/issues.scss */
+/* line 484, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal select.milestone {
   display: inline-block;
   width: 25%;
@@ -838,7 +841,7 @@ html, body {
   color: black;
   font-size: 1em;
 }
-/* line 491, ../../../src/app/issue/issues.scss */
+/* line 494, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-bar {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -848,7 +851,7 @@ html, body {
   padding: 0 4px;
   position: relative;
 }
-/* line 499, ../../../src/app/issue/issues.scss */
+/* line 502, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-bar .labels {
   display: inline-block;
   -webkit-box-sizing: border-box;
@@ -864,12 +867,12 @@ html, body {
   border: 1px solid #ccd4d5;
   border-radius: 0 2px 2px 0;
 }
-/* line 514, ../../../src/app/issue/issues.scss */
+/* line 517, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-bar .label {
   margin: 2px;
   opacity: 1;
 }
-/* line 521, ../../../src/app/issue/issues.scss */
+/* line 524, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor {
   display: inline-block;
   width: 60px;
@@ -878,7 +881,7 @@ html, body {
   left: 4px;
   z-index: 10;
 }
-/* line 530, ../../../src/app/issue/issues.scss */
+/* line 533, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .btn {
   width: 100%;
   padding: 4px;
@@ -886,30 +889,30 @@ html, body {
   border-radius: 3px 0 0 3px;
   font-size: .85em;
 }
-/* line 538, ../../../src/app/issue/issues.scss */
+/* line 541, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .btn span {
   font-size: .85em;
 }
-/* line 545, ../../../src/app/issue/issues.scss */
+/* line 548, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .open .btn {
   border-radius: 3px 0 0 0;
 }
-/* line 549, ../../../src/app/issue/issues.scss */
+/* line 552, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .dropdown-menu {
   margin: -2px 0 0;
   border-radius: 0 4px 4px 4px;
   border-top: 6px solid #e6e6e6;
   padding: 0;
 }
-/* line 558, ../../../src/app/issue/issues.scss */
+/* line 561, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .label-item:first-child {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
-/* line 563, ../../../src/app/issue/issues.scss */
+/* line 566, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .label-item.enabled {
   background: #bfc8c9;
 }
-/* line 568, ../../../src/app/issue/issues.scss */
+/* line 571, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .label-editor .label-item .color-preview {
   display: inline-block;
   width: 10px;
@@ -917,44 +920,44 @@ html, body {
   border-radius: 2px;
   margin: 0 3px;
 }
-/* line 579, ../../../src/app/issue/issues.scss */
+/* line 582, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .convert-pull {
   height: 29px;
   width: 20%;
   padding: 0 4px;
 }
-/* line 586, ../../../src/app/issue/issues.scss */
+/* line 589, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .description {
   padding: 10px 20px;
   background: white;
   border-bottom: 1px solid #ccd4d5;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
 }
-/* line 593, ../../../src/app/issue/issues.scss */
+/* line 596, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .description.empty {
   display: none;
 }
-/* line 597, ../../../src/app/issue/issues.scss */
+/* line 600, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .description h4 {
   margin: 0;
   color: #95a5a6;
   font-size: 1em;
 }
-/* line 605, ../../../src/app/issue/issues.scss */
+/* line 608, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments {
   padding: 10px;
   border-radius: 0 0 3px 3px;
 }
-/* line 609, ../../../src/app/issue/issues.scss */
+/* line 612, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments .comment {
   position: relative;
   margin: 0 0 10px;
 }
-/* line 614, ../../../src/app/issue/issues.scss */
+/* line 617, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments .comment:last-child {
   margin: 0;
 }
-/* line 619, ../../../src/app/issue/issues.scss */
+/* line 622, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments .commenter {
   height: 40px;
   max-height: 40px;
@@ -965,49 +968,49 @@ html, body {
   border: 2px solid #b1bdbd;
   border-radius: 25px;
 }
-/* line 630, ../../../src/app/issue/issues.scss */
+/* line 633, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments .comment-body {
   margin: 0 0 0 30px;
   padding: 7px 10px 7px 15px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 637, ../../../src/app/issue/issues.scss */
+/* line 640, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments .comment-body p:last-child {
   margin: 0;
 }
-/* line 643, ../../../src/app/issue/issues.scss */
+/* line 646, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments h4 {
   margin: 0 0 0 47px;
   font-size: 1em;
   color: #95a5a6;
   font-weight: normal;
 }
-/* line 650, ../../../src/app/issue/issues.scss */
+/* line 653, ../../../src/app/issue/issues.scss */
 .modal.issue-details-modal .comments h4 em {
   font-style: normal;
   color: #6d8082;
   font-weight: bold;
 }
 
-/* line 661, ../../../src/app/issue/issues.scss */
+/* line 664, ../../../src/app/issue/issues.scss */
 .pull select.milestone {
   width: 35%;
 }
-/* line 664, ../../../src/app/issue/issues.scss */
+/* line 667, ../../../src/app/issue/issues.scss */
 .pull .label-editor {
   left: 10px;
 }
-/* line 667, ../../../src/app/issue/issues.scss */
+/* line 670, ../../../src/app/issue/issues.scss */
 .pull .label-bar {
   width: 65%;
   padding-left: 10px;
 }
-/* line 673, ../../../src/app/issue/issues.scss */
+/* line 676, ../../../src/app/issue/issues.scss */
 .pull .convert-pull {
   display: none;
 }
-/* line 678, ../../../src/app/issue/issues.scss */
+/* line 681, ../../../src/app/issue/issues.scss */
 .pull .branch-info {
   display: block;
   -webkit-box-sizing: border-box;
@@ -1020,7 +1023,7 @@ html, body {
   font-size: .9em;
   text-align: center;
 }
-/* line 689, ../../../src/app/issue/issues.scss */
+/* line 692, ../../../src/app/issue/issues.scss */
 .pull .branch-info pre {
   display: inline;
   padding: 1px 4px;
@@ -1031,11 +1034,11 @@ html, body {
 }
 
 /************* CONVERT TO PULL ****************/
-/* line 701, ../../../src/app/issue/issues.scss */
+/* line 704, ../../../src/app/issue/issues.scss */
 .convert-modal {
   min-height: 80%;
 }
-/* line 704, ../../../src/app/issue/issues.scss */
+/* line 707, ../../../src/app/issue/issues.scss */
 .convert-modal .convert-header {
   margin: 0;
   font-size: 1.1em;
@@ -1043,16 +1046,16 @@ html, body {
   padding: 6px 12px;
   border-bottom: 1px solid #ccc;
 }
-/* line 711, ../../../src/app/issue/issues.scss */
+/* line 714, ../../../src/app/issue/issues.scss */
 .convert-modal .branches {
   margin: 6px 12px;
   font-size: 1.3em;
 }
-/* line 716, ../../../src/app/issue/issues.scss */
+/* line 719, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-selector {
   display: inline-block;
 }
-/* line 720, ../../../src/app/issue/issues.scss */
+/* line 723, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown {
   width: 300px;
   margin-top: 4px;
@@ -1067,7 +1070,7 @@ html, body {
   border-radius: 5px;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
 }
-/* line 734, ../../../src/app/issue/issues.scss */
+/* line 737, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-header {
   padding: 8px 10px;
   background-color: #eeeeee;
@@ -1077,12 +1080,12 @@ html, body {
   background-repeat: repeat-x;
   border-bottom: 1px solid #ddd;
 }
-/* line 744, ../../../src/app/issue/issues.scss */
+/* line 747, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-list {
   max-height: 400px;
   overflow: auto;
 }
-/* line 749, ../../../src/app/issue/issues.scss */
+/* line 752, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-item {
   cursor: pointer;
   border-bottom: 1px solid #eee;
@@ -1092,50 +1095,50 @@ html, body {
   overflow: hidden;
   color: inherit;
 }
-/* line 758, ../../../src/app/issue/issues.scss */
+/* line 761, ../../../src/app/issue/issues.scss */
 .convert-modal .branch-pulldown .menu-item:hover {
   background: blue;
 }
-/* line 764, ../../../src/app/issue/issues.scss */
+/* line 767, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary {
   margin: 8px;
 }
-/* line 773, ../../../src/app/issue/issues.scss */
+/* line 776, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .compare.btn {
   margin: 5px;
 }
-/* line 777, ../../../src/app/issue/issues.scss */
+/* line 780, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit {
   margin: 5px;
   background: #fff;
   border: 3px solid #ccd4d5;
 }
-/* line 782, ../../../src/app/issue/issues.scss */
+/* line 785, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit .avatar {
   margin: 2px;
 }
-/* line 785, ../../../src/app/issue/issues.scss */
+/* line 788, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .commit .hash {
   float: right;
   margin: 5px;
 }
-/* line 794, ../../../src/app/issue/issues.scss */
+/* line 797, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .filename {
   font-weight: bold;
 }
-/* line 797, ../../../src/app/issue/issues.scss */
+/* line 800, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .additions {
   color: green;
 }
-/* line 799, ../../../src/app/issue/issues.scss */
+/* line 802, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .additions:before {
   content: "+";
 }
-/* line 804, ../../../src/app/issue/issues.scss */
+/* line 807, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .deletions {
   color: red;
 }
-/* line 806, ../../../src/app/issue/issues.scss */
+/* line 809, ../../../src/app/issue/issues.scss */
 .convert-modal .compare-summary .file_list .file_details .file_header .deletions:before {
   content: "-";
 }
