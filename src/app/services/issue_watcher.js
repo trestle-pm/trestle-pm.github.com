@@ -61,7 +61,7 @@ angular.module('Trestle')
       return $q.all(_.map(pulls, trIssueHelpers.updateBuildStatus));
    }
 
-   var runner = intervalRunner.get(15, onUpdateBuildStatus);
+   var runner = intervalRunner.get(30, onUpdateBuildStatus);
    return runner;
 })
 
@@ -125,7 +125,7 @@ angular.module('Trestle')
          });
    }
 
-   var runner = intervalRunner.get(15, function () {
+   var runner = intervalRunner.get(30, function () {
       return $q.all([getIssueUpdates(), getClosedIssues()]);
    });
    return runner;
