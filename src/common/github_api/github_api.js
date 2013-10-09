@@ -41,10 +41,6 @@ angular.module('github.api', ['restangular'])
       // Ensure that access token is always available
       _.defaults(options.params, {access_token: getAccessToken()});
 
-      // Do not let the browser cache calls so that we always get the latest data
-      // from GitHub.
-      _.defaults(options.params, {'_cache_bust': new Date().getTime()});
-
       return options;
    });
 
