@@ -1,5 +1,18 @@
 var mod = angular.module('Trestle.issue', []);
 
+mod.filter('assignedUser', function() {
+   return function(issue) {
+      var assignee = issue.assignee,
+          default_url = 'http://www.gravatar.com/avatar/0?d=mm&f=y&s=';
+
+      return {
+         name:       assignee ? assignee.login      : 'no one',
+         avatar_url: assignee ? assignee.avatar_url : default_url
+      };
+   };
+});
+
+
 mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh, trIssueCache) {
    // init
 
@@ -50,25 +63,6 @@ mod.controller('IssueCtrl', function($scope, $modal, $rootScope, trRepoModel, gh
          }
 
          return text;
-      },
-
-      /**
-      * Return a obj of user details suitable for use in templates.
-      */
-      getAssignedUserDetails: function(avSize) {
-         avSize = avSize || 30;
-
-         if(this.issue.assignee) {
-            return {
-               name       : this.issue.assignee.login,
-               avatar_url : this.issue.assignee.avatar_url + "?s=" + avSize
-            };
-         } else {
-            return {
-               name       : 'no one',
-               avatar_url : 'http://www.gravatar.com/avatar/0?d=mm&f=y&s=' + avSize
-            };
-         }
       },
 
       /** Return true if the given label is enabled on our issue.
@@ -224,4 +218,3 @@ mod.directive('trIssueCard', function() {
       }
    };
 });
-

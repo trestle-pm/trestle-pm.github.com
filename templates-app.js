@@ -221,7 +221,7 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
     "      <div class=\"commit\"\n" +
     "           ng-repeat=\"commit in convertCtrl.compareResults.commits\">\n" +
     "        <img class=\"avatar\"\n" +
-    "             ng-src=\"{{commit.committer.avatar_url}}?s=30\"></img>\n" +
+    "             ng-src=\"{{commit.committer.avatar_url}}\"></img>\n" +
     "        <span class=\"committer\"> {{commit.committer.name}} </span>\n" +
     "        <a class=\"message\" ng-href=\"{{commit.url}}\" class=\"message\">{{commit.commit.message}}</a>\n" +
     "        <a class=\"hash\" ng-href=\"{{commit.url}}\" class=\"sha\">{{commit.sha | limitTo:7}}</a>\n" +
@@ -278,8 +278,8 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "            ng-class=\"{\n" +
     "               empty: !issueCtrl.issue.assignee\n" +
     "            }\"\n" +
-    "            title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
-    "            ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
+    "            title=\"Assigned to {{(issueCtrl.issue | assignedUser).name}}\"\n" +
+    "            ng-src=\"{{(issueCtrl.issue | assignedUser).avatar_url}}\"/>\n" +
     "   </div>\n" +
     "   <div class=\"content\">\n" +
     "      <span class=\"milestone\"\n" +
@@ -305,7 +305,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "         <img class=\"vote-avatar\"\n" +
     "               title=\"{{login}} {{details.count}}\"\n" +
     "               ng-repeat=\"(login, details) in issueCtrl.issue.tr_comment_voting.users\"\n" +
-    "               ng-src=\"{{details.avatar_url}}?s=30\"\n" +
+    "               ng-src=\"{{details.avatar_url}}\"\n" +
     "               ng-class=\"{\n" +
     "                  yes: details.count > 0,\n" +
     "                  no: details.count < 0\n" +
@@ -342,15 +342,15 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "                  ng-class=\"{\n" +
     "                     empty: !issueCtrl.issue.assignee\n" +
     "                  }\"\n" +
-    "                  title=\"Assigned to {{issueCtrl.getAssignedUserDetails(30).name}}\"\n" +
-    "                  ng-src=\"{{issueCtrl.getAssignedUserDetails(30).avatar_url}}\"/>\n" +
+    "                  title=\"Assigned to {{(issueCtrl.issue | assignedUser).name}}\"\n" +
+    "                  ng-src=\"{{(issueCtrl.issue | assignedUser).avatar_url}}\"/>\n" +
     "         </a>\n" +
     "         <ul class=\"dropdown-menu\">\n" +
     "            <h4>Assign to:</h4>\n" +
     "            <li class=\"assignee\"\n" +
     "                  ng-repeat=\"user in repoModel.assignees\"\n" +
     "                  ng-click=\"issueCtrl.assignUser(user)\">\n" +
-    "               <img class=\"avatar\" ng-src=\"{{user.avatar_url}}?s=30\"></img>\n" +
+    "               <img class=\"avatar\" ng-src=\"{{user.avatar_url}}\"></img>\n" +
     "               <span class=\"user_login\">\n" +
     "                  {{user.login}}\n" +
     "               </span>\n" +
@@ -451,7 +451,7 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "      <div class=\"comment\"\n" +
     "            ng-repeat=\"comment in issueCtrl.issue.tr_comments\">\n" +
     "         <img class=\"commenter\"\n" +
-    "               ng-src=\"{{comment.user.avatar_url}}?s=30\"/>\n" +
+    "               ng-src=\"{{comment.user.avatar_url}}\"/>\n" +
     "         <h4>\n" +
     "            <em>{{comment.user.login}}</em> commented:\n" +
     "         </h4>\n" +
@@ -502,7 +502,7 @@ angular.module("issue_filters/issue_filter.tpl.html", []).run(["$templateCache",
     "            ng-repeat=\"user in repoModel.assignees | filter:{login: '!'+sessionModel.user.login}\"\n" +
     "            ng-click=\"filterCtrl.setFilter('owner', user.login)\"\n" +
     "            ng-class=\"{active: issueFilters.owner == user.login}\" >\n" +
-    "          <img ng-src=\"{{user.avatar_url}}?s=30\" ng-title=\"{{user.login}}\" />\n" +
+    "          <img ng-src=\"{{user.avatar_url}}\" ng-title=\"{{user.login}}\" />\n" +
     "        </li>\n" +
     "      </ul>\n" +
     "      <h3>Milestone</h3>\n" +
