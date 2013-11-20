@@ -394,7 +394,7 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "      </div>\n" +
     "   </div>\n" +
     "   <div class=\"branch-info\"\n" +
-    "         ng-show=\"issueCtrl.isPullRequest()\">\n" +
+    "         ng-if=\"issueCtrl.isPullRequest()\">\n" +
     "      to <pre>{{issueCtrl.issue.tr_pull_details.base.label}}</pre>\n" +
     "      from <pre>{{issueCtrl.issue.tr_pull_details.tr_head.label}}</pre>\n" +
     "   </div>\n" +
