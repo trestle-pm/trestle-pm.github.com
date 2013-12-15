@@ -167,7 +167,6 @@ angular.module('Trestle')
             finished:  finished,
             remaining: total - finished
          };
-         console.log(issue.tr_todos);
       }
       else {
          issue.tr_todos = null;

@@ -62,6 +62,9 @@ angular.module( 'Trestle', [
       views: {
          'filter@repo': {
             templateUrl: 'issue_filters/issue_filter.tpl.html'
+         },
+         'build-status@repo': {
+            templateUrl: 'board/repo_build_status.tpl.html'
          }
       },
       resolve: {

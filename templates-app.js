@@ -1,4 +1,4 @@
-angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/create_token.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
+angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'board/repo_build_status.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/create_token.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
 
 angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("board/columns/issue_columns.tpl.html",
@@ -130,6 +130,19 @@ angular.module("board/columns/milestone_columns.tpl.html", []).run(["$templateCa
     "\n" +
     "  </ul>\n" +
     "</div>\n" +
+    "");
+}]);
+
+angular.module("board/repo_build_status.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("board/repo_build_status.tpl.html",
+    "<ul class=\"repo-build-status\" ng-controller=\"RepoBuildStatusCtrl as repoBuildStatusCtrl\" >\n" +
+    "  <li ng-repeat=\"(branch, details) in repoBuildStatusCtrl.branches\"\n" +
+    "      ng-attr-title=\"{{branch}}\"\n" +
+    "      ng-class=\"details.state\"\n" +
+    "      ng-style=\"{width: (100.0 / _.keys(repoBuildStatusCtrl.branches).length) + '%'}\"\n" +
+    "      >\n" +
+    "  </li>\n" +
+    "</ul>\n" +
     "");
 }]);
 
@@ -574,8 +587,13 @@ angular.module("repos.tpl.html", []).run(["$templateCache", function($templateCa
     "     ng-init=\"reposCtrl.init()\">\n" +
     "\n" +
     "  <div ng-include=\"'toolbar/toolbar.tpl.html'\"></div>\n" +
-    "  <div ui-view=\"columns\" class=\"columns\"></div>\n" +
-    "  <div ui-view=\"filter\"></div>\n" +
+    "\n" +
+    "  <div class=\"toolbar-clear\">\n" +
+    "    <div ui-view=\"build-status\" ></div>\n" +
+    "    <div ui-view=\"columns\" class=\"columns\"></div>\n" +
+    "\n" +
+    "    <div ui-view=\"filter\"></div>\n" +
+    "  </div>\n" +
     "\n" +
     "</div>\n" +
     "");

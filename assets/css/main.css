@@ -121,6 +121,13 @@ html, body {
   color: white;
 }
 
+/* line 84, ../../../src/app/toolbar/toolbar.scss */
+.toolbar-clear {
+  position: absolute;
+  top: 44px;
+  bottom: 0px;
+}
+
 /***************************************
  *        COLUMNS
  ***************************************/
@@ -157,7 +164,6 @@ html, body {
   overflow: auto;
   height: 100%;
   padding-top: 8px;
-  padding-top: 53px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -166,7 +172,7 @@ html, body {
   -o-transition: margin 0.5s ease-in;
   transition: margin 0.5s ease-in;
 }
-/* line 47, ../../../src/app/board/columns/issue_columns.scss */
+/* line 46, ../../../src/app/board/columns/issue_columns.scss */
 .issue-columns > li,
 .milestone-columns > li {
   list-style-image: none;
@@ -182,7 +188,7 @@ html, body {
   vertical-align: top;
 }
 
-/* line 54, ../../../src/app/board/columns/issue_columns.scss */
+/* line 53, ../../../src/app/board/columns/issue_columns.scss */
 .column-header {
   position: relative;
   -webkit-box-sizing: border-box;
@@ -198,7 +204,7 @@ html, body {
   text-align: left;
   color: #2c3e50;
 }
-/* line 68, ../../../src/app/board/columns/issue_columns.scss */
+/* line 67, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip-count {
   position: absolute;
   right: 0;
@@ -208,7 +214,7 @@ html, body {
   color: rgba(44, 62, 80, 0.6);
   line-height: 1em;
 }
-/* line 79, ../../../src/app/board/columns/issue_columns.scss */
+/* line 78, ../../../src/app/board/columns/issue_columns.scss */
 .column-header .wip-count.over-limit {
   background: #e74c3c;
   border-bottom: 1px solid rgba(0, 0, 0, 0.35);
@@ -217,7 +223,7 @@ html, body {
   text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.35);
 }
 
-/* line 89, ../../../src/app/board/columns/issue_columns.scss */
+/* line 88, ../../../src/app/board/columns/issue_columns.scss */
 .column {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -229,29 +235,30 @@ html, body {
   vertical-align: top;
 }
 
-/* line 98, ../../../src/app/board/columns/issue_columns.scss */
+/* line 97, ../../../src/app/board/columns/issue_columns.scss */
 .column-body {
   min-height: 1000px;
 }
 
 /************* BACKLOG PANEL ****************/
-/* line 105, ../../../src/app/board/columns/issue_columns.scss */
+/* line 104, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-drawer {
-  position: fixed;
-  top: 45px;
+  position: absolute;
+  top: 0;
   bottom: 0;
   left: 0;
-  width: 19%;
+  width: 250px;
   -webkit-transition: width 0.5s ease-in;
   -moz-transition: width 0.5s ease-in;
   -o-transition: width 0.5s ease-in;
   transition: width 0.5s ease-in;
 }
-/* line 115, ../../../src/app/board/columns/issue_columns.scss */
+/* line 114, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-drawer .drawer {
-  position: fixed;
+  overflow-x: hidden;
+  position: absolute;
   left: 0;
-  top: 45px;
+  top: 0;
   bottom: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -261,7 +268,6 @@ html, body {
   -o-transition: left 0.5s ease-in;
   transition: left 0.5s ease-in;
   z-index: 1;
-  width: 19%;
   background: #42576d;
   border-radius: 0 0 0 3px;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
@@ -270,7 +276,7 @@ html, body {
   padding: 8px 12px 10px 8px;
 }
 
-/* line 134, ../../../src/app/board/columns/issue_columns.scss */
+/* line 133, ../../../src/app/board/columns/issue_columns.scss */
 #backlog-toggle-btn {
   position: absolute;
   top: 5px;
@@ -286,25 +292,25 @@ html, body {
   font-size: 1.5em;
 }
 
-/* line 152, ../../../src/app/board/columns/issue_columns.scss */
+/* line 151, ../../../src/app/board/columns/issue_columns.scss */
 .show-bl #backlog-drawer .drawer {
   left: 0;
 }
-/* line 156, ../../../src/app/board/columns/issue_columns.scss */
+/* line 155, ../../../src/app/board/columns/issue_columns.scss */
 .show-bl .issue-columns {
-  margin-left: 21%;
+  margin-left: 250px;
 }
 
-/* line 164, ../../../src/app/board/columns/issue_columns.scss */
+/* line 163, ../../../src/app/board/columns/issue_columns.scss */
 .hide-bl #backlog-drawer {
   width: 0;
 }
-/* line 167, ../../../src/app/board/columns/issue_columns.scss */
+/* line 166, ../../../src/app/board/columns/issue_columns.scss */
 .hide-bl #backlog-drawer .drawer {
-  left: -19%;
+  left: -250px;
 }
 
-/* line 174, ../../../src/app/board/columns/issue_columns.scss */
+/* line 173, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue {
   display: block;
   text-align: center;
@@ -315,7 +321,7 @@ html, body {
   color: rgba(255, 255, 255, 0.5);
   font-weight: bold;
 }
-/* line 185, ../../../src/app/board/columns/issue_columns.scss */
+/* line 184, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue:hover, #new-issue:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #5faee3), color-stop(100%, #258cd1));
   background-image: -webkit-linear-gradient(#5faee3, #258cd1);
@@ -329,7 +335,7 @@ html, body {
   color: white;
   text-decoration: none;
 }
-/* line 195, ../../../src/app/board/columns/issue_columns.scss */
+/* line 194, ../../../src/app/board/columns/issue_columns.scss */
 #new-issue:active {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #217dbb), color-stop(100%, #258cd1));
   background-image: -webkit-linear-gradient(#217dbb, #258cd1);
@@ -338,9 +344,35 @@ html, body {
   background-image: linear-gradient(#217dbb, #258cd1);
 }
 
-/* line 202, ../../../src/app/board/columns/issue_columns.scss */
+/* line 201, ../../../src/app/board/columns/issue_columns.scss */
 .milestone-selection {
   width: 100%;
+}
+
+/* line 2, ../../../src/app/board/repo_build_status.scss */
+.repo-build-status {
+  margin: 0px;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 6, ../../../src/app/board/repo_build_status.scss */
+.repo-build-status li {
+  display: inline-block;
+  float: left;
+  height: 8px;
+  background-color: #95a5a6;
+}
+/* line 14, ../../../src/app/board/repo_build_status.scss */
+.repo-build-status li.pending {
+  background-color: #3498db;
+}
+/* line 18, ../../../src/app/board/repo_build_status.scss */
+.repo-build-status li.failure {
+  background-color: #e74c3c;
+}
+/* line 22, ../../../src/app/board/repo_build_status.scss */
+.repo-build-status li.success {
+  background-color: #27ae60;
 }
 
 /***************************************
@@ -1145,16 +1177,16 @@ html, body {
 /************* FILTER PANEL ****************/
 /* line 16, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer {
-  position: fixed;
-  top: 44px;
+  position: absolute;
+  top: 0;
   bottom: 0;
   right: 0;
 }
 /* line 23, ../../../src/app/issue_filters/issue_filter.scss */
 #issue-filters-drawer .drawer {
-  position: fixed;
+  position: absolute;
   right: 0;
-  top: 44px;
+  top: 0;
   bottom: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
