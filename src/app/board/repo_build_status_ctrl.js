@@ -1,6 +1,6 @@
 angular.module('Trestle.board')
 
-.controller('RepoBuildStatusCtrl', function($scope, $timeout, $q, trRepoModel, gh) {
+.controller('RepoBuildStatusCtrl', function($scope, $timeout, $q, $window, trRepoModel, gh) {
    var branches  = (trRepoModel.config.branch_monitor || {}).global,
        ctrl      = this,
        destroyed = false,
@@ -12,7 +12,23 @@ angular.module('Trestle.board')
    $scope._ = _;
 
    // Build an object with keys as the branch names
-   ctrl.branches = _.zipObject(branches, _.map(branches, function() {return {};}));
+   ctrl.branches = _.zipObject(branches, _.map(branches, function() {return null;}));
+
+   /**
+    * Helper called when the user selects a build status to view its details.
+    */
+   ctrl.onShowBuildStatus = function(buildStatus) {
+      if (buildStatus && buildStatus.target_url) {
+         $window.open(buildStatus.target_url, '_blank');
+      }
+      else if (buildStatus) {
+         $window.alert('The build status does not have a status url');
+      }
+      else {
+         $window.alert('The build status is not known');
+      }
+
+   };
 
    // Called when the scope for this controlle is destroyed so that we can stop
    // updating the build status.
@@ -31,15 +47,17 @@ angular.module('Trestle.board')
          return gh.getStatus(trRepoModel.owner, trRepoModel.repo, branch).
             then(function(ghStatuses) {
                // Sort the build statuses
-               var sorted_statuses = _.sortBy(ghStatuses, 'updated_at'),
-                   by_state = _.groupBy(sorted_statuses, 'state');
+               var sorted_statuses = _.sortBy(ghStatuses, 'updated_at'), // Old to newer
+                   newest_success  = _.findLast(sorted_statuses, {state: 'success'});
 
-               ctrl.branches[branch] = _.defaults({}, ctrl.branches[branch], {
-                  // Set the best available state for the branch
-                  state: _.find(['success', 'pending', 'failure'], function(state) {
-                     return _.has(by_state, state);
-                  })
-               });
+               // If there was ever a success report that
+               if (newest_success) {
+                  ctrl.branches[branch] = newest_success;
+               }
+               // Otherwise, report the newest there is
+               else {
+                  ctrl.branches[branch] = _.last(sorted_statuses);
+               }
             });
       });
 

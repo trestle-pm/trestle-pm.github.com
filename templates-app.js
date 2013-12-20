@@ -137,9 +137,11 @@ angular.module("board/repo_build_status.tpl.html", []).run(["$templateCache", fu
   $templateCache.put("board/repo_build_status.tpl.html",
     "<ul class=\"repo-build-status\" ng-controller=\"RepoBuildStatusCtrl as repoBuildStatusCtrl\" >\n" +
     "  <li ng-repeat=\"(branch, details) in repoBuildStatusCtrl.branches\"\n" +
-    "      ng-attr-title=\"{{branch}}\"\n" +
+    "      ng-attr-title=\"{{branch}}: {{details.description}}\"\n" +
     "      ng-class=\"details.state\"\n" +
     "      ng-style=\"{width: (100.0 / _.keys(repoBuildStatusCtrl.branches).length) + '%'}\"\n" +
+    "\n" +
+    "      ng-click=\"repoBuildStatusCtrl.onShowBuildStatus(details)\"\n" +
     "      >\n" +
     "  </li>\n" +
     "</ul>\n" +
