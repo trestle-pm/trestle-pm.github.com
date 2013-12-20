@@ -343,7 +343,7 @@ angular.module('github.api', ['restangular'])
    this.createPullFromIssue = function(owner, repo, issueNumber, base, head) {
       return GitHubRestangular
          .all(['repos', owner, repo, 'pulls'].join('/'))
-         .post({issue: issueNumber, base: base, head: head });
+         .post(JSON.stringify({issue: issueNumber, base: base, head: head }));
    };
 
    this.getStatus = function(owner, repo, ref) {
