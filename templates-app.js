@@ -571,14 +571,32 @@ angular.module("login/create_token.tpl.html", []).run(["$templateCache", functio
 
 angular.module("login/login.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("login/login.tpl.html",
-    "<form id=\"login-form\" ng-controller=\"LoginCtrl as loginCtrl\">\n" +
-    "  <input id=\"username\" placeholder=\"Username\" ng-model=\"loginCtrl.username\"></input>\n" +
-    "  <input id=\"password\" placeholder=\"Password\" ng-model=\"loginCtrl.password\" type=\"password\"></input>\n" +
+    "<div id=\"login-form\" >\n" +
+    "  <div class=\"header\" >\n" +
+    "    <h2>Sign In</h2>\n" +
+    "    <p>Login with your normal GitHub credentials.</p>\n" +
+    "  </div>\n" +
     "\n" +
-    "  <input type=\"checkbox\" ng-model=\"loginCtrl.rememberMe\"> Remember Me\n" +
+    "  <form ng-controller=\"LoginCtrl as loginCtrl\">\n" +
+    "    <div class=\"form-row\">\n" +
+    "      <input id=\"username\" placeholder=\"Username\" type=\"text\"\n" +
+    "             ng-model=\"loginCtrl.username\"></input>\n" +
+    "    </div>\n" +
     "\n" +
-    "  <button id=\"submit\" ng-click=\"loginCtrl.attemptLogin()\" >Login</button>\n" +
-    "</form>\n" +
+    "    <div class=\"form-row\" >\n" +
+    "      <input id=\"password\" placeholder=\"Password\"\n" +
+    "             ng-model=\"loginCtrl.password\" type=\"password\"></input>\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"form-row bottom-row clearfix\">\n" +
+    "      <span >\n" +
+    "        <input type=\"checkbox\" ng-model=\"loginCtrl.rememberMe\"> Remember Me\n" +
+    "      </span>\n" +
+    "      <button ng-click=\"loginCtrl.attemptLogin()\" class=\"btn pull-right\" >Login</button>\n" +
+    "    </div>\n" +
+    "  </form>\n" +
+    "\n" +
+    "</div>\n" +
     "");
 }]);
 

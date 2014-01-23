@@ -35,6 +35,43 @@ html, body {
   overflow: hidden;
 }
 
+/* line 1, ../../../src/app/login/login.scss */
+#login-form {
+  width: 400px;
+  margin: 0 auto;
+  color: #c2c2c2;
+  padding: 10px;
+  border-radius: 30px;
+  border: 12px solid #191919;
+  margin-top: 80px;
+  background-color: rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+/* line 17, ../../../src/app/login/login.scss */
+#login-form .header h2 {
+  color: #f1f1f1;
+}
+/* line 22, ../../../src/app/login/login.scss */
+#login-form .form-row {
+  width: 250px;
+  margin: 0 auto;
+}
+/* line 27, ../../../src/app/login/login.scss */
+#login-form input[type=text], #login-form input[type=password] {
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+/* line 35, ../../../src/app/login/login.scss */
+#login-form .bottom-row span {
+  float: left;
+}
+/* line 38, ../../../src/app/login/login.scss */
+#login-form .bottom-row button {
+  float: right;
+}
+
 /* line 1, ../../../src/app/toolbar/toolbar.scss */
 .board-toolbar {
   margin-bottom: 1px;
