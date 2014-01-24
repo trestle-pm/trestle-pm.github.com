@@ -267,13 +267,33 @@ angular.module('github.api', ['restangular'])
    };
 
    /**
-   * Create an issue.
-   * owner, repo, and title are required.
-   */
-   this.createIssue = function(owner, repo, title, body) {
+    @ngdoc    function
+    @name     createIssue
+    @methodOf github.api.gh
+
+    @description
+    Creates a new issue for the repository with the given settings.
+
+    @param {string} owner The owner of the repository
+    @param {string} repo  The name of the repository
+    @param {string} issue.title The title to give to the new issue
+    @param {string} issue.body A description of the issue
+    @param {int} issue.milestone If set the id of a milestone to assign the issue too.
+    @param {array.string} issue.labels If set then the label names to assign to
+                          the new issue.
+
+    @see http://developer.github.com/v3/issues/#create-an-issue
+
+    @returns {Promise} When resolved the list of all issues.
+    */
+   this.createIssue = function(owner, repo, issue) {
+      if (!issue.title) {
+         throw new Error('All issues require a title');
+      }
+
       return GitHubRestangular
          .all(['repos', owner, repo, 'issues'].join('/'))
-         .post({title: title, body: body});
+         .post(issue);
    };
 
    /**

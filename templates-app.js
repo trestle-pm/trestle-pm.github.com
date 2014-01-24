@@ -1,4 +1,4 @@
-angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'board/repo_build_status.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/create_token.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
+angular.module('templates-app', ['board/columns/issue_columns.tpl.html', 'board/columns/milestone_columns.tpl.html', 'board/repo_build_status.tpl.html', 'issue/convert_to_pull.tpl.html', 'issue/create.tpl.html', 'issue/issue.tpl.html', 'issue/issue_details.tpl.html', 'issue_filters/issue_filter.tpl.html', 'login/create_token.tpl.html', 'login/login.tpl.html', 'repos.tpl.html', 'services/missing_config_dialog.tpl.html', 'toolbar/toolbar.tpl.html']);
 
 angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("board/columns/issue_columns.tpl.html",
@@ -27,10 +27,8 @@ angular.module("board/columns/issue_columns.tpl.html", []).run(["$templateCache"
     "              ng-model=\"msFilterVal\"\n" +
     "              ng-options=\"m.value as m.title for m in columnsCtrl.getMilestoneSelectOptions()\">\n" +
     "      </select>\n" +
-    "     <a id=\"new-issue\" class=\"\"\n" +
-    "        ng-href=\"https://github.com/{{repoModel.owner}}/{{repoModel.repo}}/issues/new\"\n" +
-    "        target=\"_blank\">New Issue</a>\n" +
     "\n" +
+    "      <button id=\"new-issue\" tr-new-issue-button >New Issue</button\n" +
     "\n" +
     "     <!-- CARDS List -->\n" +
     "     <ul class=\"column-body\"\n" +
@@ -264,17 +262,104 @@ angular.module("issue/convert_to_pull.tpl.html", []).run(["$templateCache", func
     "");
 }]);
 
+angular.module("issue/create.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("issue/create.tpl.html",
+    "<div class=\"issue_detail\"\n" +
+    "     ng-controller=\"NewIssueCtrl as issueCtrl\"\n" +
+    "     ng-init=\"issue = {};\">\n" +
+    "\n" +
+    "  <div class=\"header\">\n" +
+    "    <span class=\"user-selector dropdown\">\n" +
+    "      <a class=\"dropdown-toggle\">\n" +
+    "        <img class=\"avatar\"\n" +
+    "             ng-class=\"{\n" +
+    "                       empty: !issue.assignee\n" +
+    "                       }\"\n" +
+    "             title=\"Assigned to {{(issue | assignedUser).name}}\"\n" +
+    "             ng-src=\"{{(issue | assignedUser).avatar_url}}\"/>\n" +
+    "      </a>\n" +
+    "      <ul class=\"dropdown-menu\">\n" +
+    "        <h4>Assign to:</h4>\n" +
+    "        <li class=\"assignee\"\n" +
+    "            ng-repeat=\"user in repoModel.assignees\"\n" +
+    "            ng-click=\"issue.assignee = user\">\n" +
+    "          <img class=\"avatar\" ng-src=\"{{user.avatar_url}}\"></img>\n" +
+    "          <span class=\"user_login\">\n" +
+    "            {{user.login}}\n" +
+    "          </span>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </span>\n" +
+    "\n" +
+    "    <input ng-model=\"issue.title\" class=\"title\"\n" +
+    "           type=\"text\" placeholder=\"Issue Title\" ></input>\n" +
+    "\n" +
+    "    <i class=\"close icon-remove\" ng-click=\"$close()\"></i>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"controls\">\n" +
+    "    <select class=\"milestone\"\n" +
+    "            ng-model=\"issue.milestone\"\n" +
+    "            ng-options=\"m.number as m.title for m in repoModel.milestones\" >\n" +
+    "      <option value=\"\">No Milestone</option>\n" +
+    "\n" +
+    "    </select><!--Keep collapsed to prevent spacing bug--><div class=\"label-bar\">\n" +
+    "      <div class=\"label-editor dropdown\">\n" +
+    "        <button class=\"btn dropdown-toggle-no-close\">\n" +
+    "          Labels&nbsp;<span class=\"caret\"></span>\n" +
+    "        </button>\n" +
+    "        <div class=\"dropdown-menu\">\n" +
+    "          <div class=\"label-list no-close\">\n" +
+    "            <div class=\"label-item\"\n" +
+    "                 ng-repeat=\"label in repoModel.labels | nonColumnLabels | orderBy:'name'\"\n" +
+    "                 ng-class=\"{\n" +
+    "                           enabled: (issue.labels | contains:label)\n" +
+    "                           }\"\n" +
+    "                 ng-click=\"issueCtrl.toggleLabel(issue, label)\" >\n" +
+    "              <span class=\"color-preview\"\n" +
+    "                    style=\"background-color: #{{label.color}}\">\n" +
+    "              </span>\n" +
+    "              {{label.name}}\n" +
+    "            </div>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div><!--Keep collapsed to prevent spacing bug--><div class=\"labels\">\n" +
+    "        <span class=\"label\"\n" +
+    "              style=\"background-color: #{{label.color}}\"\n" +
+    "              ng-repeat=\"label in issue.labels | nonColumnLabels | orderBy:'name'\">\n" +
+    "          {{label.name}}\n" +
+    "        </span>&nbsp;\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <textarea ng-model=\"issue.description\"\n" +
+    "            class=\"description\"\n" +
+    "            placeholder=\"Issue Description\" ></textarea>\n" +
+    "\n" +
+    "  <div class=\"modal-footer\">\n" +
+    "    <button type=\"submit\" class=\"btn btn-success\"\n" +
+    "            ng-disabled=\"!issue.title\"\n" +
+    "            ng-click=\"issueCtrl.onCreate(issue)\" >\n" +
+    "      Create Issue\n" +
+    "    </button>\n" +
+    "  </div>\n" +
+    "\n" +
+    "</div>\n" +
+    "");
+}]);
+
 angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("issue/issue.tpl.html",
-    "<div class=\"card {{issueCtrl.getBuildStatus()}}\"\n" +
+    "<div class=\"card\"\n" +
     "      ng-controller=\"IssueCtrl as issueCtrl\"\n" +
     "      ng-class=\"{\n" +
     "        updated: issueCtrl.hasBeenUpdatedSinceLastView()\n" +
     "      }\"\n" +
-    "      ng-class=\"issueCtrl.getBuildStatus()\"\n" +
+    "      ng-class=\"issueCtrl.issue | buildStatus\"\n" +
     "      ng-click=\"issueCtrl.showIssueDetails()\">\n" +
     "   <div class=\"build-header\"\n" +
-    "         ng-if=\"issueCtrl.isPullRequest()\"\n" +
+    "         ng-if=\"issueCtrl.issue | isPullRequest\"\n" +
     "         title=\"{{issueCtrl.issue.tr_top_build_status.description}}\">\n" +
     "   </div>\n" +
     "   <div class=\"header\">\n" +
@@ -283,7 +368,7 @@ angular.module("issue/issue.tpl.html", []).run(["$templateCache", function($temp
     "            title=\"Open on GitHub\"\n" +
     "            ng-href=\"{{issueCtrl.issue.html_url}}\"\n" +
     "            ng-click=\"issueCtrl.markAsViewed(); $event.stopPropagation()\">\n" +
-    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.isPullRequest()\"></i>\n" +
+    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.issue | isPullRequest\"></i>\n" +
     "         {{issueCtrl.issue.number}}\n" +
     "      </a>\n" +
     "      <span class=\"title\">\n" +
@@ -349,7 +434,7 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "<div class=\"issue_detail\"\n" +
     "      ng-controller=\"IssueCtrl as issueCtrl\"\n" +
     "      ng-init=\"issueCtrl.init(issue)\"\n" +
-    "      ng-class=\"{pull: issueCtrl.isPullRequest()}\">\n" +
+    "      ng-class=\"{pull: (issueCtrl.issue | isPullRequest)}\">\n" +
     "   <div class=\"header\">\n" +
     "      <span class=\"user-selector dropdown\">\n" +
     "         <a class=\"dropdown-toggle\">\n" +
@@ -379,18 +464,18 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "            target=\"_blank\"\n" +
     "            href=\"{{issueCtrl.issue.html_url}}\"\n" +
     "            title=\"Open on GitHub\">\n" +
-    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.isPullRequest()\"></i>\n" +
+    "         <i class=\"icon-code-fork\" ng-if=\"issueCtrl.issue | isPullRequest\"></i>\n" +
     "         {{issueCtrl.issue.number}}\n" +
     "      </a>\n" +
     "      <i class=\"close icon-remove\" ng-click=\"$close()\"></i>\n" +
     "   </div>\n" +
     "   <div class=\"status-header\">\n" +
-    "      <div ng-if=\"issueCtrl.isPullRequest()\"\n" +
+    "      <div ng-if=\"issueCtrl.issue | isPullRequest\"\n" +
     "            class=\"build-status\"\n" +
-    "            ng-class=\"issueCtrl.getBuildStatus()\">\n" +
+    "            ng-class=\"issueCtrl.issue | buildStatus\">\n" +
     "         <a target=\"_blank\"\n" +
     "               href=\"{{issueCtrl.issue.tr_top_build_status.target_url}}\" >\n" +
-    "            {{issueCtrl.getBuildStatusText()}}\n" +
+    "            {{issueCtrl.issue | buildStatusText}}\n" +
     "         </a>\n" +
     "      </div>\n" +
     "      <div class=\"comment-summary\">\n" +
@@ -409,7 +494,7 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "      </div>\n" +
     "   </div>\n" +
     "   <div class=\"branch-info\"\n" +
-    "         ng-if=\"issueCtrl.isPullRequest()\">\n" +
+    "         ng-show=\"issueCtrl.issue | isPullRequest\">\n" +
     "      to <pre>{{issueCtrl.issue.tr_pull_details.base.label}}</pre>\n" +
     "      from <pre>{{issueCtrl.issue.tr_pull_details.tr_head.label}}</pre>\n" +
     "   </div>\n" +
@@ -428,10 +513,10 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "            <div class=\"dropdown-menu\">\n" +
     "               <div class=\"label-list no-close\">\n" +
     "                  <div class=\"label-item\"\n" +
-    "                        ng-repeat=\"label in repoModel.labels | nonColumnLabels\"\n" +
+    "                        ng-repeat=\"label in repoModel.labels | nonColumnLabels | orderBy:'name'\"\n" +
     "                        ng-click=\"issueCtrl.toggleLabel(label)\"\n" +
     "                        ng-class=\"{\n" +
-    "                           enabled: issueCtrl.isLabelEnabled(label.name)\n" +
+    "                           enabled: (issueCtrl.issue.tr_label_names | contains:label.name)\n" +
     "                        }\">\n" +
     "                     <span class=\"color-preview\"\n" +
     "                           style=\"background-color: #{{label.color}}\">\n" +
@@ -448,7 +533,7 @@ angular.module("issue/issue_details.tpl.html", []).run(["$templateCache", functi
     "            </span>&nbsp;\n" +
     "         </div>\n" +
     "      </div><!--Keep collapsed to prevent spacing bug--><button class=\"convert-pull btn btn-success\"\n" +
-    "            ng-if=\"!issueCtrl.isPullRequest()\"\n" +
+    "            ng-if=\"!(issueCtrl.issue | isPullRequest)\"\n" +
     "            ng-click=\"issueCtrl.convertToPull()\">\n" +
     "         Convert to Pull\n" +
     "      </button>\n" +

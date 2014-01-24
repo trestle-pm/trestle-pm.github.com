@@ -161,7 +161,10 @@ angular.module('Trestle')
          // Helper method to create configuration issue
          function create_config() {
             gh.createIssue(trRepoModel.owner, trRepoModel.repo,
-                           TRESTLE_CONFIG_TITLE, JSON.stringify(DEFAULT_CONFIG))
+                           {
+                              title: TRESTLE_CONFIG_TITLE,
+                              body: JSON.stringify(DEFAULT_CONFIG)
+                           })
                .then(function(result_issue) {
                   console.log('issue created');
                   gh.updateIssue(trRepoModel.owner, trRepoModel.repo,
